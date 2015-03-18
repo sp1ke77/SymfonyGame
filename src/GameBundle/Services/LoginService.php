@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Service;
+namespace GameBundle\Services;
 use GameBundle\Game;
 use \Exception as Exception;
 

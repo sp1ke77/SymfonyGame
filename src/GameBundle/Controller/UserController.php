@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use GameBundle\Service\LoginService;
+use GameBundle\Services\LoginService;
 use GameBundle\Game\DBCommon;
 
 class UserController extends Controller
