@@ -1,7 +1,7 @@
 <?php
 
 namespace GameBundle\Service;
-use GameBundle\Game\DBCommon;
+use GameBundle\Game;
 use \Exception as Exception;
 
 /**
