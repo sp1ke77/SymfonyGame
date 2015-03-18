@@ -1,5 +1,6 @@
 <?php
-namespace ACA\ShopBundle\Shop;
+
+namespace GameBundle\Game;
 use \Exception as Exception;
 use \mysqli as mysqli;
 use \mysqli_result as mysqli_result;
@@ -7,7 +8,7 @@ use \stdClass as stdClass;
 /**
  * Class DBCommon contains functionality for us to interact with the database
  *
- * @package ACA\ShopBundle\Util
+ * @package GameBundle\Game
  */
 class DBCommon
 {

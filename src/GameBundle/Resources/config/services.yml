@@ -1,4 +1,8 @@
 services:
     db:
-        class: game\src\GameBundle\Game\DBCommon
+        class: GameBundle\Game\DBCommon
         arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
+    service_login:
+        class: GameBundle\Services\LoginService
+        calls:
+            - [setDb, ["@db"]]

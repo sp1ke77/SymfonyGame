@@ -1,3 +1,7 @@
 game_homepage:
     path:     /
     defaults: { _controller: GameBundle:Default:index }
+
+login:
+    path:     /login
+    defaults: { _controller: GameBundle:User:login }
