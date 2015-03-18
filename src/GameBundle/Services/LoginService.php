@@ -25,7 +25,7 @@ class LoginService
     function doLoginRequest($username, $password)
     {
         // Check if this is in the DB or not.
-        $query = 'select * from game where username = "' . $username . '" and password = "' . $password . '"';
+        $query = 'select * from game.user where username = "' . $username . '" and password = "' . $password . '"';
         $this->db->setQuery($query);
         $loginObj = $this->db->query();
 
@@ -33,7 +33,7 @@ class LoginService
         {
             return $loginObj;
         } else {
-            throw new Exception ('Your login credentials are wrong.');
+            return null;
         }
 
     }

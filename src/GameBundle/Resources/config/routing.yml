@@ -5,3 +5,11 @@ game_homepage:
 login:
     path:     /login
     defaults: { _controller: GameBundle:User:login }
+
+registration:
+    path:     /registration
+    defaults: { _controller: GameBundle:User:registration }
+
+submit_registration:
+    path:     /submit_registration
+    defaults: { _controller: GameBundle:User:submitRegistration }

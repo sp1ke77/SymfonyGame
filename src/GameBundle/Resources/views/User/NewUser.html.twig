@@ -1,0 +1,40 @@
+{% extends 'GameBundle::layout.html.twig' %}
+
+{% block title %}Adon Melech - Registration{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 pull-left" >
+                <div class="panel panel-default" style="padding: 80px; min-height: 800px">
+                    <form name="submit_registration" action="/submit_registration" method="post">
+                        <ul style="list-style-type: none">
+                            <small><li>username  <input type="text" name="username" ></li>
+                            <li>email <input type="text" name="email"></li>
+                            <br>
+                            <li>password <input type="password" name="password1">
+                            <li>retype password <input type="password" name="password2"></li>
+                            <br>
+                            <li>your name <input type="text" name="displayname" maxlength="46"></li>
+                            <li>date of birth <input type="date" name="dateofbirth"></li>
+                            <br>
+                            <li><input type="submit"></li></small>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 pull-right">
+                <div class="panel panel-default "style="padding: 80px; min-height: 800px">
+                    <p>If you do not have an account, please register one.</p>
+                    <p>Username must be unique.</p>
+                </div>
+            </div>
+            </form>
+
+        </div>
+
+
+    </div>
+
+{% endblock %}

@@ -3,9 +3,7 @@
 namespace GameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DefaultController extends Controller
 {
@@ -19,18 +17,14 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $session = $this->get('session');
-        if ($session->get('logged_in'))
-        {
-            $loggedIn = true;
-            $userName = $session->get('user_name');
-        } else {
-            $loggedIn = false;
-            $userName = "stranger";
-        }
+        $logged_in = $session->get('logged_in');
+        $user_name = $session->get('username');
+
+        if ($user_name == '') { $user_name = "stranger"; }
 
         return $this->render('GameBundle:Default:index.html.twig', array(
-                'loggedIn' => $loggedIn,
-                'user_name' => $userName
+                'logged_in' => $logged_in,
+                'user_name' => $user_name
          ));
     }
 }
