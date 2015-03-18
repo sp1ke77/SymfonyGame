@@ -47,7 +47,7 @@ class DBCommon
      */
     public function __construct($host, $user, $pass, $database, $port = 3306)
     {
-        $this->mysqli = new mysqli($host, $user, $pass, $database, $port);
+        $this->mysqli = new mysqli($host, $user, 'root', $database, $port);
         if ($this->mysqli->connect_errno) {
             throw new Exception("Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . $this->mysqli->connect_error);
         }
