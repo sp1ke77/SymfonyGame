@@ -5,14 +5,20 @@ namespace GameBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use GameBundle\Services\LoginService;
 use GameBundle\Game\DBCommon;
-use \Exception as Exception;
+use GameBundle\Game\User;
 
 
+/**
+ * Class UserController
+ * @package GameBundle\Controller
+ */
 class UserController extends Controller
 {
 
+    /**
+     * @return RedirectResponse
+     */
     function loginAction()
     {
         /** @var DBCommon $db */
@@ -25,53 +31,51 @@ class UserController extends Controller
         $db = $this->get('db');
         $loginService->setDb($db);
 
-        $userObj = $loginService->doLoginRequest($userName, $password);
+        $results = $loginService->doLoginRequest($userName, $password);
 
-        if (!isset($userObj)) {
+        if (!isset($results)) {
             return new RedirectResponse('/registration');
         } else {
-            $session->set('user_id', $userObj->user_id);
-            $session->set('name', $userObj->name);
+            $session->set('logged_in', true);
+            $session->set('user_id', $results["user id"]);
+            $session->set('username', $results["username"]);
+            $session->set('displayname', $results["display name"]);
             return new RedirectResponse('/');
         }
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     function registrationAction()
     {
         return $this->render('GameBundle:User:NewUser.html.twig');
     }
 
+    /**
+     * @return RedirectResponse
+     * @throws \Exception
+     */
     function submitRegistrationAction()
     {
         $username = $_POST['username'];
-        $password1 = $_POST['password1'];
-        $password2 = $_POST['password2'];
+        $name = $_POST['displayname'];
+        $password = $_POST['password1'];
         $dateofBirth = $_POST['dateofbirth'];
         $email = $_POST['email'];
 
+        /** @var DBCommon $db */
         $db = $this->get('db');
         $session = $this->get('session');
 
-        $query = 'SELECT * FROM game.user WHERE username="' . $username . '";';
-        $db->setQuery($query);
-        $userObj = $db->loadObject();
-
-        if (!empty($userObj)) { throw new Exception('Your username must be unique'); }
-
-        if ($password1 != $password2) { throw new Exception('Passwords do not match'); }
-
-            $query = 'INSERT INTO
-                          game.user
-                          (username, password, email, date_of_birth)
-                      VALUES("' . $username . '", "' . $password1 . '", "'
-                            . $dateofBirth . '",  "' . $email . '");';
-            $db->setQuery($query);
-            $db->query();
-            $user = $db->loadObject();
-
-            $session->set('logged_in', true);
-            $session->set('user_id', $user->user_id);
-            $session->set('username', $user->name);
+        $user = new User(null);
+        $user->setDb($db);
+        $user->setUsername($username);
+        $user->setName($name);
+        $user->setEmail($email);
+        $user->setPassword($password);
+        $user->setDateofbirth($dateofBirth);
+        $user->insert();
 
         return new RedirectResponse('/');
     }

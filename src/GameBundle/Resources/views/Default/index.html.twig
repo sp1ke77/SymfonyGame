@@ -3,14 +3,22 @@
 {% block title %}Adon Melech{% endblock %}
 
 {% block content %}
-            {% if logged_in %}
-                <li role="presentation">
+
+                <div class="jumbotron">
+             {% if logged_in %}
+                  <div class="text-center">
+                 <h3>Welcome {{ displayname }}!</h3>
+             </div>
+            {% else %}
+                <div class="panel panel-default"></div>
                     <form name="login" action="/login" method="post">
-                        <input type="text" name="username" placeholder="username" style="max-width:100px"></text>
-                        <input type="text" name="password" placeholder="password" style="max-width:100px"></text>
-                        <input type="submit" style="width:0px; height:0px; opacity:0;"/>
+                        <h3>login</h3>
+                        <small><p>username <input type="text" name="username" placeholder="username"></text></p>
+                        <p>password<input type="text" name="password" placeholder="password"></text></p>
+                        <input type="submit"></small>
                     </form>
-                </li>
-            {% endif %}
+                </div>
+             {% endif %}
+                </div>
 
 {% endblock %}

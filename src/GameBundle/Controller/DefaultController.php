@@ -18,13 +18,13 @@ class DefaultController extends Controller
     {
         $session = $this->get('session');
         $logged_in = $session->get('logged_in');
-        $user_name = $session->get('username');
+        $displayname = $session->get('displayname');
 
-        if ($user_name == '') { $user_name = "stranger"; }
+        if (!$logged_in) { $displayname = "stranger"; }
 
         return $this->render('GameBundle:Default:index.html.twig', array(
                 'logged_in' => $logged_in,
-                'user_name' => $user_name
+                'displayname' => $displayname
          ));
     }
 }

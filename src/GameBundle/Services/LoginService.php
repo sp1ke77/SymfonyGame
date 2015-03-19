@@ -22,16 +22,25 @@ class LoginService
         $this->db = $db;
     }
 
+    /**
+     * @param $username
+     * @param $password
+     * @return null|array $results
+     */
     function doLoginRequest($username, $password)
     {
         // Check if this is in the DB or not.
         $query = 'select * from game.user where username = "' . $username . '" and password = "' . $password . '"';
         $this->db->setQuery($query);
-        $loginObj = $this->db->query();
+        $loginObj = $this->db->loadObject();
 
         if (!empty($loginObj))
         {
-            return $loginObj;
+            $results["username"] = $loginObj->username;
+            $results["display name"] = $loginObj->displayname;
+            $results["user id"] = $loginObj->user_id;
+
+            return $results;
         } else {
             return null;
         }
