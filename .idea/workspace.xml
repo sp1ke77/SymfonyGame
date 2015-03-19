@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a20d4e0-5795-43b2-ba21-89c0451e1c07" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/adon_webmodel.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/Game/User.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/read.me" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" afterPath="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="0a20d4e0-5795-43b2-ba21-89c0451e1c07" name="Default" comment="" />
     <ignored path="game.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -92,8 +80,8 @@
       <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.5189004" vertical-offset="0" max-vertical-offset="1598">
-              <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.7302405" vertical-offset="0" max-vertical-offset="1598">
+              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
               <folding>
                 <element signature="e#41#98#0#PHP" expanded="true" />
               </folding>
@@ -957,8 +945,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5189004" vertical-offset="0" max-vertical-offset="1598">
-          <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.7302405" vertical-offset="0" max-vertical-offset="1598">
+          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
           <folding>
             <element signature="e#41#98#0#PHP" expanded="true" />
           </folding>
