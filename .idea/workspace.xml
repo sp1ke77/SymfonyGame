@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a20d4e0-5795-43b2-ba21-89c0451e1c07" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/adon_webmodel.png" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/Game/User.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/read.me" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" afterPath="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="game.iws" />
@@ -44,11 +47,31 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-18.961538" vertical-offset="255" max-vertical-offset="1020">
+              <caret line="44" column="20" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="493">
-              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+            <state vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="561">
+              <caret line="12" column="103" selection-start-line="12" selection-start-column="103" selection-end-line="12" selection-end-column="103" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,8 +80,8 @@
       <file leaf-file-name="DefaultController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.153847" vertical-offset="13" max-vertical-offset="595">
-              <caret line="27" column="12" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="12" />
+            <state vertical-scroll-proportion="-9.961538" vertical-offset="13" max-vertical-offset="595">
+              <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
               <folding>
                 <element signature="e#41#98#0#PHP" expanded="true" />
               </folding>
@@ -66,21 +89,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.076923" vertical-offset="421" max-vertical-offset="1003">
-              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.7233677" vertical-offset="846" max-vertical-offset="1479">
-              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+            <state vertical-scroll-proportion="1.5189004" vertical-offset="0" max-vertical-offset="1598">
+              <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
               <folding>
                 <element signature="e#41#98#0#PHP" expanded="true" />
               </folding>
@@ -123,14 +136,14 @@
         <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml" />
         <option value="$PROJECT_DIR$/app/cache/dev/appDevDebugProjectContainer.php" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" />
         <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
         <option value="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" />
         <option value="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/GameBundle/Game/User.php" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" />
       </list>
     </option>
@@ -858,14 +871,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33552632" vertical-offset="0" max-vertical-offset="608">
-          <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="2533">
@@ -879,24 +884,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
           <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="493">
-          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.153847" vertical-offset="13" max-vertical-offset="595">
-          <caret line="27" column="12" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="12" />
-          <folding>
-            <element signature="e#41#98#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -921,14 +908,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.076923" vertical-offset="421" max-vertical-offset="1003">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="35.307693" vertical-offset="2601" max-vertical-offset="3298">
@@ -942,10 +921,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.961538" vertical-offset="13" max-vertical-offset="595">
+          <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+          <folding>
+            <element signature="e#41#98#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.961538" vertical-offset="255" max-vertical-offset="1020">
+          <caret line="44" column="20" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="561">
+          <caret line="12" column="103" selection-start-line="12" selection-start-column="103" selection-end-line="12" selection-end-column="103" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.7233677" vertical-offset="846" max-vertical-offset="1479">
-          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        <state vertical-scroll-proportion="1.5189004" vertical-offset="0" max-vertical-offset="1598">
+          <caret line="52" column="5" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
           <folding>
             <element signature="e#41#98#0#PHP" expanded="true" />
           </folding>

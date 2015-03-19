@@ -6,6 +6,10 @@ login:
     path:     /login
     defaults: { _controller: GameBundle:User:login }
 
+logout:
+    path:     /logout
+    defaults: { _controller: GameBundle:User:logout }
+
 registration:
     path:     /registration
     defaults: { _controller: GameBundle:User:registration }

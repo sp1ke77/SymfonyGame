@@ -44,6 +44,14 @@ class UserController extends Controller
         }
     }
 
+    function logoutAction()
+    {
+        $session = $this->get('session');
+        $session->clear();
+
+        return new RedirectResponse('/');
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -66,7 +74,6 @@ class UserController extends Controller
 
         /** @var DBCommon $db */
         $db = $this->get('db');
-        $session = $this->get('session');
 
         $user = new User(null);
         $user->setDb($db);
