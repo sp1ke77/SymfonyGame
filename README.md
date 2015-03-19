@@ -24,7 +24,7 @@ DATABASE TABLES
 			name, img-full, img-icon, desc, value, type (enum)
 
 			tribe (~40ish entries)
-			name, culture (enum), relations (fk: relation), statuses (fk: status), {{... ptype vectors... }}
+			name, culture (enum), relations (fk: relation), statuses (fk: status), {{ ptype vectors }}
 
 
 	CAN BE CREATED DURING PLAY
@@ -44,18 +44,18 @@ DATABASE TABLES
 			unit
 			name, mapzone (fk: mapzone), ptype (enum), owner (fk: character), fighters
 
+			depot 
+			wheat, wine, olives, cattle, copper, cedar, incense, {{ etc... }}
+
+
 
 	MUST BE CREATED DURING PLAY
 
 			relation
 			subject (fk: character|tribe), subjecttype (enum), object (fk: character|tribe), value, reason
 
-			depot 
-			wheat, wine, olives, cattle, copper, cedar, incense, {{ etc... }}
-
 			status
 			subject (fk: tribe), object (fk: tribe), status (enum)
 
 			news
-			{{ ...subscribers... }}, text, alertlevel
-
+			{{ subscribers }}, text, alertlevel
