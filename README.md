@@ -24,7 +24,7 @@ DATABASE TABLES
 			name, img-full, img-icon, desc, value, type (enum)
 
 			tribe (~40ish entries)
-			name, culture (enum), relations (fk: relation), statuses (fk: status), {{ ptype vectors }}
+			name, culture (enum), relations (fk: relation), statuses (fk: status), {{... ptype vectors... }}
 
 
 	CAN BE CREATED DURING PLAY
@@ -58,4 +58,5 @@ DATABASE TABLES
 			subject (fk: tribe), object (fk: tribe), status (enum)
 
 			news
-			{{ subscribers }}, text, alertlevel
+			{{ ...subscribers... }}, text, alertlevel
+
