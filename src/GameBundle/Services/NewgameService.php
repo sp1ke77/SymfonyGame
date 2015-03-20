@@ -13,7 +13,6 @@
 namespace GameBundle\Services;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Tribe;
-use GameBundle\Game\Clan;
 
 /**
  * Class NewgameService
@@ -179,12 +178,12 @@ class NewgameService
         $tradegoods = array(
             'Wheat' => array(
                 'Description' => 'The staff of life without which everyone starves',
-                'Trade Value' => 1,
-                'Food Value' => 1,
-                'Type' => 'food'
+                'Trade Value' => 1.0,
+                'Food Value' => 1.0,
+                'Type' => 1
             ),
             'Olives' => array(
-                'Description' => 'As well as being tasty, an important source of oil and therefore crucial to the baker\'s trade.',
+                'Description' => 'As well as being tasty, an important source of oil and therefore crucial to the baking trade.',
                 'Trade Value' => 1.2,
                 'Food Value' => 1.2,
                 'Type' => 1
@@ -248,11 +247,12 @@ class NewgameService
     /**
      *  Object literal must be abstracted to a json
      *
+     *  Will eventually take a parameter $number to use as the condition for the iteration
+     *
      */
     protected function createSomeTribes()
     {
         $tribes = array(
-            'Egyptian' => array('', '', '', '', '', ''),
             'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wa-Khasis", "Lotan",
                 "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar",
                 "Qadeshtu", "Yarikh", "Yaw"),
@@ -265,14 +265,12 @@ class NewgameService
             'Tejenu' => array("Andronek", "Etewokewet", "Filaretos", "Kleonak", "Nikostros", "Tros",
                 "Khalkeos", "Xaridhmos", "Kaliod", "Kupirijo", "Radamanq", "Makhawon",
                 "Glaukos"),
-            'Keftiu' => array('', '', '', '', '', ''),
+            'Keftiu' => array('Tinay', '', '', '', '', ''),
             'Amurru' => array("Yarikhu", "Rabbu", "Uprapu", "Yakhruru", "Mikhalizayu", "Almutu",
                 "Numkha", "Aqba-el", "Yamutbal", "Ya'ilanu", "Sim'alites", "Amnanu",
                 "Zamri-Lim"),
             'Shasu' => array("Jetheth", "Oholibamah", "Mibzar", "Iram-Ammon", "Kenaz", "Pinon",
-                "Timnah", "Magdiel", "Elah", "Zepho", "Kenaz", "Mizzah", "Nathath"),
-            'Sangaru' => array('', '', '', '', '', ''),
-            'Hittite' => array('', '', '', '', '', '')
+                "Timnah", "Magdiel", "Elah", "Zepho", "Kenaz", "Mizzah", "Nathath")
         );
 
         for ($i = 1; $i < 32; $i++)
@@ -289,6 +287,7 @@ class NewgameService
     }
 
     /**
+     * Create  one clan per tribe and that's it
      *
      */
     protected function createSomeClans()
@@ -394,7 +393,7 @@ class NewgameService
      */
     private function createDepot()
     {
-        $query = "INSERT INTO depot(wheat, olives, cattle) VALUES(200,100,100);";
+        $query = "INSERT INTO depot(wheat, olives, cattle) VALUES(0,0,0);";
         $this->db->setQuery($query);
         $this->db->query();
         $depotId = $this->db->getLastInsertId();
@@ -488,7 +487,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE diplo_relation;";
+        $query = "DROP TABLE diplomatic_relation;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -555,8 +554,8 @@ class NewgameService
                           named VARCHAR(45) NULL,
                           imgfull VARCHAR(45) NULL,
                           description VARCHAR(160) NULL,
-                          tradevalue NUMERIC(1,1) NULL,
-                          foodvalue NUMERIC(1,1) NULL,
+                          tradevalue NUMERIC(2,1) NULL,
+                          foodvalue NUMERIC(2,1) NULL,
                           tgtype ENUM('food','supplies','goods','gifts') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
@@ -565,7 +564,13 @@ class NewgameService
         $query = "CREATE TABLE game.tribe (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
-                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
+                          gregariousness NUMERIC(3,2) DEFAULT 0,
+                          belligerence NUMERIC(3,2) DEFAULT 0,
+                          tenacity NUMERIC(3,2) DEFAULT 0,
+                          insularity NUMERIC(3,2) DEFAULT 0,
+                          spirituality NUMERIC(3,2) DEFAULT 0,
+                          sumptuousness NUMERIC(3,2) DEFAULT 0,
+                          culture ENUM('Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -573,19 +578,39 @@ class NewgameService
         $query = "CREATE TABLE game.playercharacter (
                           id INT NOT NULL AUTO_INCREMENT,
                           userid INT NULL,
-                          mapzone INT NULL,
+                          x INT NULL,
+                          y INT NULL,
                           named VARCHAR(45) NULL,
+                          swords INT DEFAULT 0,
+                          staves INT DEFAULT 0,
+                          cups INT DEFAULT 0,
+                          discs INT DEFAULT 0,
                           culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
-                          depot INT NULL,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "CREATE TABLE game.agent (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          named VARCHAR(45) NULL,
+                          x INT NULL,
+                          y INT NULL,
+                          swords INT DEFAULT 0,
+                          staves INT DEFAULT 0,
+                          cups INT DEFAULT 0,
+                          discs INT DEFAULT 0,
+                          ptype ENUM('friendly', 'schemer', 'ruthless', 'cautious', 'bully', 'priest', 'workaholic') NULL,
+                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
 
         $query = "CREATE TABLE game.clan (
                           id INT NOT NULL AUTO_INCREMENT,
-                          mapzone INT NULL,
-                          ptype INT NULL,
                           tribe INT NULL,
+                          ptype INT NULL,
+                          x INT NULL,
+                          y INT NULL,
                           population INT NULL,
                           fighters INT NULL,
                           food INT NULL,
@@ -618,24 +643,26 @@ class NewgameService
 
         $query = "CREATE TABLE game.depot (
                           id INT NOT NULL AUTO_INCREMENT,
-                          wheat INT NULL,
-                          olives INT NULL,
-                          cattle INT NULL,
-                          copper INT NULL,
-                          fish INT NULL,
-                          incense INT NULL,
-                          wood INT NULL,
-                          linen INT NULL,
-                          gold INT NULL,
-                          dyes INT NULL,
+                          wheat INT DEFAULT 0,
+                          olives INT DEFAULT 0,
+                          cattle INT DEFAULT 0,
+                          copper INT DEFAULT 0,
+                          fish INT DEFAULT 0,
+                          incense INT DEFAULT 0,
+                          wood INT DEFAULT 0,
+                          linen INT DEFAULT 0,
+                          gold INT DEFAULT 0,
+                          dyes INT DEFAULT 0,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
 
         $query = "CREATE TABLE game.diplomatic_relation (
                           id INT NOT NULL AUTO_INCREMENT,
-                          characterid INT NULL,
-                          target INT NULL,
+                          ownerid INT NULL,
+                          ownertype ENUM('player', 'agent', 'clan', 'tribe', 'nation'),
+                          targetid INT NULL,
+                          targettype ENUM('player', 'agent', 'clan', 'tribe', 'nation'),
                           modifier INT NULL,
                           reasons VARCHAR(140) NULL,
                           PRIMARY KEY (id));";
@@ -644,8 +671,10 @@ class NewgameService
 
         $query = "CREATE TABLE game.diplomatic_status (
                           id INT NOT NULL AUTO_INCREMENT,
-                          tribe INT NULL,
-                          target INT NULL,
+                          ownerid INT NULL,
+                          ownertype ENUM('nation', 'tribe'),
+                          targetid INT NULL,
+                          targettype ENUM('nation', 'tribe'),
                           status ENUM('Peace','War','Alliance','Truce') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
