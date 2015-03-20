@@ -120,10 +120,12 @@ class GameworldAdminService
                           named VARCHAR(45) NULL,
                           imglarge VARCHAR(45) NULL,
                           imgsmall VARCHAR(45) NULL,
-                          description VARCHAR(45) NULL,
+                          description VARCHAR(160) NULL,
                           depot INT NULL,
                           king INT NULL,
                           priest INT NULL,
+                          x int NULL,
+                          y int NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -133,7 +135,7 @@ class GameworldAdminService
                           named VARCHAR(45) NULL,
                           imglarge VARCHAR(45) NULL,
                           imgsmall VARCHAR(45) NULL,
-                          description VARCHAR(160) NULL,
+                          god VARCHAR(45) NULL,
                           city INT NULL,
                           ruledby INT NULL,
                           PRIMARY KEY (id));";
@@ -154,7 +156,7 @@ class GameworldAdminService
         $query = "CREATE TABLE game.tribe (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
-                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amorite','Shasu','Babylonian','Hittite') NULL,
+                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amorite','Shasu','Chaldean','Hittite') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -164,6 +166,7 @@ class GameworldAdminService
                           userid INT NULL,
                           mapzone INT NULL,
                           named VARCHAR(45) NULL,
+                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amorite','Shasu','Chaldean','Hittite') NULL,
                           depot INT NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);

@@ -30,6 +30,8 @@ class AdminController extends Controller
 
             $gameworldScenarioService = $this->get('service_gameworld_scenario');
             $gameworldScenarioService->randomizeMap();
+            $gameworldScenarioService->initializeCities();
+
 
           //
           // Populate the required tables from scenario data
