@@ -17,19 +17,19 @@ DATABASE TABLES
 			id, geotype (enum), tradegoods (fk: tradegood), persons, buildings (fk: building)
 
 			kingdom (4 entries)
-			name, img-large, img-small, img-face, dynasty (fk: tribe), {{ ...stats... }}, {{ ...traits.... }}
+			name, imglarge, imgsmall, img-face, dynasty (fk: tribe), {{ ...stats... }}, {{ ...traits.... }}
 
 			city (32 entries)
-			name, img-large, img-small, depot (fk: depot), king (fk: character), priest (fk: character)
+			name, imglarge, imgsmall, depot (fk: depot), king (fk: character), priest (fk: character)
 
 			region (32 entries)
-			name, img-large, desc, city (fk: city), ruledby (fk: nation)
+			name, imglarge, description, city (fk: city), ruledby (fk: nation)
 			
 			tradegood (~35 entries)
-			name, img-full, img-icon, desc, value, type (enum)
+			name, imgfull, img-icon, description, value, tgtype (enum)
 
 			tribe (~40ish entries)
-			name, culture (enum), relations (fk: relation), statuses (fk: status), {{... ptype vectors... }}
+			name, culture (enum), {{... ptype vectors... }}
 
 
 	CAN BE CREATED DURING PLAY
@@ -37,7 +37,7 @@ DATABASE TABLES
 			user
 			username, displayname, email, dob, password
 
-			character
+			playercharacter
 			user (fk: user), mapzone (fk: mapzone), name, {{ ... stats... }} , {{ ...traits ... }} , depot (fk: depot)
 
 			clan (one-per-tribe created at game start)
@@ -56,12 +56,8 @@ DATABASE TABLES
 
 	MUST BE CREATED DURING PLAY
 
-			relation
-			subject (fk: character|tribe), subjecttype (enum), object (fk: character|tribe), value, reason
+			diplomatic_relation
+			characterid, target, modifier, reason
 
-			status
-			subject (fk: tribe), object (fk: tribe), status (enum)
-
-			news
-			{{ ...subscribers... }}, text, alertlevel
-
+			diplomatic_status
+			tribe (fk: tribe), target (fk: tribe), status (enum)
