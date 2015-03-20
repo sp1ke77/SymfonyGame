@@ -6,11 +6,7 @@ services:
         class: GameBundle\Services\LoginService
         calls:
             - [setDb, ["@db"]]
-    service_gameworld_admin:
-        class: GameBundle\Services\GameworldAdminService
-        calls:
-            - [setDb, ["@db"]]
-    service_gameworld_scenario:
-        class: GameBundle\Services\GameworldScenarioService
+    service_newgame:
+        class: GameBundle\Services\NewgameService
         calls:
             - [setDb, ["@db"]]

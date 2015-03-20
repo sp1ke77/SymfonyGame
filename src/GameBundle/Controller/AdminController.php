@@ -24,18 +24,9 @@ class AdminController extends Controller
 
         if ($passphrase == "restarttheworld")
         {
-            $gameworldAdminService = $this->get('service_gameworld_admin');
-            $gameworldAdminService->trashGameworldRecords();
-            $gameworldAdminService->setupGameworldRecords();
+            $newgameService = $this->get('service_newgame');
+            $newgameService->creategame('yesanotherone','yesathirdone');
 
-            $gameworldScenarioService = $this->get('service_gameworld_scenario');
-            $gameworldScenarioService->randomizeMap();
-            $gameworldScenarioService->initializeCities();
-            $gameworldScenarioService->initializeTradeGoods();
-
-          //
-          // Populate the required tables from scenario data
-          //
           // Set the game timer to start
 
             return new RedirectResponse('/admin');
