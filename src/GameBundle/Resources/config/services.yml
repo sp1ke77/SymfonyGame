@@ -10,3 +10,7 @@ services:
         class: GameBundle\Services\GameworldAdminService
         calls:
             - [setDb, ["@db"]]
+    service_gameworld_scenario:
+        class: GameBundle\Services\GameworldScenarioService
+        calls:
+            - [setDb, ["@db"]]

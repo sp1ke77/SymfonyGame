@@ -220,7 +220,7 @@ class GameworldAdminService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.diplo_relation (
+        $query = "CREATE TABLE game.diplomatic_relation (
                           id INT NOT NULL AUTO_INCREMENT,
                           characterid INT NULL,
                           target INT NULL,

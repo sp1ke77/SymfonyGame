@@ -22,14 +22,15 @@ class AdminController extends Controller
     public function newgameAction() {
         $passphrase = $_POST['passphrase'];
 
-        if ($passphrase = "restarttheworld")
+        if ($passphrase == "restarttheworld")
         {
             $gameworldAdminService = $this->get('service_gameworld_admin');
             $gameworldAdminService->trashGameworldRecords();
             $gameworldAdminService->setupGameworldRecords();
 
-          //
-          // $gameworldScenarioService = $this->get('scenario_service');
+            $gameworldScenarioService = $this->get('service_gameworld_scenario');
+            $gameworldScenarioService->randomizeMap();
+
           //
           // Populate the required tables from scenario data
           //
