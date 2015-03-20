@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a20d4e0-5795-43b2-ba21-89c0451e1c07" name="Default" comment="" />
+    <list default="true" id="0a20d4e0-5795-43b2-ba21-89c0451e1c07" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/AdminConsole/Admin.html.twig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/AdminController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GameBundle/Services/GameworldAdminService.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml" afterPath="$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="game.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -28,78 +37,78 @@
       <file leaf-file-name="services.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
-              <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.961538" vertical-offset="255" max-vertical-offset="1020">
-              <caret line="44" column="20" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="561">
-              <caret line="12" column="103" selection-start-line="12" selection-start-column="103" selection-end-line="12" selection-end-column="103" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.961538" vertical-offset="13" max-vertical-offset="595">
-              <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
+              <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
               <folding>
-                <element signature="e#41#98#0#PHP" expanded="true" />
+                <marker date="1426805557771" expanded="true" signature="0:421" placeholder="services:" />
+                <marker date="1426805557771" expanded="true" signature="181:289" placeholder="service_login:" />
+                <marker date="1426805557771" expanded="true" signature="294:421" placeholder="service_gameworld_admin:" />
+                <marker date="1426805557771" expanded="true" signature="384:421" placeholder="calls:" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
+      <file leaf-file-name="AdminController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/AdminController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7302405" vertical-offset="0" max-vertical-offset="1598">
-              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
-              <folding>
-                <element signature="e#41#98#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/User.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="35.307693" vertical-offset="2601" max-vertical-offset="3298">
-              <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.91237116" vertical-offset="132" max-vertical-offset="833">
+              <caret line="39" column="86" selection-start-line="39" selection-start-column="86" selection-end-line="39" selection-end-column="86" />
               <folding>
                 <element signature="e#6#87#0#PHP" expanded="true" />
-                <marker date="1426793311887" expanded="true" signature="1183:1245" placeholder="select * fro..user..." />
-                <marker date="1426793311887" expanded="true" signature="1803:1938" placeholder="INSERT INTO ..." />
-                <marker date="1426793311887" expanded="true" signature="1803:2077" placeholder="INSERT INTO ..." />
+                <element signature="e#122#179#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameworldAdminService.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameBundle/Services/GameworldAdminService.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="13.730769" vertical-offset="2023" max-vertical-offset="4216">
+              <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
+              <folding>
+                <element signature="e#6#87#0#PHP" expanded="true" />
+                <element signature="e#120#149#0#PHP" expanded="true" />
+                <marker date="1426812221234" expanded="true" signature="496:510" placeholder="DROP TABLE m..." />
+                <marker date="1426812221234" expanded="true" signature="598:616" placeholder="DROP TABLE m..." />
+                <marker date="1426812221234" expanded="true" signature="714:732" placeholder="DROP TABLE k..." />
+                <marker date="1426812221234" expanded="true" signature="820:835" placeholder="DROP TABLE c..." />
+                <marker date="1426812221234" expanded="true" signature="923:940" placeholder="DROP TABLE r..." />
+                <marker date="1426812221234" expanded="true" signature="1028:1048" placeholder="DROP TABLE t..." />
+                <marker date="1426812221234" expanded="true" signature="1136:1152" placeholder="DROP TABLE t..." />
+                <marker date="1426812221234" expanded="true" signature="1240:1266" placeholder="DROP TABLE p..." />
+                <marker date="1426812221234" expanded="true" signature="1354:1369" placeholder="DROP TABLE c..." />
+                <marker date="1426812221234" expanded="true" signature="1457:1476" placeholder="DROP TABLE b..." />
+                <marker date="1426812221234" expanded="true" signature="1564:1579" placeholder="DROP TABLE u..." />
+                <marker date="1426812221234" expanded="true" signature="1667:1683" placeholder="DROP TABLE d..." />
+                <marker date="1426812221234" expanded="true" signature="1771:1796" placeholder="DROP TABLE d..." />
+                <marker date="1426812221234" expanded="true" signature="1884:1912" placeholder="DROP TABLE d..." />
+                <marker date="1426812221234" expanded="true" signature="2097:2359" placeholder="CREATE TABLE..map..." />
+                <marker date="1426812221234" expanded="true" signature="2447:2700" placeholder="CREATE TABLE..mapzone..." />
+                <marker date="1426812221234" expanded="true" signature="2788:3127" placeholder="CREATE TABLE..kingdom..." />
+                <marker date="1426812221234" expanded="true" signature="3215:3679" placeholder="CREATE TABLE..city..." />
+                <marker date="1426812221234" expanded="true" signature="3767:4193" placeholder="CREATE TABLE..region..." />
+                <marker date="1426812221234" expanded="true" signature="4281:4697" placeholder="CREATE TABLE..tradegood..." />
+                <marker date="1426812221234" expanded="true" signature="4785:5109" placeholder="CREATE TABLE..tribe..." />
+                <marker date="1426812221234" expanded="true" signature="5197:5513" placeholder="CREATE TABLE..playercharacter..." />
+                <marker date="1426812221234" expanded="true" signature="5601:5989" placeholder="CREATE TABLE..clan..." />
+                <marker date="1426812221234" expanded="true" signature="6077:6430" placeholder="CREATE TABLE..building..." />
+                <marker date="1426812221234" expanded="true" signature="6518:6817" placeholder="CREATE TABLE..unit..." />
+                <marker date="1426812221234" expanded="true" signature="6905:7538" placeholder="CREATE TABLE..depot..." />
+                <marker date="1426812221234" expanded="true" signature="7626:7951" placeholder="CREATE TABLE..diplo_relation..." />
+                <marker date="1426812221234" expanded="true" signature="8039:8341" placeholder="CREATE TABLE..diplomatic_status..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DBCommon.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="15.538462" vertical-offset="523" max-vertical-offset="2533">
+              <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -121,18 +130,21 @@
         <option value="$PROJECT_DIR$/app/config/config.yml" />
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/app/AppKernel.php" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml" />
         <option value="$PROJECT_DIR$/app/cache/dev/appDevDebugProjectContainer.php" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
         <option value="$PROJECT_DIR$/src/GameBundle/Services/LoginService.php" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/GameBundle/Game/User.php" />
         <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig" />
         <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig" />
-        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/GameBundle/Controller/UserController.php" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/views/AdminConsole/Admin.html.twig" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Services/GameworldAdminService.php" />
+        <option value="$PROJECT_DIR$/src/GameBundle/Controller/AdminController.php" />
       </list>
     </option>
   </component>
@@ -253,140 +265,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GameBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GameBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="User" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GameBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Default" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GameBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="game" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GameBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -535,30 +413,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="2533">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
-          <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="493">
-          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="13" max-vertical-offset="595">
@@ -583,7 +437,6 @@
           <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
           <folding>
             <element signature="e#38#67#0#PHP" expanded="true" />
-            <marker date="1426783888309" expanded="true" signature="-1:-1" placeholder="select * fro..game..." />
           </folding>
         </state>
       </provider>
@@ -660,7 +513,6 @@
           <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
           <folding>
             <element signature="e#38#67#0#PHP" expanded="true" />
-            <marker date="1426783888309" expanded="true" signature="-1:-1" placeholder="select * fro..game..." />
           </folding>
         </state>
       </provider>
@@ -859,71 +711,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="2533">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
-          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.961538" vertical-offset="51" max-vertical-offset="748">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <element signature="e#275#315#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Services/LoginService.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.57731956" vertical-offset="336" max-vertical-offset="918">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#38#67#0#PHP" expanded="true" />
-            <marker date="1426783888309" expanded="true" signature="-1:-1" placeholder="select * fro..game..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="35.307693" vertical-offset="2601" max-vertical-offset="3298">
           <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding>
             <element signature="e#6#87#0#PHP" expanded="true" />
-            <marker date="1426793311887" expanded="true" signature="1183:1245" placeholder="select * fro..user..." />
-            <marker date="1426793311887" expanded="true" signature="1803:1938" placeholder="INSERT INTO ..." />
-            <marker date="1426793311887" expanded="true" signature="1803:2077" placeholder="INSERT INTO ..." />
+            <marker date="1426793311887" expanded="true" signature="-1:-1" placeholder="select * fro..user..." />
+            <marker date="1426793311887" expanded="true" signature="-1:-1" placeholder="INSERT INTO ..." />
+            <marker date="1426793311887" expanded="true" signature="-1:-1" placeholder="INSERT INTO ..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.961538" vertical-offset="13" max-vertical-offset="595">
-          <caret line="16" column="33" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-          <folding>
-            <element signature="e#41#98#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.961538" vertical-offset="255" max-vertical-offset="1020">
-          <caret line="44" column="20" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -935,20 +732,135 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/User/NewUser.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61340207" vertical-offset="0" max-vertical-offset="731">
+          <caret line="21" column="49" selection-start-line="21" selection-start-column="49" selection-end-line="21" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/routing.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7269737" vertical-offset="0" max-vertical-offset="608">
+          <caret line="26" column="55" selection-start-line="26" selection-start-column="55" selection-end-line="26" selection-end-column="55" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/layout.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4089347" vertical-offset="255" max-vertical-offset="1020">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/DefaultController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8178694" vertical-offset="153" max-vertical-offset="765">
+          <caret line="37" column="12" selection-start-line="34" selection-start-column="28" selection-end-line="37" selection-end-column="12" />
+          <folding>
+            <element signature="e#41#98#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/views/AdminConsole/Admin.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5079086" vertical-offset="0" max-vertical-offset="569">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Resources/config/services.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+          <folding>
+            <marker date="1426805557771" expanded="true" signature="0:421" placeholder="services:" />
+            <marker date="1426805557771" expanded="true" signature="181:289" placeholder="service_login:" />
+            <marker date="1426805557771" expanded="true" signature="294:421" placeholder="service_gameworld_admin:" />
+            <marker date="1426805557771" expanded="true" signature="384:421" placeholder="calls:" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Game/DBCommon.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="15.538462" vertical-offset="523" max-vertical-offset="2533">
+          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Services/LoginService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.8846154" vertical-offset="306" max-vertical-offset="918">
+          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+          <folding>
+            <element signature="e#38#67#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7302405" vertical-offset="0" max-vertical-offset="1598">
-          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        <state vertical-scroll-proportion="-2.6153846" vertical-offset="0" max-vertical-offset="1598">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="6" selection-end-column="54" />
           <folding>
             <element signature="e#41#98#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Services/GameworldAdminService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="13.730769" vertical-offset="2023" max-vertical-offset="4216">
+          <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
+          <folding>
+            <element signature="e#6#87#0#PHP" expanded="true" />
+            <element signature="e#120#149#0#PHP" expanded="true" />
+            <marker date="1426812221234" expanded="true" signature="496:510" placeholder="DROP TABLE m..." />
+            <marker date="1426812221234" expanded="true" signature="598:616" placeholder="DROP TABLE m..." />
+            <marker date="1426812221234" expanded="true" signature="714:732" placeholder="DROP TABLE k..." />
+            <marker date="1426812221234" expanded="true" signature="820:835" placeholder="DROP TABLE c..." />
+            <marker date="1426812221234" expanded="true" signature="923:940" placeholder="DROP TABLE r..." />
+            <marker date="1426812221234" expanded="true" signature="1028:1048" placeholder="DROP TABLE t..." />
+            <marker date="1426812221234" expanded="true" signature="1136:1152" placeholder="DROP TABLE t..." />
+            <marker date="1426812221234" expanded="true" signature="1240:1266" placeholder="DROP TABLE p..." />
+            <marker date="1426812221234" expanded="true" signature="1354:1369" placeholder="DROP TABLE c..." />
+            <marker date="1426812221234" expanded="true" signature="1457:1476" placeholder="DROP TABLE b..." />
+            <marker date="1426812221234" expanded="true" signature="1564:1579" placeholder="DROP TABLE u..." />
+            <marker date="1426812221234" expanded="true" signature="1667:1683" placeholder="DROP TABLE d..." />
+            <marker date="1426812221234" expanded="true" signature="1771:1796" placeholder="DROP TABLE d..." />
+            <marker date="1426812221234" expanded="true" signature="1884:1912" placeholder="DROP TABLE d..." />
+            <marker date="1426812221234" expanded="true" signature="2097:2359" placeholder="CREATE TABLE..map..." />
+            <marker date="1426812221234" expanded="true" signature="2447:2700" placeholder="CREATE TABLE..mapzone..." />
+            <marker date="1426812221234" expanded="true" signature="2788:3127" placeholder="CREATE TABLE..kingdom..." />
+            <marker date="1426812221234" expanded="true" signature="3215:3679" placeholder="CREATE TABLE..city..." />
+            <marker date="1426812221234" expanded="true" signature="3767:4193" placeholder="CREATE TABLE..region..." />
+            <marker date="1426812221234" expanded="true" signature="4281:4697" placeholder="CREATE TABLE..tradegood..." />
+            <marker date="1426812221234" expanded="true" signature="4785:5109" placeholder="CREATE TABLE..tribe..." />
+            <marker date="1426812221234" expanded="true" signature="5197:5513" placeholder="CREATE TABLE..playercharacter..." />
+            <marker date="1426812221234" expanded="true" signature="5601:5989" placeholder="CREATE TABLE..clan..." />
+            <marker date="1426812221234" expanded="true" signature="6077:6430" placeholder="CREATE TABLE..building..." />
+            <marker date="1426812221234" expanded="true" signature="6518:6817" placeholder="CREATE TABLE..unit..." />
+            <marker date="1426812221234" expanded="true" signature="6905:7538" placeholder="CREATE TABLE..depot..." />
+            <marker date="1426812221234" expanded="true" signature="7626:7951" placeholder="CREATE TABLE..diplo_relation..." />
+            <marker date="1426812221234" expanded="true" signature="8039:8341" placeholder="CREATE TABLE..diplomatic_status..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameBundle/Controller/AdminController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.91237116" vertical-offset="132" max-vertical-offset="833">
+          <caret line="39" column="86" selection-start-line="39" selection-start-column="86" selection-end-line="39" selection-end-column="86" />
+          <folding>
+            <element signature="e#6#87#0#PHP" expanded="true" />
+            <element signature="e#122#179#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1,0 +1,21 @@
+{% extends 'GameBundle::layout.html.twig' %}
+
+{% block title %}Adon Melech - Administrator Console{% endblock %}
+
+{% block content %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <form name="newgame" action="\newgame" method="post">
+                            <p class="text-center">enter the passphrase <input type="text" name="passphrase"></p>
+                            <p class="text-center"><input type="submit" class="button btn-default" name="initialize gameworld" value="initialize gameworld"></p>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

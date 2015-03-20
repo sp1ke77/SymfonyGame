@@ -5,15 +5,25 @@ namespace GameBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * Class DefaultController
+ * @package GameBundle\Controller
+ */
 class DefaultController extends Controller
 {
 
+    /**
+     * Constructor creates a new session
+     */
     public function __construct()
     {
         $this->Session = new Session();
         $this->Session->start();
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $session = $this->get('session');

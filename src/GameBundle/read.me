@@ -1,0 +1,60 @@
+
+DATABASE TABLES
+
+	MUST BE CREATED AT GAME START
+
+			map (1600 entries)
+			x, y, mapzone (fk: mapzone)
+
+			mapzone (1600 entries)
+			id, geotype (enum)
+
+			kingdom (4 entries)
+			name, img-large, img-small, img-face, dynasty (fk: tribe), {{ ...stats... }}, {{ ...traits.... }}
+
+			city (32 entries)
+			name, img-large, img-small, depot (fk: depot), king (fk: character), priest (fk: character)
+
+			region (32 entries)
+			name, img-large, desc, city (fk: city), ruledby (fk: nation)
+			
+			tradegood (~35 entries)
+			name, img-full, img-icon, desc, value, type (enum)
+
+			tribe (~40ish entries)
+			name, culture (enum), relations (fk: relation), statuses (fk: status), {{... ptype vectors... }}
+
+
+	CAN BE CREATED DURING PLAY
+
+			user
+			username, displayname, email, dob, password
+
+			character
+			user (fk: user), mapzone (fk: mapzone), name, {{ ... stats... }} , {{ ...traits ... }} , depot (fk: depot)
+
+			clan (one-per-tribe created at game start)
+			name, mapzone (fk: mapzone), ptype (enum), tribe (fk: tribe), population, fighters, depot (fk: depot)
+
+			building
+			name, mapzone (fk: mapzone), owner (fk: character), region (fk: region), topuser (fk: clan)
+
+			unit
+			name, mapzone (fk: mapzone), ptype (enum), owner (fk: character), fighters
+
+			depot 
+			wheat, wine, olives, cattle, copper, cedar, incense, {{ etc... }}
+
+
+
+	MUST BE CREATED DURING PLAY
+
+			relation
+			subject (fk: character|tribe), subjecttype (enum), object (fk: character|tribe), value, reason
+
+			status
+			subject (fk: tribe), object (fk: tribe), status (enum)
+
+			news
+			{{ ...subscribers... }}, text, alertlevel
+

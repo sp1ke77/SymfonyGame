@@ -17,3 +17,11 @@ registration:
 submit_registration:
     path:     /submit_registration
     defaults: { _controller: GameBundle:User:submitRegistration }
+
+admin_console:
+    path:     /admin
+    defaults: { _controller: GameBundle:Admin:index }
+
+initialize_gameworld:
+    path:     /newgame
+    defaults: { _controller: GameBundle:Admin:newgame }
