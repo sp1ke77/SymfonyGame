@@ -89,17 +89,10 @@ class GameworldAdminService
     public function setupGameworldRecords()
     {
         // Create all nencessary tables
-        $query = "CREATE TABLE game.map (
+        $query = "CREATE TABLE game.mapzone (
                           id INT NOT NULL AUTO_INCREMENT,
                           x INT(2) NOT NULL,
                           y INT(2) NOT NULL,
-                          mapzone INT(6) NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "CREATE TABLE game.mapzone (
-                          id INT NOT NULL AUTO_INCREMENT,
                           geotype ENUM('plains','hills','mountains','desert','swamp','forest','shallowsea','deepsea') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
@@ -147,7 +140,8 @@ class GameworldAdminService
                           named VARCHAR(45) NULL,
                           imgfull VARCHAR(45) NULL,
                           description VARCHAR(160) NULL,
-                          tradevalue INT NULL,
+                          tradevalue NUMERIC(1,1) NULL,
+                          foodvalue NUMERIC(1,1) NULL,
                           tgtype ENUM('food','supplies','goods','gifts') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
@@ -209,15 +203,13 @@ class GameworldAdminService
                           id INT NOT NULL AUTO_INCREMENT,
                           wheat INT NULL,
                           olives INT NULL,
-                          wine INT NULL,
                           cattle INT NULL,
                           copper INT NULL,
+                          fish INT NULL,
                           incense INT NULL,
-                          cedar INT NULL,
+                          wood INT NULL,
                           linen INT NULL,
-                          wool INT NULL,
                           gold INT NULL,
-                          silver INT NULL,
                           dyes INT NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
