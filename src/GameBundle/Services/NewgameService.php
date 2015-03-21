@@ -614,7 +614,7 @@ class NewgameService
                           population INT NULL,
                           fighters INT NULL,
                           food INT NULL,
-                          gold INT NULL,
+                          coin INT NULL,
                           depot INT NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);

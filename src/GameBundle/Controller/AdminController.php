@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+use GameBundle\Game\Rules\EnforceParams;
+
 class AdminController extends Controller
 {
 
@@ -33,6 +35,17 @@ class AdminController extends Controller
 
             // Return Redirect to a page that shows the stats for the current scenario
         }
+    }
+
+    public function testAction()
+    {
+        $db = $this->get('db');
+
+        $EnforceParams = new EnforceParams();
+        $EnforceParams->setDb($db);
+        $EnforceParams->trashDeadObjects();
+
+        return new RedirectResponse('/admin');
     }
 
 }

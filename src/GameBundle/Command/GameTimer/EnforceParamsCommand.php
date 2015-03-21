@@ -2,11 +2,14 @@
 
 namespace GameBundle\Command\GameTimer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use GameBundle\Game\DBCommon;
+use Psr\Log\LoggerInterface;
+use GameBundle\Game\Rules\EnforceParams;
 
-class EnforceParams extends ContainerAwareCommand
+class EnforceParamsCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -19,9 +22,17 @@ class EnforceParams extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var DBCommon $db */
+        /** @var $logger LoggerInterface */
+        $logger = $this->getContainer()->get('logger');
         $db = $this->getContainer()->get('db');
 
+        $logger->info('EnforceParams round begun ... ');
 
+        $EnforceParams = new EnforceParams();
+        $EnforceParams->setDb($db);
+
+        $EnforceParams->trashDeadObjects();
+
+        $logger->info('EnforceParams round complete');
     }
 }

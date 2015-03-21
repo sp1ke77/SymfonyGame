@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use GameBundle\Game\DBCommon;
 
-class EnforceParams extends ContainerAwareCommand
+class AIStrategic extends ContainerAwareCommand
 {
     protected function configure()
     {

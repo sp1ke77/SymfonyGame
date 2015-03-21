@@ -25,3 +25,7 @@ admin_console:
 initialize_gameworld:
     path:     /newgame
     defaults: { _controller: GameBundle:Admin:newgame }
+
+admin_test:
+    path:     /test
+    defaults: { _controller: GameBundle:Admin:test }

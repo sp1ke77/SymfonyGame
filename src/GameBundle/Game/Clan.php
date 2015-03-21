@@ -6,6 +6,7 @@
  * Time: 1:43 PM
  */
 namespace GameBundle\Game;
+use GameBundle\Game\DBCommon;
 
 /**
  * Class Clan
@@ -13,45 +14,40 @@ namespace GameBundle\Game;
  */
 class Clan
 {
-    // Key
     /**
-     * @var
-     */
-    protected $db;
-    /**
-     * @var int clanId
+     * Keys
+     * @var int $clanId
      */
     protected $clanId;
 
-    // Fields
     /**
-     * @var
+     * Fields
+     * @var $population
+     * @var $fighters
+     * @var $coin
+     * @var $food
      */
     protected $population;
-    /**
-     * @var
-     */
     protected $fighters;
-    /**
-     * @var
-     */
     protected $coin;
-    /**
-     * @var
-     */
     protected $food;
 
-    // References
     /**
-     * @var
+     * References
+     * @var $depotId
+     * @var $tribeId
      */
     protected $depotId;
-    /**
-     * @var
-     */
     protected $tribeId;
 
     /**
+     * Components
+     * @var DBCommon $db
+     */
+    protected $db;
+
+    /**
+     * Constructor
      * @param $clanId
      */
     public function __construct($clanId)
@@ -73,13 +69,13 @@ class Clan
     }
 
     /**
-     *
+     * Hydrate the object
      */
     public function load()
     {
         $query = "SELECT * FROM clan WHERE id=" . $this->clanId . ";";
         $this->db->setQuery($query);
-        $queryObj = $this->loadObject();
+        $queryObj = $this->db->loadObject();
 
         if (!empty($queryObj)) {
             $this->population = $queryObj->population;
