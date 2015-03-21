@@ -1,0 +1,16 @@
+
+GAME TIMER STRUCTURE
+
+
+*2 * * * * Rules->EnforceParams
+
+*5 * * * * Simulation->RandomModeEvents
+
+*10 * * * * Rules->Actions
+
+* *1 * * * Simulation->AIShortTerm
+
+* *5 * * * Simulation->AILongTerm
+
+* * *1 * * Simulation->DailyEvents
+

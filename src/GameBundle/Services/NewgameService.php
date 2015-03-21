@@ -86,7 +86,7 @@ class NewgameService
             $x = $i % 20;
             $y = $i / 20;
 
-            $query = "INSERT INTO map(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) .");";
+            $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) .");";
             $this->db->setQuery($query);
             $this->db->query();
 
