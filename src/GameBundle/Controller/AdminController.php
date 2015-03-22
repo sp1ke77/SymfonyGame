@@ -41,9 +41,12 @@ class AdminController extends Controller
     {
         $db = $this->get('db');
 
+
+        // Swap this whatever service is to be tested
+
         $EnforceParams = new EnforceParams();
         $EnforceParams->setDb($db);
-        $EnforceParams->trashDeadObjects();
+        $EnforceParams->enforce();
 
         return new RedirectResponse('/admin');
     }

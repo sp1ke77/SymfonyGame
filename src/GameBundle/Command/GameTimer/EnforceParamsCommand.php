@@ -26,13 +26,17 @@ class EnforceParamsCommand extends ContainerAwareCommand
         $logger = $this->getContainer()->get('logger');
         $db = $this->getContainer()->get('db');
 
+        echo 'EnforceParams round begun ... ';
         $logger->info('EnforceParams round begun ... ');
 
         $EnforceParams = new EnforceParams();
         $EnforceParams->setDb($db);
 
-        $EnforceParams->trashDeadObjects();
+        echo 'Trashing dead objects';
+        $EnforceParams->enforce();
+        $logger->info($EnforceParams->getStatus());
 
+        echo 'EnforceParams round complete';
         $logger->info('EnforceParams round complete');
     }
 }

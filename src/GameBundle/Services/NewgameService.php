@@ -11,8 +11,10 @@
  */
 
 namespace GameBundle\Services;
+use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
-use GameBundle\Game\Tribe;
+use GameBundle\Game\Model\Tribe;
+use Symfony\Component\Yaml\Dumper;
 
 /**
  * Class NewgameService
@@ -175,72 +177,15 @@ class NewgameService
      */
     protected function initializeTradeGoods()
     {
-        $tradegoods = array(
-            'Wheat' => array(
-                'Description' => 'The staff of life without which everyone starves',
-                'Trade Value' => 1.0,
-                'Food Value' => 1.0,
-                'Type' => 1
-            ),
-            'Olives' => array(
-                'Description' => 'As well as being tasty, an important source of oil and therefore crucial to the baking trade.',
-                'Trade Value' => 1.2,
-                'Food Value' => 1.2,
-                'Type' => 1
-            ),
-            'Cattle' => array(
-                'Description' => 'The favorite pets of the rich and powerful, often their favorite totems and occasionally their favorite meals.',
-                'Trade Value' => 3.8,
-                'Food Value' => 2.8,
-                'Type' => 1
-            ),
-            'Fish' => array(
-                'Description' => 'Along with wheat, the mainstay of the local diet.',
-                'Trade Value' => 1.2,
-                'Food Value' => 1.2,
-                'Type' => 1
-            ),
-            'Wood' => array(
-                'Description' => 'Good lumber is needed to make the largest, most impressive houses as well as that princely symbol, the seagoing barque.',
-                'Trade Value' => 4.8,
-                'Food Value' => 0,
-                'Type' => 2
-            ),
-            'Linen' => array(
-                'Description' => 'Linen is needed for making clothing and housewares. Princes search far and wide for weavers of quality cloth.',
-                'Trade Value' => 2.6,
-                'Food Value' => 0,
-                'Type' => 2
-            ),
-            'Gold' => array(
-                'Description' => 'Gold is used to make the likenesses of gods and the honored dead. They say that to be cast this way makes one immortal.',
-                'Trade Value' => 6.0,
-                'Food Value' => 0,
-                'Type' => 4
-            ),
-            'Copper' => array(
-                'Description' => 'Copper is an exceptionally easy metal to work. As such it is used for everything: cookware, urns, hunting weapons.',
-                'Trade Value' => 3.0,
-                'Food Value' => 0,
-                'Type' => 2
-            ),
-            'Incense' => array(
-                'Description' => 'Required in all sacred spaces, incense is burnt to please the spirits of the holy houses and the tombs.',
-                'Trade Value' => 4.5,
-                'Food Value' => 0,
-                'Type' => 4
-            ),
-            'Dyes' => array(
-                'Description' => 'Nobles of all lands need bright dyes to color their clothes and paint the likenesses on their shrines.',
-                'Trade Value' => 3.4,
-                'Food Value' => 0,
-                'Type' => 3
-            )
-        );
+        $kernel = $this->get('kernel');
 
-        foreach ($tradegoods as $k => $v)
+        $file = fopen('\var\www\game\src\GameBundle\Game\Scenario\tradegoods.json', 'r');
+        $tradegoods[] = json_decode($file);
+
+        for ($i = 0; $i < 40; $i++)
         {
-            $this->createTradeGood($k, $v['Description'], $v['Trade Value'], $v['Food Value'], $v['Type']);
+            $tradegood = array_rand($tradegoods);
+            $this->createTradeGood($tradegood['Name'], $tradegood['Description'], $tradegood['Trade Value'], $tradegood['Food Value'], $tradegood['Type']);
         }
     }
 
@@ -296,8 +241,8 @@ class NewgameService
 
         foreach ($tribes as $tribe)
         {
-            $tribeId = $tribe->getTribeId();
-            $this->createClan($tribeId);
+            $tid = $tribe->getTribeId();
+            $this->createClan($tid);
         }
     }
 
@@ -381,7 +326,7 @@ class NewgameService
     private function createClan($tribeId)
     {
         $depotId = $this->createDepot();
-        $query = "INSERT INTO clan(tribe, depot, population, fighters, food, gold) VALUES(" . $tribeId . ", " . $depotId . ", 100, 60, 35, 0);";
+        $query = "INSERT INTO clan(tribe, depot, population, fighters, food, coin) VALUES(" . $tribeId . ", " . $depotId . ", 100, 60, 35, 0);";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -438,14 +383,9 @@ class NewgameService
         $this->db->setquery($query);
         $this->db->query();
 
-        // drop all records for current game
-        $query = "DROP TABLE map;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "DROP TABLE mapzone;";
         $this->db->setQuery($query);
-        $result = $this->db->query();
+        $this->db->query();
 
         $query = "DROP TABLE kingdom;";
         $this->db->setQuery($query);

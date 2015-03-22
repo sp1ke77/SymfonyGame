@@ -5,7 +5,7 @@
  * Date: 3/20/2015
  * Time: 1:43 PM
  */
-namespace GameBundle\Game;
+namespace GameBundle\Game\Clan;
 use GameBundle\Game\DBCommon;
 
 /**
@@ -22,11 +22,13 @@ class Clan
 
     /**
      * Fields
+     * @var int $x, $y
      * @var $population
      * @var $fighters
      * @var $coin
      * @var $food
      */
+    protected $x, $y;
     protected $population;
     protected $fighters;
     protected $coin;
@@ -84,6 +86,8 @@ class Clan
             $this->food = $queryObj->food;
             $this->tribeId = $queryObj->tribe;
             $this->depotId = $queryObj->depot;
+            $this->x = $queryObj->x;
+            $this->y = $queryObj->y;
         }
     }
 
@@ -93,6 +97,22 @@ class Clan
     public function getClanId()
     {
         return $this->clanId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getY()
+    {
+        return $this->y;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getX()
+    {
+        return $this->x;
     }
 
     /**

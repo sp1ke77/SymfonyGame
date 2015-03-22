@@ -5,7 +5,8 @@
  * Date: 3/20/2015
  * Time: 2:07 PM
  */
-namespace GameBundle\Game;
+namespace GameBundle\Game\Model;
+use GameBundle\Game\DBCommon;
 
 /**
  * Class Tribe
@@ -14,25 +15,27 @@ namespace GameBundle\Game;
 class Tribe
 {
     /**
-     * @var
+     * Components
+     * @var DBCommon
      */
     protected $db;
+
     /**
-     * @var
+     * Properties
+     * @var int $culture
+     * @var string $named
+     */
+    protected $culture;
+    protected $named;
+
+    /**
+     * References
+     * @var int $tribeId
      */
     protected $tribeId;
 
     /**
-     * @var
-     */
-    protected $culture;
-
-    /**
-     * @var string
-     */
-    protected $named;
-
-    /**
+     * Constructor
      * @param $tribeId
      */
     function __construct($tribeId)
@@ -69,19 +72,11 @@ class Tribe
     }
 
     /**
-     * @return mixed
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
      * @return int
      */
     public function getTribeId()
     {
-        return (int)$this->tribeId;
+        return $this->tribeId;
     }
 
     /**

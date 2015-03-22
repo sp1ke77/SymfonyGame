@@ -6,7 +6,7 @@
  * Time: 9:44 PM
  */
 
-namespace GameBundle\Game;
+namespace GameBundle\Game\Model;
 
 use \Exception as Exception;
 
