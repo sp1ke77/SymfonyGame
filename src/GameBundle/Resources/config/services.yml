@@ -10,5 +10,3 @@ services:
         class: GameBundle\Services\NewgameService
         calls:
             - [setDb, ["@db"]]
-        arguments:
-            - ['%kernel.root_dir%']

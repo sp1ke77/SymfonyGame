@@ -26,8 +26,13 @@ class AdminController extends Controller
 
         if ($passphrase == "restarttheworld")
         {
+            // Get the services we need to invoke a new game
             $newgameService = $this->get('service_newgame');
-            $newgameService->creategame('yesanotherone','yesathirdone');
+            $path = $this->get('kernel')->getRootDir();
+
+            // Configure NewgameService and execute createGame()
+            $newgameService->setPath($path);
+            $newgameService->createGame('yesanotherone','yesathirdone');
 
           // Set the game timer to start
 

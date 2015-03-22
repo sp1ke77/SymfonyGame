@@ -32,7 +32,6 @@ class EnforceParamsCommand extends ContainerAwareCommand
         $EnforceParams = new EnforceParams();
         $EnforceParams->setDb($db);
 
-        echo 'Trashing dead objects';
         $EnforceParams->enforce();
         $logger->info($EnforceParams->getStatus());
 

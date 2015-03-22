@@ -11,10 +11,10 @@
  */
 
 namespace GameBundle\Services;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Tribe;
-use Symfony\Component\Yaml\Dumper;
 
 /**
  * Class NewgameService
@@ -27,6 +27,13 @@ class NewgameService
      */
 
     protected $db;
+
+    protected $path;
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
 
     /**
      * @param DBCommon $db
@@ -177,15 +184,26 @@ class NewgameService
      */
     protected function initializeTradeGoods()
     {
-        $kernel = $this->get('kernel');
-
-        $file = fopen('\var\www\game\src\GameBundle\Game\Scenario\tradegoods.json', 'r');
-        $tradegoods[] = json_decode($file);
-
+        // Decode the json document and spit it out as an associative array
+        $file = file_get_contents($this->path . "/Resources/Scenario/tradegoods.json");
+        $tradegoods[] = json_decode($file, true);
         for ($i = 0; $i < 40; $i++)
         {
-            $tradegood = array_rand($tradegoods);
-            $this->createTradeGood($tradegood['Name'], $tradegood['Description'], $tradegood['Trade Value'], $tradegood['Food Value'], $tradegood['Type']);
+            // Get a random key from the array (nesting depth one)
+            $rk = array_rand($tradegoods[0]);
+            $tradegood = $tradegoods[0][$rk];   // Pull the specific object
+
+            // Get the data from the random tradegood
+            $name = $tradegood['Name'];
+            $description = $tradegood['Description'];
+            $fv = $tradegood['Food Value'];
+            $tv = $tradegood['Trade Value'];
+            $tgtype = $tradegood['Type'];
+
+            // Find a random valid location to put this token
+
+            // Insert into game.tradegood
+            $this->createTradeGood($name, $description, $fv, $tv, $tgtype);
         }
     }
 
