@@ -37,49 +37,47 @@ class Rules
     /**
      * submit() is the main input to the Rules system
      *
-     * @param array $move An associative array containing arguments for the submitted action
+     * @param array $request An associative array containing arguments for the submitted action
      * @return array The outcome of the submitted action. Most recent message is also available
      * by getting $this->status.
      */
-    public function submit($move)
+    public function submit($request)
     {
-
         /*
          * Rules implements a Strategy pattern. It must do three things:
-         * 1. Decide what kind of game-move $arg represents
+         * 1. Decide what kind of game-move the request represents
          * 2. Check if it is a legal move; if it is, execute it
-         * 3. Create some news about it and output results as an array
+         * 3. Create some news about it and output results 
          */
 
         // Validate
-        if (empty($move['Action']) | empty($move['Issuer']))
+        if (empty($request['Action']) | empty($request['Issuer']))
         {
-            return $this->getError('Invalid request', 'Missing action or issuer.');
+            return $this->getResult('Invalid request', 'Missing action or issuer');
         }
 
-        // Get the parameters
-        $action = $move['Action'];
-        $issuer = (int)$move['Issuer'];
-
-        // Get the optional arguments, if any were inputted
-        if (empty($move['Args']))
+        // Get the parameters and optional args
+        $action = $request['Action'];
+        $issuer = (int)$request['Issuer'];
+        if (empty($request['Args']))
         {
             $args = null;
         } else {
-            $args = $move['Args'];
+            $args = $request['Args'];
         }
 
-        // Switch
-        switch ($action) {
+        // Pick a strategy
+        switch ($action)
+        {
             case 'Travel':
 
                 if (!$args) {
-                    return $this->getError('Invalid request', 'Travel requires Args: string "x,y" ');
+                    return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
                 } else {
                     $moveLocation[] = explode(',', $args);
                 }
 
-                // private function travelLogic()
+                // something->function travelLogic()
                 // {
                 //      Get Issuer as object
                 //      if it is not IMappable, $this->getError();
@@ -88,9 +86,11 @@ class Rules
                 //  }
 
                 break;
-        }
 
-        // Create some output
+            default:
+
+                return $this->getResult('Invalid request', 'Undefined action');
+        }
     }
 
     /*
@@ -109,7 +109,7 @@ class Rules
      * @param string $description
      * @return array
      */
-    private function getError($type, $description)
+    private function getResult($type, $description)
     {
         $error = [];
         $error['Type'] = $type;
@@ -118,12 +118,4 @@ class Rules
         return $error;
     }
 
-    private function getResult($type, $description)
-    {
-        $result = [];
-        $result['Type'] = $type;
-        $result['Description'] = $description;
-        $this->status = $description;
-        return $result;
-    }
 }
