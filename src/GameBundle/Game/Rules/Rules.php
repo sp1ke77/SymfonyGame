@@ -34,6 +34,12 @@ class Rules
         $this->db = $db;
     }
 
+    /*
+     *
+     *                      MAIN
+     *
+     *
+     */
     /**
      * submit() is the main input to the Rules system
      *
@@ -47,7 +53,7 @@ class Rules
          * Rules implements a Strategy pattern. It must do three things:
          * 1. Decide what kind of game-move the request represents
          * 2. Check if it is a legal move; if it is, execute it
-         * 3. Create some news about it and output results 
+         * 3. Create some news about it and output results
          */
 
         // Validate
@@ -96,14 +102,32 @@ class Rules
     /*
      *
      *
-     *              PRIVATE FUNCTIONS
+     *                      EXTRAS
      *
      *
      */
+    /**
+     * Create a request packaged for submission
+     *
+     * @param string $action
+     * @param string $issuer
+     * @param string $args
+     * @return array
+     */
+    public function createRequest($action, $issuer, $args = null)
+    {
+        $request = [];
+        $request['Action'] = $action;
+        $request['Issuer'] = $issuer;
+        $request['Args'] = $args;
+        return $request;
+    }
 
     /**
+     * Create a result packaged for return
      *
-     * Package an array for output
+     * If it is the result of a successful move,
+     * publish the output to all subscribers
      *
      * @param string $type
      * @param string $description
@@ -111,11 +135,11 @@ class Rules
      */
     private function getResult($type, $description)
     {
-        $error = [];
-        $error['Type'] = $type;
-        $error['Description'] = $description;
+        $result = [];
+        $result['Type'] = $type;
+        $result['Description'] = $description;
         $this->status = $description;
-        return $error;
+        return $result;
     }
 
 }
