@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Tribe;
+use GameBundle\Services\MapService;
 
 /**
  * Class NewgameService
@@ -200,10 +201,12 @@ class NewgameService
             $tv = $tradegood['Trade Value'];
             $tgtype = $tradegood['Type'];
 
-            // Find a random valid location to put this token
+            $MapService = new MapService();
+            $MapService->setDb($this->db);
+            $mapzone = (int)$MapService->getRandomPassableMapZone();
 
             // Insert into game.tradegood
-            $this->createTradeGood($name, $description, $fv, $tv, $tgtype);
+            $this->createTradeGood($mapzone, $name, $description, $fv, $tv, $tgtype);
         }
     }
 
@@ -307,15 +310,16 @@ class NewgameService
      *
      * INSERT INTO game.tradegood
      *
-     * @param $named
-     * @param $description
-     * @param $tv
-     * @param $fv
-     * @param $tgtype
+     * @param int $mapzone
+     * @param string $named
+     * @param string $description
+     * @param float $tv
+     * @param float $fv
+     * @param int $tgtype
      */
-    private function createTradeGood($named, $description, $tv, $fv, $tgtype)
+    private function createTradeGood($mapzone, $named, $description, $tv, $fv, $tgtype)
     {
-        $query = "INSERT INTO tradegood(named, description, tradevalue, foodvalue, tgtype) VALUES('" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
+        $query = "INSERT INTO tradegood(mapzone, named, description, tradevalue, foodvalue, tgtype) VALUES(" . $mapzone . ", '" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
         $this->db->setQuery($query);
         $this->db->query();
     }

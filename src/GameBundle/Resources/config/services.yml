@@ -10,3 +10,7 @@ services:
         class: GameBundle\Services\NewgameService
         calls:
             - [setDb, ["@db"]]
+    service_map:
+        class: GameBundle\Services\MapService
+        calls:
+            - [setDb, ["@db"]]

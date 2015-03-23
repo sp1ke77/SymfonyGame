@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-use GameBundle\Game\Rules\EnforceParams;
+use GameBundle\Services\MapService;
 
 class AdminController extends Controller
 {
@@ -49,9 +49,9 @@ class AdminController extends Controller
 
         // Swap this whatever service is to be tested
 
-        $EnforceParams = new EnforceParams();
-        $EnforceParams->setDb($db);
-        $EnforceParams->enforce();
+        $MapService = new MapService();
+        $MapService->setDb($db);
+        $MapService->getRandomPassableMapZone();
 
         return new RedirectResponse('/admin');
     }
