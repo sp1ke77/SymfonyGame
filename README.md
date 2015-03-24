@@ -10,7 +10,7 @@ FILES WITH THE MOST ACTION
 
 NOTES ON THE CURRENT BUILD
 
-* The more I think about it, the more I think Rules will need to be broken into Player-facing and Simulation-facing strategies that call upon a common pool of mechanics (i.e. check->update logic) elsewhere. This should serve to keep the mechanical logic out of the Simulation's decision-trees, remove all the janky code required for class-agnosticism from rules->submit() and enable the Player-facing facade to do finer-grain identity-checking on all requests.
+* The more I think about it, the more I think Rules will need to be broken into Player-facing and Simulation-facing strategies that call upon a common pool of mechanics (i.e. check->update logic) elsewhere. This should serve to keep the mechanical logic out of the Simulation's decision-trees, remove all the janky code required for class-agnosticism from rules->submit() and enable the Player-facing end to do finer-grain identity-checking on all requests.
 * It is still not clear whether UPDATE and SET queries should be in an insert()/update() method on game entity classes or whether database i/o should be kept on two strictly one-way paths. 
 * Clans, Armies and Characters will need to be updated with enums representing their current AI states.
 * Still need to write a strategy for Simulation/RandomEvent that will allow selection-by-criteria from an open-ended, external collection of events.
