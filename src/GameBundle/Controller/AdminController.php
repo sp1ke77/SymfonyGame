@@ -11,7 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-use GameBundle\Services\MapService;
+// Temporary
+use GameBundle\Game\Rules\Rules;
+use GameBundle\Game\Model\Clan;
 
 class AdminController extends Controller
 {
@@ -49,10 +51,13 @@ class AdminController extends Controller
 
         // Swap this whatever service is to be tested
 
-        $MapService = new MapService();
-        $MapService->setDb($db);
-        $MapService->getRandomPassableMapZone();
-
+        $rules = New Rules($db);
+        $request['Action'] = 'Travel';
+        $request['Issuer'] = new Clan(null);
+        $request['Args'] = '4,5';
+        $result = $rules->submit($request);
+        print_r($result);
+        die();
         return new RedirectResponse('/admin');
     }
 

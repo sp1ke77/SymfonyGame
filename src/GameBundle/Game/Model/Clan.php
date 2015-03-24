@@ -5,14 +5,17 @@
  * Date: 3/20/2015
  * Time: 1:43 PM
  */
-namespace GameBundle\Game\Clan;
+
+namespace GameBundle\Game\Model;
+
 use GameBundle\Game\DBCommon;
+use GameBundle\Game\Rules\IMappable;
 
 /**
  * Class Clan
  * @package GameBundle\Game
  */
-class Clan
+class Clan implements IMappable
 {
     /**
      * Keys

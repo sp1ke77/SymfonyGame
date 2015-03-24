@@ -513,6 +513,7 @@ class NewgameService
 
         $query = "CREATE TABLE game.tradegood (
                           id INT NOT NULL AUTO_INCREMENT,
+                          mapzone INT NULL,
                           named VARCHAR(45) NULL,
                           imgfull VARCHAR(45) NULL,
                           description VARCHAR(160) NULL,

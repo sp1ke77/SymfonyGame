@@ -41,11 +41,8 @@ class Rules
      *
      */
     /**
-     * submit() is the main input to the Rules system
-     *
-     * @param array $request An associative array containing arguments for the submitted action
-     * @return array The outcome of the submitted action. Most recent message is also available
-     * by getting $this->status.
+     * @param array $request an array containing arguments for the submitted request
+     * @return array the outcome of the request
      */
     public function submit($request)
     {
@@ -57,39 +54,45 @@ class Rules
          */
 
         // Validate
-        if (empty($request['Action']) | empty($request['Issuer']))
-        {
+        if (empty($request['Action']) | empty($request['Issuer'])) {
             return $this->getResult('Invalid request', 'Missing action or issuer');
         }
 
         // Get the parameters and optional args
         $action = $request['Action'];
-        $issuer = (int)$request['Issuer'];
-        if (empty($request['Args']))
-        {
+        $issuer = $request['Issuer'];
+        if (empty($request['Args'])) {
             $args = null;
         } else {
             $args = $request['Args'];
         }
 
         // Pick a strategy
-        switch ($action)
-        {
+        switch ($action) {
             case 'Travel':
 
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
                 } else {
                     $moveLocation[] = explode(',', $args);
+                    $x2 = $moveLocation[0];
+                    $y2 = $moveLocation[1];
                 }
 
-                // something->function travelLogic()
-                // {
-                //      Get Issuer as object
-                //      if it is not IMappable, $this->getError();
-                //      some x,y math to see if it's a valid move;
-                //      return $this->getResult();
-                //  }
+                if (array_search('GameBundle\Game\Rules\IMappable', class_implements($issuer))) {
+                    $x1 = $issuer->getX();
+                    $y1 = $issuer->getY();
+                    $tablename = strtolower(basename(get_class($issuer)));
+
+                    if ($this->checkLegalMove($x1, $y1, $x2, $y2)) {
+                        $query = 'UPDATE ' . $tablename . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
+                        $this->db->setQuery($query);
+                        $this->db->query();
+                        return $this->getResult('Success', $issuer->named . ' traveled to ' . $x2 . ', ' . $y2);
+                    } else {
+                        return $this->getResult('Ilegal move', 'Destination is too far or not passable');
+                    }
+                }
 
                 break;
 
@@ -114,7 +117,7 @@ class Rules
      * @param string $args
      * @return array
      */
-    public function createRequest($action, $issuer, $args = null)
+    public function createRequest($issuer, $action, $args = null)
     {
         $request = [];
         $request['Action'] = $action;
@@ -142,4 +145,28 @@ class Rules
         return $result;
     }
 
+    /**
+     * Takes x1,y1 and x2,y2, returns if move is legal
+     * @param int $x1
+     * @param int $y1
+     * @param int $x2
+     * @param int $y2
+     * @return bool
+     */
+    private function checkLegalMove($x1, $y1, $x2, $y2)
+    {
+        if (abs(($x1 - $x2) > 1) & (abs($y1 - $y2)) > 1)
+        {
+            $query = "SELECT geotype FROM mapzone WHERE x=" . $x2 . " AND y=" . $y2 . ";";
+            $this->db->setQuery($db);
+            $this->db->query();
+            $result = $this->db->loadObject();
+            if ($result == 'plains' | $result == 'forest' | $result == 'desert' | $result == 'hills' | $result == 'mountain')
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
