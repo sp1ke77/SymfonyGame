@@ -24,27 +24,22 @@ class Rules
      */
     protected $db;
 
+    /**
+     * @param DBCommon $db
+     */
     public function setDb($db)
     {
         $this->db = $db;
     }
 
+    /**
+     * @param DBCommon $db
+     */
     public function __construct($db)
     {
         $this->db = $db;
     }
 
-    /*
-     *
-     *
-     *
-     *
-     *                      MAIN
-     *
-     *
-     *
-     *
-     */
     /**
      * Create a request packaged for submission
      *
@@ -111,9 +106,8 @@ class Rules
      *
      */
 
-    protected function travel($issuer, $x2, $y2)
+    protected function travel(IMappable $issuer, $x2, $y2)
     {
-        if (array_search('GameBundle\Game\Rules\IMappable', class_implements($issuer))) {
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
             $tablename = strtolower(basename(get_class($issuer)));
@@ -126,7 +120,6 @@ class Rules
             } else {
                 return $this->getResult('Ilegal move', 'Destination is too far or not passable');
             }
-        }
     }
 
     /*
