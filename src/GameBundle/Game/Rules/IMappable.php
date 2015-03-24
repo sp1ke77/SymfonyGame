@@ -12,5 +12,8 @@ interface IMappable
 {
     public function getX();
     public function getY();
+    public function setX($x);
+    public function setY($y);
+    public function getId();
 
 }

@@ -53,7 +53,9 @@ class AdminController extends Controller
 
         $rules = New Rules($db);
         $request['Action'] = 'Travel';
-        $request['Issuer'] = new Clan(null);
+        $request['Issuer'] = new Clan(23);
+        $request['Issuer']->setX(4);
+        $request['Issuer']->setY(4);
         $request['Args'] = '4,5';
         $result = $rules->submit($request);
         print_r($result);

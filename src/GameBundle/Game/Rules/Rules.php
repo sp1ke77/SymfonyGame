@@ -9,6 +9,14 @@
 namespace GameBundle\Game\Rules;
 use GameBundle\Game\DBCommon;
 
+/**
+ * Class Rules
+ *
+ * Obviously, this should be constructed with the db and if you don't lols wil ensue.
+ *
+ * @param DBCommon $db
+ * @package GameBundle\Game\Rules
+ */
 class Rules
 {
 
@@ -81,14 +89,65 @@ class Rules
         switch ($action) {
             case 'Travel':
 
+                // The interface for travel is IMappable; Clans, Armies and Characters have it.
+                // Implementing IMappable means having fields $x and $y (that is, a location) and
+                // methods for getting and updating them.
+
+                if (!array_search("GameBundle\\Game\\Rules\\IMappable", class_implements($issuer)))
+                {
+                    return $this->getResult('Invalid request', 'Issuer must implement IMappable');
+                }
+
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
                 } else {
-                    $xy[] = explode(',', $args);
-                    $this->travel($issuer, $xy[0], $xy[1]);
+                    $xy = explode(',', $args);
+                    return $this->travel($issuer, $xy[0], $xy[1]);
                 }
 
                 break;
+
+            case 'Holiday':
+
+                // Check if it's a Clan and if so, if it has enough food and if so, ->holiday()
+                // No other class can take this action
+
+                break;
+
+            case 'Buy Goods':
+
+                // The interface for trading is IDepotHaver; Clans and Characters have it
+                // (Cities technically have depots too, but they do not initiate trades).
+                //
+
+                // Check if the issuer has enough coin, if the issuer is located in a city
+                // with sufficient supplies and, if it all checks out, execute the trade.
+
+                // Args may be somewhat complicated.
+
+                break;
+
+            case 'Sell Goods':
+
+                // The interface for trading is IDepotHaver; Clans and Characters have it
+                // (Cities technically have depots too, but they do not initiate trades).
+                //
+
+                // Check if enough crap exists in the issuer's depot, if the issuer is
+                // located in a city with sufficient coin and, if it all checks out, execute
+                // the trade.
+
+                // Args may be somewhat complicated.
+
+            case 'Intercept':
+
+                // Check if the target is still in the area. If a battle already exists here,
+                // subscribe this unit. If the intercept check succeeds, subscribe the target
+                // too. If a battle does not exist here and the intercept check succeeds,
+                // create a new battle here and subscribe both units. The interface for all
+                // this stuff is ICombatable; Clans and Armies implement it, Characters don't.
+                //
+                // Args are probably something like "$target_id, $class_id"
 
             default:
 
@@ -110,13 +169,14 @@ class Rules
     {
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
-            $tablename = strtolower(basename(get_class($issuer)));
+
+            $tablename = strtolower($this->getClass($issuer));
 
             if ($this->checkLegalMove($x1, $y1, $x2, $y2)) {
                 $query = 'UPDATE ' . $tablename . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
                 $this->db->setQuery($query);
                 $this->db->query();
-                return $this->getResult('Success', $issuer->named . ' traveled to ' . $x2 . ', ' . $y2);
+                return $this->getResult('Success', $tablename . $issuer->getId() . ' traveled to ' . $x2 . ', ' . $y2);
             } else {
                 return $this->getResult('Ilegal move', 'Destination is too far or not passable');
             }
@@ -130,6 +190,13 @@ class Rules
      *
      *
      */
+
+    private function getClass($issuer)
+    {
+        $getclass = explode('\\', get_class($issuer));
+        $name = array_pop($getclass);
+        return $name;
+    }
 
     /**
      * Create a result packaged for return
@@ -160,13 +227,14 @@ class Rules
      */
     private function checkLegalMove($x1, $y1, $x2, $y2)
     {
-        if (abs(($x1 - $x2) > 1) & (abs($y1 - $y2)) > 1)
+        if (abs(($x1 - $x2) < 2) & (abs($y1 - $y2)) < 2)
         {
             $query = "SELECT geotype FROM mapzone WHERE x=" . $x2 . " AND y=" . $y2 . ";";
-            $this->db->setQuery($db);
+            $this->db->setQuery($query);
             $this->db->query();
-            $result = $this->db->loadObject();
-            if ($result == 'plains' | $result == 'forest' | $result == 'desert' | $result == 'hills' | $result == 'mountain')
+            $result = $this->db->loadResult();
+            if ($result == 'plains' | $result == 'forest' | $result == 'desert' |
+                    $result == 'hills' | $result == 'mountain' | $result == 'swamp')
             {
                 return true;
             } else {
@@ -174,7 +242,4 @@ class Rules
             }
         }
     }
-
-
-
 }

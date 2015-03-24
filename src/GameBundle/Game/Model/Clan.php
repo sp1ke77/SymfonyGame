@@ -30,6 +30,7 @@ class Clan implements IMappable
      * @var $fighters
      * @var $coin
      * @var $food
+     * @var $tribeName
      */
     protected $x, $y;
     protected $population;
@@ -97,7 +98,7 @@ class Clan implements IMappable
     /**
      * @return int
      */
-    public function getClanId()
+    public function getId()
     {
         return $this->clanId;
     }
@@ -116,6 +117,22 @@ class Clan implements IMappable
     public function getX()
     {
         return $this->x;
+    }
+
+    /**
+     * @param mixed $x
+     */
+    public function setX($x)
+    {
+        $this->x = $x;
+    }
+
+    /**
+     * @param mixed $y
+     */
+    public function setY($y)
+    {
+        $this->y = $y;
     }
 
     /**
