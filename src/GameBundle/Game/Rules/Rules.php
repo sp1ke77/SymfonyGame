@@ -36,24 +36,39 @@ class Rules
 
     /*
      *
+     *
+     *
+     *
      *                      MAIN
      *
      *
+     *
+     *
      */
+    /**
+     * Create a request packaged for submission
+     *
+     * @param string $action
+     * @param string $issuer
+     * @param string $args
+     * @return array
+     */
+    public function createRequest($issuer, $action, $args = null)
+    {
+        $request = [];
+        $request['Action'] = $action;
+        $request['Issuer'] = $issuer;
+        $request['Args'] = $args;
+        return $request;
+    }
+
     /**
      * @param array $request an array containing arguments for the submitted request
      * @return array the outcome of the request
      */
     public function submit($request)
     {
-        /*
-         * Rules implements a Strategy pattern. It must do three things:
-         * 1. Decide what kind of game-move the request represents
-         * 2. Check if it is a legal move; if it is, execute it
-         * 3. Create some news about it and output results
-         */
-
-        // Validate
+        // Validate the request object
         if (empty($request['Action']) | empty($request['Issuer'])) {
             return $this->getResult('Invalid request', 'Missing action or issuer');
         }
@@ -74,24 +89,8 @@ class Rules
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
                 } else {
-                    $moveLocation[] = explode(',', $args);
-                    $x2 = $moveLocation[0];
-                    $y2 = $moveLocation[1];
-                }
-
-                if (array_search('GameBundle\Game\Rules\IMappable', class_implements($issuer))) {
-                    $x1 = $issuer->getX();
-                    $y1 = $issuer->getY();
-                    $tablename = strtolower(basename(get_class($issuer)));
-
-                    if ($this->checkLegalMove($x1, $y1, $x2, $y2)) {
-                        $query = 'UPDATE ' . $tablename . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
-                        $this->db->setQuery($query);
-                        $this->db->query();
-                        return $this->getResult('Success', $issuer->named . ' traveled to ' . $x2 . ', ' . $y2);
-                    } else {
-                        return $this->getResult('Ilegal move', 'Destination is too far or not passable');
-                    }
+                    $xy[] = explode(',', $args);
+                    $this->travel($issuer, $xy[0], $xy[1]);
                 }
 
                 break;
@@ -105,26 +104,39 @@ class Rules
     /*
      *
      *
-     *                      EXTRAS
+     *
+     *                      STRATEGIES
+     *
      *
      *
      */
-    /**
-     * Create a request packaged for submission
-     *
-     * @param string $action
-     * @param string $issuer
-     * @param string $args
-     * @return array
-     */
-    public function createRequest($issuer, $action, $args = null)
+
+    protected function travel($issuer, $x2, $y2)
     {
-        $request = [];
-        $request['Action'] = $action;
-        $request['Issuer'] = $issuer;
-        $request['Args'] = $args;
-        return $request;
+        if (array_search('GameBundle\Game\Rules\IMappable', class_implements($issuer))) {
+            $x1 = $issuer->getX();
+            $y1 = $issuer->getY();
+            $tablename = strtolower(basename(get_class($issuer)));
+
+            if ($this->checkLegalMove($x1, $y1, $x2, $y2)) {
+                $query = 'UPDATE ' . $tablename . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
+                $this->db->setQuery($query);
+                $this->db->query();
+                return $this->getResult('Success', $issuer->named . ' traveled to ' . $x2 . ', ' . $y2);
+            } else {
+                return $this->getResult('Ilegal move', 'Destination is too far or not passable');
+            }
+        }
     }
+
+    /*
+     *
+     *
+     *                      PRIVATE FUNCTIONS
+     *
+     *
+     *
+     */
 
     /**
      * Create a result packaged for return
@@ -169,4 +181,7 @@ class Rules
             }
         }
     }
+
+
+
 }
