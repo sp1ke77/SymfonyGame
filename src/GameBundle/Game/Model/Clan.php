@@ -25,13 +25,16 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      * @var $fighters
      * @var $coin
      * @var $food
-     * @var $tribeName
+     * @var $morale
+     * @var $activity
      */
     protected $x, $y;
     protected $population;
     protected $fighters;
     protected $coin;
     protected $food;
+    protected $morale;
+    protected $activity;
 
     /**
      * References
@@ -42,7 +45,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     protected $tribeId;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getY()
     {
@@ -50,7 +53,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getX()
     {
@@ -58,7 +61,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @param mixed $x
+     * @param int $x
      */
     public function setX($x)
     {
@@ -66,7 +69,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @param mixed $y
+     * @param int $y
      */
     public function setY($y)
     {
@@ -74,7 +77,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getPopulation()
     {
@@ -82,7 +85,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getFighters()
     {
@@ -90,7 +93,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getFood()
     {
@@ -98,11 +101,67 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @return mixed
+     * @param mixed $population
+     */
+    public function setPopulation($population)
+    {
+        $this->population = $population;
+    }
+
+    /**
+     * @param mixed $coin
+     */
+    public function setCoin($coin)
+    {
+        $this->coin = $coin;
+    }
+
+    /**
+     * @param mixed $morale
+     */
+    public function setMorale($morale)
+    {
+        $this->morale = $morale;
+    }
+
+    /**
+     * @param mixed $activity
+     */
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+    }
+
+    /**
+     * @param mixed $fighters
+     */
+    public function setFighters($fighters)
+    {
+        $this->fighters = $fighters;
+    }
+
+    /**
+     * @param int
+     */
+
+    public function setFood($food)
+    {
+        $this->food = $food;
+    }
+    /**
+     * @return int
      */
     public function getCoin()
     {
         return $this->coin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTribeId()
+    {
+        return $this->tribeId;
     }
 
     /*
@@ -110,7 +169,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      *
      */
     /**
-     * @return mixed
+     * @return int
      */
     public function getDepot()
     {
@@ -122,14 +181,10 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      *  ICombatant implementation
      *
      */
-    /**
-     * @return mixed
-     */
-    public function getTribeId()
-    {
-        return $this->tribeId;
-    }
 
+    /**
+     * @return int
+     */
     public function getMorale()
     {
 
@@ -143,5 +198,44 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     public function Defend($attack)
     {
 
+    }
+
+    /*
+     *
+     *
+     *
+     *               CLAN SPECIFIC FUNCTIONS
+     *
+     *
+     *
+     */
+
+    public function checkLarder()
+    {
+        $depot = New Depot($this->depotId);
+        $depot->load();
+
+        // This should be made more extensible, probably by using reflection some more
+        $this->food = (($depot->getWheat() * 1) + ($depot->getOlives() * 1.2) +
+                        ($depot->getFish() * 1.2) + ($depot->getCattle() * 2.8));
+        $depot->setWheat(0);
+        $depot->setOlives(0);
+        $depot->setFish(0);
+        $depot->setCattle(0);
+        $depot->update();
+    }
+
+    public function consumeFood($amt)
+    {
+        if ($this->food > $amt) {
+            $this->food -= $amt;
+            $this->update();
+            return true;
+        } else {
+            // Generate some news about famine and bad shit
+            $this->population -= 1;
+            $this->update();
+            return false;
+        }
     }
 }

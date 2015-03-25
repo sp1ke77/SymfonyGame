@@ -66,6 +66,7 @@ class NewgameService
             $this->initializeCities();
             $this->initializeTradeGoods();
 
+            // $this->createTradeGoodTokens();
             $this->createSomeTribes();
             $this->createSomeClans();
         }
@@ -184,6 +185,8 @@ class NewgameService
      */
     protected function initializeTradeGoods()
     {
+        // CREATE THE PLATONIC TRADE GOODS
+
         // Decode the json document and spit it out as an associative array
         $file = file_get_contents($this->path . "/Resources/Scenario/tradegoods.json");
         $tradegoods[] = json_decode($file, true);
@@ -200,12 +203,8 @@ class NewgameService
             $tv = $tradegood['Trade Value'];
             $tgtype = $tradegood['Type'];
 
-            $MapService = new MapService();
-            $MapService->setDb($this->db);
-            $mapzone = (int)$MapService->getRandomPassableMapZone();
-
             // Insert into game.tradegood
-            $this->createTradeGood($mapzone, $name, $description, $fv, $tv, $tgtype);
+            $this->createTradeGood($name, $description, $fv, $tv, $tgtype);
         }
     }
 
@@ -316,9 +315,9 @@ class NewgameService
      * @param float $fv
      * @param int $tgtype
      */
-    private function createTradeGood($mapzone, $named, $description, $tv, $fv, $tgtype)
+    private function createTradeGood($named, $description, $tv, $fv, $tgtype)
     {
-        $query = "INSERT INTO tradegood(mapzone, named, description, tradevalue, foodvalue, tgtype) VALUES(" . $mapzone . ", '" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
+        $query = "INSERT INTO tradegood_platonic(named, description, tradevalue, foodvalue, tgtype) VALUES('" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -510,15 +509,22 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.tradegood (
+        $query = "CREATE TABLE game.tradegood_platonic (
                           id INT NOT NULL AUTO_INCREMENT,
-                          mapzone INT NULL,
                           named VARCHAR(45) NULL,
                           imgfull VARCHAR(45) NULL,
                           description VARCHAR(160) NULL,
                           tradevalue NUMERIC(2,1) NULL,
                           foodvalue NUMERIC(2,1) NULL,
                           tgtype ENUM('food','supplies','goods','gifts') NULL,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "CREATE TABLE game.tradegood_token (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          mapzone INT NULL,
+                          tg VARCHAR(45) NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -643,5 +649,11 @@ class NewgameService
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
+
+        $query = "CREATE TABLE game.battle (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          mapzone INT NULL,
+                          clans NOT NULL,
+                          PRIMARY KEY (id));)";
     }
 }

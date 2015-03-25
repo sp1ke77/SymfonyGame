@@ -11,6 +11,8 @@ use GameBundle\Game\DBCommon;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 use GameBundle\Game\Rules\Checks;
 use GameBundle\Game\Rules\Actions;
+use GameBundle\Game\Model\Clan;
+use GameBundle\GameBundle;
 
 
 /**
@@ -18,7 +20,8 @@ use GameBundle\Game\Rules\Actions;
  *
  * Obviously, this should be constructed with the db and if you don't lols wil ensue.
  *
- * @param DBCommon $db
+ * @param $check Checks
+ * @param $action Actions
  * @package GameBundle\Game\Rules
  */
 class Rules
@@ -32,32 +35,44 @@ class Rules
 
     /**
      * Components
-     * @var DBCommon $db
+     * @var $check Checks
+     * @var $action Actions
      */
-    protected $db;
+    protected $check;
+    protected $action;
 
     /**
-     * @param DBCommon $db
+     * @param $action
      */
-    public function setDb($db)
+    public function setAction($action)
     {
-        $this->db = $db;
+        $this->action = $action;
     }
 
     /**
-     * @param DBCommon $db
+     * @param $check
      */
-    public function __construct($db)
+    public function setCheck($check)
     {
-        $this->db = $db;
+        $this->check = $check;
+    }
+
+    /**
+     * @param $checks Checks
+     * @param $actions Actions
+     */
+    public function __construct($checks, $actions)
+    {
+        $this->check = $checks;
+        $this->action = $actions;
     }
 
     /**
      * Create a request packaged for submission
      *
-     * @param string $action
-     * @param string $issuer
-     * @param string $args
+     * @param $issuer object
+     * @param $action string
+     * @param $args string
      * @return array
      */
     public function createRequest($issuer, $action, $args = null)
@@ -118,6 +133,12 @@ class Rules
 
                 // Check if it's a Clan and if so, if it has enough food and if so, ->holiday()
                 // No other class can take this action
+                if ($this->getClass($issuer) != 'Clan')
+                {
+                    return $this->getResult('Invalid request', 'Only clans can holiday');
+                } else {
+                    return $this->holiday($issuer);
+                }
 
                 break;
 
@@ -129,7 +150,26 @@ class Rules
                 // Check if the issuer has enough coin, if the issuer is located in a city
                 // with sufficient supplies and, if it all checks out, execute the trade.
 
-                // Args may be somewhat complicated.
+                if (!array_search("GameBundle\\Game\\Rules\\Interfaces\\IDepotHaver", class_implements($issuer)))
+                {
+                    return $this->getResult('Invalid request', 'Issuer must implement IDepotHaver');
+                }
+
+                if (!$args) {
+                    return $this->getResult('Invalid request', 'Buy Goods requires Args: string"');
+                } else {
+                    if (!is_string($args))
+                    {
+                        return $this->getResult('Invalid request', 'Travel requires Args: string"');
+                    } elseif ($args != "f" || "g" || "e") {
+                        return $this->getResult('Invalid request', 'Undefined argument');
+                    } else {
+                        return $this->buygoods($issuer, $args);
+                    }
+                }
+
+                // Args:
+                // f => Buy all food
 
                 break;
 
@@ -141,7 +181,8 @@ class Rules
                 // located in a city with sufficient coin and, if it all checks out, execute
                 // the trade.
 
-                // Args may be somewhat complicated.
+                // Args:
+                // a => Sell all nonfood
 
             case 'Attack':
 
@@ -176,22 +217,39 @@ class Rules
 
     public function travel(IMappable $issuer, $x2, $y2)
     {
-            // Summon the services
-            $check = New Checks($this->db);
-            $action = New Actions($this->db);
-
             // Get the issuer's current location
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
-            if ($check->checkLegalMove($x1, $y1, $x2, $y2))
+            if ($this->check->checkLegalMove($x1, $y1, $x2, $y2))
             {
-                $result = $action->mapTravel($issuer, $x2, $y2);
+                $result = $this->action->mapTravel($issuer, $x2, $y2);
                 return $this->getResult('Success', $result);
             } else {
-                return $this->getResult('Ilegal move', 'Destination is too far or not passable');
+                return $this->getResult('Illegal move', 'Destination is too far or is not passable');
             }
     }
+
+    public function holiday(Clan $issuer) {
+
+            if ($issuer->getFood() > 5)
+            {
+                $issuer->checkLarder();
+                if ($issuer->consumeFood($issuer, 5)) {}
+                    $issuer->setPopulation($issuer->getPopulation() + 5);
+                    return $this->getResult('Success', 'Clan ' . $issuer->getId() . ' celebrated a holy day');
+            } else {
+                return $this->getResult('Illegal move', 'Cannot holiday without at least 5 food');
+            }
+    }
+
+    /*
+     *
+     *
+     *                       PRIVATE FUNCTIONS
+     *
+     *
+     */
 
     /**
      * Create a result packaged for return
@@ -199,8 +257,8 @@ class Rules
      * If it is the result of a successful move,
      * publish the output to all subscribers
      *
-     * @param string $type
-     * @param string $description
+     * @param $type string
+     * @param $description string
      * @return array
      */
     private function getResult($type, $description)
@@ -210,5 +268,12 @@ class Rules
         $result['Description'] = $description;
         $this->status = $description;
         return $result;
+    }
+
+    private function getClass($issuer)
+    {
+        $getclass = explode('\\', get_class($issuer));
+        $name = array_pop($getclass);
+        return $name;
     }
 }

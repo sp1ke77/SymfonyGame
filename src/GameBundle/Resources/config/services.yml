@@ -22,3 +22,7 @@ services:
         class: GameBundle\Game\Rules\Actions
         calls:
             - [setDb, ["@db"]]
+    rules:
+        class: GameBundle\Game\Rules\Rules
+        arguments:
+            - ["@checks", "@actions"]
