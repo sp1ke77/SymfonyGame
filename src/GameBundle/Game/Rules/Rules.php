@@ -8,6 +8,10 @@
 
 namespace GameBundle\Game\Rules;
 use GameBundle\Game\DBCommon;
+use GameBundle\Game\Rules\Interfaces\IMappable;
+use GameBundle\Game\Rules\Checks;
+use GameBundle\Game\Rules\Actions;
+
 
 /**
  * Class Rules
@@ -88,12 +92,11 @@ class Rules
         // Pick a strategy
         switch ($action) {
             case 'Travel':
-
                 // The interface for travel is IMappable; Clans, Armies and Characters have it.
                 // Implementing IMappable means having fields $x and $y (that is, a location) and
                 // methods for getting and updating them.
 
-                if (!array_search("GameBundle\\Game\\Rules\\IMappable", class_implements($issuer)))
+                if (!array_search("GameBundle\\Game\\Rules\\Interfaces\\IMappable", class_implements($issuer)))
                 {
                     return $this->getResult('Invalid request', 'Issuer must implement IMappable');
                 }
@@ -102,6 +105,10 @@ class Rules
                     return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
                 } else {
                     $xy = explode(',', $args);
+                    if (count($xy) != 2)
+                    {
+                        return $this->getResult('Invalid request', 'Travel requires Args: string "x,y"');
+                    }
                     return $this->travel($issuer, $xy[0], $xy[1]);
                 }
 
@@ -118,7 +125,6 @@ class Rules
 
                 // The interface for trading is IDepotHaver; Clans and Characters have it
                 // (Cities technically have depots too, but they do not initiate trades).
-                //
 
                 // Check if the issuer has enough coin, if the issuer is located in a city
                 // with sufficient supplies and, if it all checks out, execute the trade.
@@ -129,9 +135,7 @@ class Rules
 
             case 'Sell Goods':
 
-                // The interface for trading is IDepotHaver; Clans and Characters have it
-                // (Cities technically have depots too, but they do not initiate trades).
-                //
+                // Check if the issuer implements IDepotHaver
 
                 // Check if enough crap exists in the issuer's depot, if the issuer is
                 // located in a city with sufficient coin and, if it all checks out, execute
@@ -139,15 +143,20 @@ class Rules
 
                 // Args may be somewhat complicated.
 
-            case 'Intercept':
+            case 'Attack':
 
-                // Check if the target is still in the area. If a battle already exists here,
-                // subscribe this unit. If the intercept check succeeds, subscribe the target
-                // too. If a battle does not exist here and the intercept check succeeds,
-                // create a new battle here and subscribe both units. The interface for all
-                // this stuff is ICombatable; Clans and Armies implement it, Characters don't.
+                // Check if the issuer is IMappable and ICombatable, and if the target
+                // is valid.
+
+                // battle() {} {
+                //      Check if the target is still in the area. If a battle already exists here,
+                //      subscribe this unit. If the intercept check succeeds, subscribe the target
+                //      too. If a battle does not exist here and the intercept check succeeds,
+                //      create a new battle here and subscribe both units. The interface for all
+                //      this stuff is ICombatable; Clans and Armies implement it, Characters don't.
+                // }
                 //
-                // Args are probably something like "$target_id, $class_id"
+                // Args are probably just $target_id
 
             default:
 
@@ -165,37 +174,23 @@ class Rules
      *
      */
 
-    protected function travel(IMappable $issuer, $x2, $y2)
+    public function travel(IMappable $issuer, $x2, $y2)
     {
+            // Summon the services
+            $check = New Checks($this->db);
+            $action = New Actions($this->db);
+
+            // Get the issuer's current location
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
-            $tablename = strtolower($this->getClass($issuer));
-
-            if ($this->checkLegalMove($x1, $y1, $x2, $y2)) {
-                $query = 'UPDATE ' . $tablename . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
-                $this->db->setQuery($query);
-                $this->db->query();
-                return $this->getResult('Success', $tablename . $issuer->getId() . ' traveled to ' . $x2 . ', ' . $y2);
+            if ($check->checkLegalMove($x1, $y1, $x2, $y2))
+            {
+                $result = $action->mapTravel($issuer, $x2, $y2);
+                return $this->getResult('Success', $result);
             } else {
                 return $this->getResult('Ilegal move', 'Destination is too far or not passable');
             }
-    }
-
-    /*
-     *
-     *
-     *                      PRIVATE FUNCTIONS
-     *
-     *
-     *
-     */
-
-    private function getClass($issuer)
-    {
-        $getclass = explode('\\', get_class($issuer));
-        $name = array_pop($getclass);
-        return $name;
     }
 
     /**
@@ -215,31 +210,5 @@ class Rules
         $result['Description'] = $description;
         $this->status = $description;
         return $result;
-    }
-
-    /**
-     * Takes x1,y1 and x2,y2, returns if move is legal
-     * @param int $x1
-     * @param int $y1
-     * @param int $x2
-     * @param int $y2
-     * @return bool
-     */
-    private function checkLegalMove($x1, $y1, $x2, $y2)
-    {
-        if (abs(($x1 - $x2) < 2) & (abs($y1 - $y2)) < 2)
-        {
-            $query = "SELECT geotype FROM mapzone WHERE x=" . $x2 . " AND y=" . $y2 . ";";
-            $this->db->setQuery($query);
-            $this->db->query();
-            $result = $this->db->loadResult();
-            if ($result == 'plains' | $result == 'forest' | $result == 'desert' |
-                    $result == 'hills' | $result == 'mountain' | $result == 'swamp')
-            {
-                return true;
-            } else {
-                return false;
-            }
-        }
     }
 }

@@ -14,3 +14,11 @@ services:
         class: GameBundle\Services\MapService
         calls:
             - [setDb, ["@db"]]
+    checks:
+        class: GameBundle\Game\Rules\Checks
+        calls:
+            - [setDb, ["@db"]]
+    actions:
+        class: GameBundle\Game\Rules\Actions
+        calls:
+            - [setDb, ["@db"]]

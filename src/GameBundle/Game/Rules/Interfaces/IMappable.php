@@ -6,7 +6,7 @@
  * Time: 10:33 PM
  */
 
-namespace GameBundle\Game\Rules;
+namespace GameBundle\Game\Rules\Interfaces;
 
 interface IMappable
 {

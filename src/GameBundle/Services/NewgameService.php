@@ -24,9 +24,8 @@ use GameBundle\Services\MapService;
 class NewgameService
 {
     /**
-     * @var DBCommon $db
+     * @var $db DBCommon
      */
-
     protected $db;
 
     protected $path;
@@ -219,11 +218,11 @@ class NewgameService
     protected function createSomeTribes()
     {
         $tribes = array(
-            'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wa-Khasis", "Lotan",
+            'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wakhasir", "Lotan",
                 "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar",
                 "Qadeshtu", "Yarikh", "Yaw"),
-            'Hurrian' => array("Matarum", "Yariha-Amu", "Ihid", "Iniru", "Sin-mussalim", "Abbana-el",
-                "Yaiti-ibal", "Yimsi-el", "Mut-rame", "Habdu-Ami", "Kabi-epuh",
+            'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mussalim", "Abbana-el",
+                "Yaiti-obal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh",
                 "Zakija-Hamu", "Zunan"),
             'Luwian' => array("Maddunani", "Kuruntiya", "Runtiya", "Hantawati", "Tarkasna", "Zupari",
                 "Tupana", "Tuwarsanza", "Tibe", "Esi-tmmata", "Manaha", "Umanaddu",
@@ -579,14 +578,15 @@ class NewgameService
                           food INT NULL,
                           coin INT NULL,
                           depot INT NULL,
+                          activity ENUM('wandering', 'exploring', 'working', 'trading', 'holiday', 'fighting'),
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
 
         $query = "CREATE TABLE game.building (
                           id INT NOT NULL AUTO_INCREMENT,
-                          named VARCHAR(45) NULL,
                           mapzone INT NULL,
+                          named VARCHAR(45) NULL,
                           owner INT NULL,
                           region INT NULL,
                           topuser INT NULL,
@@ -594,12 +594,13 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.unit (
+        $query = "CREATE TABLE game.army (
                           id INT NOT NULL AUTO_INCREMENT,
                           mapzone INT NULL,
                           ptype INT NULL,
                           owner INT NULL,
                           fighters INT NULL,
+                          stance ENUM ('attack', 'police', 'avoid'),
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -623,9 +624,9 @@ class NewgameService
         $query = "CREATE TABLE game.diplomatic_relation (
                           id INT NOT NULL AUTO_INCREMENT,
                           ownerid INT NULL,
-                          ownertype ENUM('player', 'agent', 'clan', 'tribe', 'nation'),
+                          ownertype ENUM('player', 'agent', 'tribe', 'nation'),
                           targetid INT NULL,
-                          targettype ENUM('player', 'agent', 'clan', 'tribe', 'nation'),
+                          targettype ENUM('player', 'agent', 'tribe', 'nation'),
                           modifier INT NULL,
                           reasons VARCHAR(140) NULL,
                           PRIMARY KEY (id));";

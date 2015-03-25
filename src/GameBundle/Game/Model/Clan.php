@@ -8,21 +8,16 @@
 
 namespace GameBundle\Game\Model;
 
-use GameBundle\Game\DBCommon;
-use GameBundle\Game\Rules\IMappable;
+use GameBundle\Game\Rules\Interfaces\IMappable;
+use GameBundle\Game\Rules\Interfaces\IDepotHaver;
+use GameBundle\Game\Rules\Interfaces\ICombatant;
 
 /**
  * Class Clan
  * @package GameBundle\Game
  */
-class Clan implements IMappable
+class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
 {
-    /**
-     * Keys
-     * @var int $clanId
-     */
-    protected $clanId;
-
     /**
      * Fields
      * @var int $x, $y
@@ -45,63 +40,6 @@ class Clan implements IMappable
      */
     protected $depotId;
     protected $tribeId;
-
-    /**
-     * Components
-     * @var DBCommon $db
-     */
-    protected $db;
-
-    /**
-     * Constructor
-     * @param $clanId
-     */
-    public function __construct($clanId)
-    {
-        if (!isset($clanId))
-        {
-            return;
-        } else {
-            $this->clanId = $clanId;
-        }
-    }
-
-    /**
-     * @param $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
-    /**
-     * Hydrate the object
-     */
-    public function load()
-    {
-        $query = "SELECT * FROM clan WHERE id=" . $this->clanId . ";";
-        $this->db->setQuery($query);
-        $queryObj = $this->db->loadObject();
-
-        if (!empty($queryObj)) {
-            $this->population = $queryObj->population;
-            $this->fighters = $queryObj->fighters;
-            $this->coin = $queryObj->coin;
-            $this->food = $queryObj->food;
-            $this->tribeId = $queryObj->tribe;
-            $this->depotId = $queryObj->depot;
-            $this->x = $queryObj->x;
-            $this->y = $queryObj->y;
-        }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->clanId;
-    }
 
     /**
      * @return mixed
@@ -167,14 +105,23 @@ class Clan implements IMappable
         return $this->coin;
     }
 
+    /*
+     *  IDepotHaver implementation
+     *
+     */
     /**
      * @return mixed
      */
-    public function getDepotId()
+    public function getDepot()
     {
         return $this->depotId;
     }
 
+    /*
+     *
+     *  ICombatant implementation
+     *
+     */
     /**
      * @return mixed
      */
@@ -183,5 +130,18 @@ class Clan implements IMappable
         return $this->tribeId;
     }
 
+    public function getMorale()
+    {
 
+    }
+
+    public function Attack()
+    {
+
+    }
+
+    public function Defend($attack)
+    {
+
+    }
 }

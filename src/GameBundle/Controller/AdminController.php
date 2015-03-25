@@ -48,12 +48,11 @@ class AdminController extends Controller
     {
         $db = $this->get('db');
 
-
         // Swap this whatever service is to be tested
 
         $rules = New Rules($db);
         $request['Action'] = 'Travel';
-        $request['Issuer'] = new Clan(23);
+        $request['Issuer'] = new Clan(8);
         $request['Issuer']->setX(4);
         $request['Issuer']->setY(4);
         $request['Args'] = '4,5';
