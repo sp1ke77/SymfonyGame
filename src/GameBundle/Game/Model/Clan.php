@@ -109,7 +109,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
-     * @param mixed $coin
+     * @param $coin int
      */
     public function setCoin($coin)
     {

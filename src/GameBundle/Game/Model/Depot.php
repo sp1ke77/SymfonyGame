@@ -220,7 +220,7 @@ class Depot extends GameEntity
      *
      *
      */
-    public function Buy($good, $amt, &$coin) {
+    public function Buy($good, $amt, $coin) {
 
         $reflection = New ReflectionClass($this);
         if ($coin > ($amt * $this->GetPlatonic($good)->tradevalue))

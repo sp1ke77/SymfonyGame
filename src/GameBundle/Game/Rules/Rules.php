@@ -9,9 +9,12 @@
 namespace GameBundle\Game\Rules;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Rules\Interfaces\IMappable;
+use GameBundle\Game\Rules\Interfaces\IDepotHaver;
+use GameBundle\Game\Rules\Interfaces\ICombatant;
 use GameBundle\Game\Rules\Checks;
 use GameBundle\Game\Rules\Actions;
 use GameBundle\Game\Model\Clan;
+use GameBundle\Game\Model\Depot;
 use GameBundle\GameBundle;
 
 
@@ -158,18 +161,16 @@ class Rules
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Buy Goods requires Args: string"');
                 } else {
-                    if (!is_string($args))
+                    $xy = explode(',', $args);
+                    if (count($xy) != 2)
                     {
-                        return $this->getResult('Invalid request', 'Travel requires Args: string"');
-                    } elseif ($args != "f" || "g" || "e") {
-                        return $this->getResult('Invalid request', 'Undefined argument');
-                    } else {
-                        return $this->buygoods($issuer, $args);
+                        return $this->getResult('Invalid request', 'Buy Goods requires Args: string "{good},{amount}"');
                     }
+                    return $this->travel($issuer, $xy[0], $xy[1]);
                 }
 
                 // Args:
-                // f => Buy all food
+                // wa => Buy all wheat
 
                 break;
 
@@ -240,6 +241,23 @@ class Rules
                     return $this->getResult('Success', 'Clan ' . $issuer->getId() . ' celebrated a holy day');
             } else {
                 return $this->getResult('Illegal move', 'Cannot holiday without at least 5 food');
+            }
+    }
+
+    public function buyGoods(IDepotHaver $issuer, $args)
+    {
+            // Pull up the issuer's depot and find out how much credit we have
+            $depot = New Depot($issuer->getDepot());
+            $coin = $issuer->getCoin();
+            $tradegood = $depot->getPlatonic($args[0]);
+            $amt = (int)$args[1];
+
+            if ($coin > ($tradegood->tradevalue * $amt)) {
+                $depot->Buy((int)$args[0], $amt, $coin);
+                return $this->getResult('Success', get_class($issuer) . ' ' . $issuer->getId() .
+                                               ' bought ' . $amt . ' ' . $args[0] . '.');
+            } else {
+                return $this->getResult('Illegal move','Issuer had insufficient coin');
             }
     }
 
