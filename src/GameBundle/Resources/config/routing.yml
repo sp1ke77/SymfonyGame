@@ -29,3 +29,11 @@ initialize_gameworld:
 admin_test:
     path:     /test
     defaults: { _controller: GameBundle:Admin:test }
+
+map_view:
+    path:     /mapview
+    defaults: { _controller: GameBundle:Mapview:index }
+
+get_map:
+    path:   /map
+    defaults: { _controller: GameBundle:Mapview:getmap }

@@ -166,11 +166,10 @@ class Rules
                     {
                         return $this->getResult('Invalid request', 'Buy Goods requires Args: string "{good},{amount}"');
                     }
-                    return $this->travel($issuer, $xy[0], $xy[1]);
+                    return $this->buyGoods($issuer, $xy[0], $xy[1]);
                 }
 
-                // Args:
-                // wa => Buy all wheat
+                // Args {good},{amount}. Note that {good} must be lowercase and must match a field in game.depot.
 
                 break;
 

@@ -207,9 +207,16 @@ class Depot extends GameEntity
      *
      */
 
+    /**
+     * Get a representation of one of the platonic tradegood categories. Must be spelled correctly.
+     * Use this if you need the text description, images or current tradevalue/foodvalue properties.
+     *
+     * @param $fieldname
+     * @return null|\stdClass
+     */
     public function GetPlatonic($fieldname)
     {
-        $query = "SELECT * FROM tradegood_platonic WHERE named='" . $fieldname . "';";
+        $query = "SELECT * FROM tradegood_platonic WHERE named='" . strtolower($fieldname) . "';";
         $this->db->setDb($query);
         $this->db->query();
         return $this->db->loadObject();

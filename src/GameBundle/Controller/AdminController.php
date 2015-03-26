@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Temporary
 use GameBundle\Game\Rules\Rules;
-use GameBundle\Game\Model\Clan;
+use GameBundle\Game\Model\Mapzone;
 
 class AdminController extends Controller
 {
@@ -47,18 +47,10 @@ class AdminController extends Controller
     public function testAction()
     {
         $db = $this->get('db');
+        $path = $this->get('kernel')->getRootDir();
 
         // Swap this whatever service is to be tested
 
-        $rules = New Rules($db);
-        $request['Action'] = 'Travel';
-        $request['Issuer'] = new Clan(8);
-        $request['Issuer']->setX(4);
-        $request['Issuer']->setY(4);
-        $request['Args'] = '4,5';
-        $result = $rules->submit($request);
-        print_r($result);
-        die();
         return new RedirectResponse('/admin');
     }
 
