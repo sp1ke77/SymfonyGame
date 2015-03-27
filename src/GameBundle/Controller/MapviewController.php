@@ -15,13 +15,13 @@ use GameBundle\Game\Model\Mapzone;
 
 class MapviewController extends Controller
 {
-
     public function getMapAction()
     {
-        $center = 161;
+        $session = $this->get('session');
+        $topleft = $session->get('mvid');
 
         $db = $this->get('db');
-        $query = "SELECT * FROM mapzone WHERE id=" . $center . ";";
+        $query = "SELECT * FROM mapzone WHERE id=" . $topleft . ";";
         $db->setQuery($query);
         $db->query();
         $cz = $db->loadObject();
@@ -43,7 +43,8 @@ class MapviewController extends Controller
     }
 
     public function indexAction() {
-
+        $session = $this->get('session');
+        $session->set('mvid', 10);
 
         return $this->render('GameBundle:Game:mapview.html.twig');
     }

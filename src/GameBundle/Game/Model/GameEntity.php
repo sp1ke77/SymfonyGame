@@ -60,17 +60,14 @@ abstract class GameEntity
         $reflectionClass = new ReflectionClass($table);
         $properties = $reflectionClass->getProperties();
 
-        $query = "SELECT " . $table . " WHERE id=" . (int)$properties['id'] . ";";
-        $this->db->setQuery($query);
-        $this->db->query();
-        $loadObj = $this->db->query();
-
         foreach($properties as $node)
         {
-            $propertyName = $node->getName();
-            if($propertyName != 'id')
+            $query = "SELECT " . $node->getName() . " FROM " . $table . " WHERE id=" . (int)$this->getId() . ";";
+            $this->db->setQuery($query);
+            $result = $this->db->query();
+            if($node->getName() != 'id')
             {
-                $this->{$propertyName} = $loadObj->{$propertyName};
+                $this->{$node->getName()} = $result;
             }
         }
     }

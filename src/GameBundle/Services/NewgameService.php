@@ -89,17 +89,14 @@ class NewgameService
     protected function randomizeMap()
     {
         // Create 400 map zones, randomize geotype and link each with an abstract x,y
-        for ($i = 0; $i < 400; $i++)
-        {
-            // Create the mapzone
+        for ($x = 0; $x < 20; $x++) {
+            for ($y = 0; $y < 20; $y++) {
 
-            $x = $i % 20;
-            $y = $i / 20;
+                $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) . ");";
+                $this->db->setQuery($query);
+                $this->db->query();
 
-            $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) .");";
-            $this->db->setQuery($query);
-            $this->db->query();
-
+            }
         }
     }
 
@@ -260,7 +257,7 @@ class NewgameService
 
         foreach ($tribes as $tribe)
         {
-            $tid = $tribe->getTribeId();
+            $tid = $tribe->getId();
             $this->createClan($tid);
         }
     }
