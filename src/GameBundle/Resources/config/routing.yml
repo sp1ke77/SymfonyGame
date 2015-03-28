@@ -31,8 +31,8 @@ admin_test:
     defaults: { _controller: GameBundle:Admin:test }
 
 map_view:
-    path:     /mapview
-    defaults: { _controller: GameBundle:Mapview:index }
+    path:     /mapview/{slug}
+    defaults: { _controller: GameBundle:Mapview:index, slug: null }
 
 get_map:
     path:   /map

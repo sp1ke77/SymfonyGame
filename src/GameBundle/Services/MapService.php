@@ -21,16 +21,16 @@ class MapService
     }
 
     /**
-     * @return int
+     * @return object
      */
     public function getRandomPassableMapZone()
     {
-        $query = "SELECT id FROM mapzone WHERE geotype!='deepsea' OR geotype !='shallowsea' ORDER BY Rand() LIMIT 1";
+        $query = "SELECT * FROM mapzone WHERE geotype!='deepsea' AND geotype !='shallowsea' ORDER BY Rand() LIMIT 1;";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
 
-        return $loadObj->id;
+        return $loadObj;
     }
 
 }

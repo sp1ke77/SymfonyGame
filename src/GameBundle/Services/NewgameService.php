@@ -89,15 +89,26 @@ class NewgameService
     protected function randomizeMap()
     {
         // Create 400 map zones, randomize geotype and link each with an abstract x,y
-        for ($x = 0; $x < 20; $x++) {
-            for ($y = 0; $y < 20; $y++) {
+        for ($x = 0; $x < 60; $x++) {
+            for ($y = 0; $y < 40; $y++) {
 
                 $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) . ");";
                 $this->db->setQuery($query);
                 $this->db->query();
-
             }
         }
+
+        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<47 AND y>11 AND y<33;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x<45 AND y>13 AND y<31 AND geotype='deepsea';";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "UPDATE mapzone SET geotype='desert' WHERE y>=33 AND geotype='forest';";
+        $this->db->setQuery($query);
+        $this->db->query();
     }
 
     /**
@@ -109,68 +120,90 @@ class NewgameService
         $cities = array(
             'Ugarit' => array(
                 'Description' => 'An ancient port of the Hurrians',
-                'x' => 3,
-                'y' => 8,
-                'Region' => 'Alalakh',
-                'God' => 'Tesub'),
+                'x' => 52,
+                'y' => 10,
+                'Region' => '',
+                'God' => ''),
             'Qadesh' => array(
                 'Description' => '',
-                'x' => 2,
-                'y' => 3,
+                'x' => 57,
+                'y' => 40,
                 'Region' => 'Amurru',
                 'God' => ''),
             'Hamath' => array(
                 'Description' => '',
-                'x' => 5,
-                'y' => 7,
+                'x' => 57,
+                'y' => 3,
                 'Region' => 'Nuhasse',
                 'God' => 'Astarte'),
             'Arvad' => array(
                 'Description' => '',
-                'x' => 5,
-                'y' => 2,
+                'x' => 42,
+                'y' => 15,
                 'Region' => 'Jazirat',
                 'God' => ''),
             'Gubal' => array(
                 'Description' => '',
-                'x' => 15,
-                'y' => 13,
+                'x' => 50,
+                'y' => 20,
                 'Region' => '',
                 'God' => 'Amun'),
             'Tyre' => array(
                 'Description' => '',
-                'x' => 12,
-                'y' => 5,
+                'x' => 48,
+                'y' => 29,
                 'Region' => '',
                 'God' => 'Melkart'),
             'Shechem' => array(
                 'Description' => '',
-                'x' => 13,
-                'y' => 12,
+                'x' => 55,
+                'y' => 35,
                 'Region' => 'Nahal Iron',
                 'God' => ''),
             'Megiddo' => array(
                 'Description' => '',
-                'x' => 17,
-                'y' => 1,
+                'x' => 50,
+                'y' => 60,
                 'Region' => 'Megiddo',
                 'God' => ''),
-            'Asqaluna' => array(
+            'Asqalun' => array(
                 'Description' => '',
-                'x' => 15,
-                'y' => 2,
+                'x' => 47,
+                'y' => 37,
                 'Region' => 'Asqanu',
                 'God' => 'El'),
             'Gezer' => array(
                 'Description' => '',
-                'x' => 6,
-                'y' => 8,
+                'x' => 55,
+                'y' => 45,
                 'Region' => 'Nahal Iron',
                 'God' => 'Amun'),
+            'Phaito' => array(
+                'Description' => '',
+                'x' => 5,
+                'y' => 1,
+                'Region' => 'Keftiu',
+                'God' => 'Baal'),
+            'Tanit' => array(
+                'Description' => '',
+                'x' => 41,
+                'y' => 34,
+                'Region' => 'Goshen',
+                'God' => 'Amun'),
+            'Menfer' => array(
+                'Description' => '',
+                'x' => 33,
+                'y' => 47,
+                'Region' => 'Egypt',
+                'God' => 'Ptah'),
             );
 
         foreach ($cities as $k => $v)
         {
+            $query = "UPDATE mapzone SET geotype='plains' WHERE x=" .$v['x']. " AND y=" .$v['y']. ";";
+            $this->db->setQuery($query);
+            $this->db->query();
+
             $cId = $this->createCity($k, $v['Description'], $v['x'], $v['y']);
             $this->createRegion($v['Region'], $v['God'], $cId);
         }
@@ -217,7 +250,7 @@ class NewgameService
             'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wakhasir", "Lotan",
                 "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar",
                 "Qadeshtu", "Yarikh", "Yaw"),
-            'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mussalim", "Abbana-el",
+            'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mslm", "Abbana-el",
                 "Yaiti-obal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh",
                 "Zakija-Hamu", "Zunan"),
             'Luwian' => array("Maddunani", "Kuruntiya", "Runtiya", "Hantawati", "Tarkasna", "Zupari",
@@ -225,16 +258,17 @@ class NewgameService
                 "Musisipa"),
             'Tejenu' => array("Andronek", "Etewokewet", "Filaretos", "Kleonak", "Nikostros", "Tros",
                 "Khalkeos", "Xaridhmos", "Kaliod", "Kupirijo", "Radamanq", "Makhawon",
-                "Glaukos"),
-            'Keftiu' => array('Tinay', '', '', '', '', ''),
-            'Amurru' => array("Yarikhu", "Rabbu", "Uprapu", "Yakhruru", "Mikhalizayu", "Almutu",
-                "Numkha", "Aqba-el", "Yamutbal", "Ya'ilanu", "Sim'alites", "Amnanu",
+                "Glaukos", 'Dionysios'),
+            'Keftiu' => array('Tinay', 'Noso', 'Cukra', 'Paito', 'Ouran', 'Ida', 'Malia', 'Zakra',
+                                'Melo', 'Kea', 'Zauro'),
+            'Amurru' => array("Yarikhu", "Rabbu", "Uprapu", "Yakhruru", "Mikhalzyu", "Almutu",
+                "Numkha", "Aqba-el", "Yamutbal", "Ya'ilanu", "Sim'alits", "Amnanu",
                 "Zamri-Lim"),
-            'Shasu' => array("Jetheth", "Oholibamah", "Mibzar", "Iram-Ammon", "Kenaz", "Pinon",
+            'Shasu' => array("Jetheth", "Oholibmah", "Mibzar", "Iram-amon", "Kenaz", "Pinon",
                 "Timnah", "Magdiel", "Elah", "Zepho", "Kenaz", "Mizzah", "Nathath")
         );
 
-        for ($i = 1; $i < 32; $i++)
+        for ($i = 1; $i < 72; $i++)
         {
             // Pick a culture group
             $cg = array_rand($tribes);
@@ -305,7 +339,6 @@ class NewgameService
      *
      * INSERT INTO game.tradegood
      *
-     * @param int $mapzone
      * @param string $named
      * @param string $description
      * @param float $tv
@@ -343,7 +376,17 @@ class NewgameService
     private function createClan($tribeId)
     {
         $depotId = $this->createDepot();
-        $query = "INSERT INTO clan(tribe, depot, population, fighters, food, coin) VALUES(" . $tribeId . ", " . $depotId . ", 100, 60, 35, 0);";
+        $query = "SELECT named FROM tribe WHERE id=" . $tribeId . ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $tribeName = $this->db->loadResult();
+        $MapService = new MapService();
+        $MapService->setDb($this->db);
+        $mz = $MapService->getRandomPassableMapZone();
+        $x = $mz->x;
+        $y = $mz->y;
+        $query = "INSERT INTO clan(named, tribe, x, y, depot, population, fighters, food, coin) VALUES('"
+                    .$tribeName. "', " .$tribeId. ", " .$x. ', ' .$y. ', ' .$depotId. ", 100, 60, 35, 0);";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -572,6 +615,7 @@ class NewgameService
 
         $query = "CREATE TABLE game.clan (
                           id INT NOT NULL AUTO_INCREMENT,
+                          named VARCHAR(45) NULL,
                           tribe INT NULL,
                           ptype INT NULL,
                           x INT NULL,

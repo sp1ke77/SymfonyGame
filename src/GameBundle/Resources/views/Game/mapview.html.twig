@@ -9,9 +9,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                    <div class="row">
-                        <canvas height="500px" width="1200px" id="map"></canvas>
-                    </div>
+                <canvas height="500px" width="1200px" id="map" style="margin-left:-70px"></canvas>
             </div>
         </div>
 
@@ -83,35 +81,31 @@ $(function() {
         type: "GET",
         //data: "23",
         success: function (data) {
-            console.log(data);
-            var c = document.getElementById("map");
-            var ctx = c.getContext("2d");
-
             var plains = new Image();
             plains.src = "\\tiles\\plains_tile.png";
-
             var hills = new Image();
             hills.src = "\\tiles\\hills_tile.png";
-
             var desert = new Image();
             desert.src = "\\tiles\\desert_tile.png";
-
             var mountains = new Image();
             mountains.src = "\\tiles\\mountains_tile.png";
-
             var swamp = new Image();
             swamp.src = "\\tiles\\swamp_tile.png";
-
             var forest = new Image();
             forest.src = "\\tiles\\forest_tile.png";
-
             var shallowsea = new Image();
             shallowsea.src = "\\tiles\\shallowsea_tile.png";
-
             var deepsea = new Image();
             deepsea.src = "\\tiles\\deepsea_tile.png";
+            var city = new Image();
+            city.src = "\\tiles\\city.png";
+            var clan = new Image();
+            clan.src = "\\tiles\\clan.png";
 
+            var c = document.getElementById("map");
+            var ctx = c.getContext("2d");
             ctx.beginPath();
+
             for (var i = 0; i < data['data'].length; i++) {
                 var x2 = data['data'][i].x * plains.width;
                 var y2 = data['data'][i].y * plains.height;
@@ -143,8 +137,29 @@ $(function() {
                         ctx.drawImage(shallowsea, x2, y2);
                         break;
                 }
-                ctx.fillText(data['data'][i].x + ',' + data['data'][i].y + ' id:' + data['data'][i].id, x2 + 10, y2 + 10);
             }
+
+            if (data['cities'])
+            {
+                for(var n = 0; n < (data['cities'].length); n++)
+                {
+                    ctx.drawImage(city, (data['cities'][n].x * plains.width) + 25, (data['cities'][n].y * plains.height) + 25);
+                    ctx.fillText(data['cities'][n].named, (data['cities'][n].x * plains.width) + 30, (data['cities'][n].y * plains.height) + 35);
+                }
+            }
+
+            if (data['clans'])
+            {
+                for(var n = 0; n < (data['clans'].length); n++)
+                {
+                    var fx = Math.floor((Math.random() * 60) + -30);
+                    var fy = Math.floor((Math.random() * 20) + 50);
+                    ctx.drawImage(clan, (data['clans'][n].x * plains.width) + fx, (data['clans'][n].y * plains.height + fy));
+                    ctx.fillText(data['clans'][n].named, (data['clans'][n].x * plains.width) + fx + 8, (data['clans'][n].y * plains.height) + fy + 10);
+                }
+            }
+
+            console.log(data);
         }
     });
 });

@@ -29,6 +29,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      * @var $activity
      */
     protected $x, $y;
+    protected $named;
     protected $population;
     protected $fighters;
     protected $coin;
