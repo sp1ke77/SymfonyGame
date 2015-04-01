@@ -90,23 +90,45 @@ class NewgameService
     {
         // Create 400 map zones, randomize geotype and link each with an abstract x,y
         for ($x = 0; $x < 60; $x++) {
-            for ($y = 0; $y < 40; $y++) {
+            for ($y = 0; $y < 60; $y++) {
 
-                $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 8) . ");";
+                $query = "INSERT INTO mapzone(x, y, geotype) VALUE (" . $x . ", " . $y . ", " . rand(1, 7) . ");";
                 $this->db->setQuery($query);
                 $this->db->query();
             }
         }
-
-        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<47 AND y>11 AND y<33;";
+        // Create the Mediterranean sea
+        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<=47 AND y>20 AND y<40;";
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x<45 AND y>13 AND y<31 AND geotype='deepsea';";
+        // Create the Aegean/Bay of Tripoli
+        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<12;";
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "UPDATE mapzone SET geotype='desert' WHERE y>=33 AND geotype='forest';";
+        // Create Africa and the Arabian desert
+        $query = "UPDATE mapzone SET geotype='desert' WHERE y>40 AND geotype='shallowsea' OR y>40 AND geotype='forest';";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        // Create the Nile river
+        $query = "UPDATE mapzone SET geotype='swamp' WHERE x>28 x<42 AND y>40 AND geotype='hills' OR x>28 x<40 AND y>40 AND geotype='mountains';";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=30 AND y>40;";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=33 AND y>40;";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=40 AND y>40;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        // Create Syria and Turkey
+        $query = "UPDATE mapzone SET geotype='hills' WHERE y<20 AND geotype='desert'"
+            . " OR x<20 AND geotype='swamp';";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -120,8 +142,8 @@ class NewgameService
         $cities = array(
             'Ugarit' => array(
                 'Description' => 'An ancient port of the Hurrians',
-                'x' => 52,
-                'y' => 10,
+                'x' => 51,
+                'y' => 23,
                 'Region' => '',
                 'God' => ''),
             'Qadesh' => array(
@@ -144,8 +166,8 @@ class NewgameService
                 'God' => ''),
             'Gubal' => array(
                 'Description' => '',
-                'x' => 50,
-                'y' => 20,
+                'x' => 47,
+                'y' => 45,
                 'Region' => '',
                 'God' => 'Amun'),
             'Tyre' => array(
@@ -163,7 +185,7 @@ class NewgameService
             'Megiddo' => array(
                 'Description' => '',
                 'x' => 50,
-                'y' => 60,
+                'y' => 30,
                 'Region' => 'Megiddo',
                 'God' => ''),
             'Asqalun' => array(
@@ -248,22 +270,17 @@ class NewgameService
     {
         $tribes = array(
             'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wakhasir", "Lotan",
-                "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar",
-                "Qadeshtu", "Yarikh", "Yaw"),
-            'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mslm", "Abbana-el",
-                "Yaiti-obal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh",
-                "Zakija-Hamu", "Zunan"),
-            'Luwian' => array("Maddunani", "Kuruntiya", "Runtiya", "Hantawati", "Tarkasna", "Zupari",
-                "Tupana", "Tuwarsanza", "Tibe", "Esi-tmmata", "Manaha", "Umanaddu",
-                "Musisipa"),
-            'Tejenu' => array("Andronek", "Etewokewet", "Filaretos", "Kleonak", "Nikostros", "Tros",
-                "Khalkeos", "Xaridhmos", "Kaliod", "Kupirijo", "Radamanq", "Makhawon",
-                "Glaukos", 'Dionysios'),
-            'Keftiu' => array('Tinay', 'Noso', 'Cukra', 'Paito', 'Ouran', 'Ida', 'Malia', 'Zakra',
-                                'Melo', 'Kea', 'Zauro'),
+                "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar", "Qadeshtu", "Yarikh", "Yaw"),
+            'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mslim", "Abbana-el",
+                "Yai-tobal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh", "Zakija-Hamu", "Zunan"),
+            'Luwian' => array("Madunani", "Kuruntya", "Runtya", "Hantawti", "Tarkasn", "Zupari",
+                "Tupana", "Tuwrsanza", "Tibe", "Esi-tmata", "Manaha", "Umanaddu", "Musisipa"),
+            'Tejenu' => array("Andronak", "Etewokwt", "Klonak", "Nikostur",
+                "Khalkeos", "Xarihmo", "Kaliode", "Kupirijo", "Makhawon", 'Glaukos'),
+            'Keftiu' => array('Tinay', 'Noso', 'Cukra', 'Paito', 'Ouran', 'Tros',
+                                'Ida', 'Malia', 'Zakra', 'Melo', 'Kea', 'Zauro', 'Filarto'),
             'Amurru' => array("Yarikhu", "Rabbu", "Uprapu", "Yakhruru", "Mikhalzyu", "Almutu",
-                "Numkha", "Aqba-el", "Yamutbal", "Ya'ilanu", "Sim'alits", "Amnanu",
-                "Zamri-Lim"),
+                "Numkha", "Aqba-el", "Yamutbal", "Ya'ilanu", "Sim'alits", "Amnanu", "Zamri-Lim"),
             'Shasu' => array("Jetheth", "Oholibmah", "Mibzar", "Iram-amon", "Kenaz", "Pinon",
                 "Timnah", "Magdiel", "Elah", "Zepho", "Kenaz", "Mizzah", "Nathath")
         );
