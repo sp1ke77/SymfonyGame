@@ -7,68 +7,62 @@
     <div class="container-fluid">
         <!--- MAP CONTAINER --->
 
-        <div class="row">
-            <div class="col-md-12">
-                <canvas height="500px" width="1200px" id="map" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
-                <canvas height="500px" width="1200px" id="stuff" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas height="500px" width="1200px" id="map" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                    <canvas height="500px" width="1200px" id="stuff" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                </div>
             </div>
-        </div>
 
         <!--- BOTTOM BAR --->
 
-        <div class="row navbar-fixed-bottom">
-            <div class="col-md-3 bottom">
-                <div class="panel panel-default">
-                    <h4>[ContextName]</h4>
-                    <p>[ContextProperties]</p>
-                    <ul>
-                        <li>[Key] => [Value]</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-6">
+            <div class="row navbar-fixed-bottom">
+                <div class="col-md-3 bottom">
                     <div class="panel panel-default">
-                        <div class="row">
-                            <div class="col-md-4">
-                            <h4 id="txt-inspector-name">Inspector</h4>
-                            <small>[ContextProperties]</p>
-                                <ul id="txt-inspector-properties">
-                                    <li>[Key] => [Value]</li>
-                                </ul></small>
-                            </div>
-                            <div class="col-md-4">
-                                <canvas id="cnv-inspector'"></canvas>
-                            </div>
-                            <div class="col-md-4">
-                                <form name="inspector_controls" action="/control" method="post">
-                                    <p>
-                                        <select name="listbox" id="#slc-inspector">
+                        <h4>[ContextName]</h4>
+                        <p>[ContextProperties]</p>
+                        <ul>
+                            <li>[Key] => [Value]</li>
+                        </ul>
+                    </div>
+                </div>
 
-                                        </select>
-                                    </p>
-                                    <p>
-                                        <input type="button" name="sample2" class="button btn-default" value="Trade">
-                                        <input type="button" name="sample2" class="button btn-default" value="Diplomacy">
-                                    </p>
-                                    <p>
-                                        <input type="button" name="sample1" class="button btn-default" value="Counsel">
-                                    </p>
-                                </form>
+                <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="row">
+                                <div class="col-md-6">
+                                <h4 id="txt-inspector-name">Inspector</h4>
+                                <small>[ContextProperties]</p>
+                                    <ul id="txt-inspector-properties">
+                                        <li>[Key] => [Value]</li>
+                                    </ul></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <form name="inspector_controls" action="/control" method="post">
+                                        <p>
+                                            <input type="button" name="sample2" class="button btn-default" value="Trade">
+                                            <input type="button" name="sample2" class="button btn-default" value="Diplomacy">
+                                        </p>
+                                        <p>
+                                            <input type="button" name="sample1" class="button btn-default" value="Counsel">
+                                        </p>
+                                        <p id="p-listbox">
+                                        </p>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-            </div>
+                </div>
 
-            <div class="col-md-3 pull-right">
-                <div class="panel panel-default">
-                    <h4>News</h4>
-                    <ul>
-                        <li>[MostRecentItems]</li>
-                    </ul>
+                <div class="col-md-3 pull-right">
+                    <div class="panel panel-default">
+                        <h4>News</h4>
+                        <ul>
+                            <li>[MostRecentItems]</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
 
 {% endblock %}
@@ -189,30 +183,47 @@ $(document).bind('click', function () {
 
         x = Math.floor(x / 100);
         y = Math.floor(y / 100);
-        console.log(x + ", " + y);
 
         var data = JSON.parse(sessionStorage.getItem("data"));
 
         if (typeof data != 'undefined') {
             var name = document.getElementById("txt-inspector-name");
-            var list = document.getElementById("txt-inspector-list");
+            var citySelected = false;
 
-            for (var i = 0; i < data['cities'].length; i++) {
-                if ((data['cities'][i].x == x) && (data['cities'][i].y == y)) {
-                    name.innerText = data['cities'][i].named;
-                    return;
-                }
-            }
-
-            for (i = 0; i < data['data'].length; i++) {
-
-                if ((data['data'][i].x == x) && (data['data'][i].y == y)) {
-                    name.innerText = data['data'][i].geotype;
-                    return;
+            if (data['cities'].length > 0) {
+                for (var i = 0; i < data['cities'].length; i++) {
+                    if ((data['cities'][i].x == x) && (data['cities'][i].y == y)) {
+                        name.innerText = data['cities'][i].named;
+                        citySelected = true;
                     }
                 }
             }
 
+            if (!citySelected) {
+                for (i = 0; i < data['data'].length; i++) {
+                    if ((data['data'][i].x == x) && (data['data'][i].y == y)) {
+                        name.innerText = data['data'][i].geotype;
+                    }
+                }
+            }
+
+            var p = document.getElementById('p-listbox');
+            if (data['clans'].length > 0) {
+                var lststr = "";
+                while (p.firstChild) p.removeChild(p.firstChild);
+
+                    lststr += '<select name="clans-list" style="width:150px;">';
+                    for (i = 0; i < data['clans'].length; i++) {
+                        if ((data['clans'][i].x == x) && (data['clans'][i].y == y)) {
+                            lststr += '<option value="' + data['clans'][i].named + '">' + data['clans'][i].named + '</option>';
+                        }
+                    }
+                    lststr += '</select>';
+                    p.innerHTML = lststr;
+                } else {
+                    while (p.firstChild) p.removeChild(p.firstChild);
+                }
+            }
     });
 });
 </script>
