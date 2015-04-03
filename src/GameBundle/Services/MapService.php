@@ -7,6 +7,7 @@
  */
 
 namespace GameBundle\Services;
+
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\Tradegood_Token;
@@ -16,9 +17,10 @@ use GameBundle\Game\Rules\Interfaces\IMappable;
 class MapService
 {
 
-    /** @var DBCommon $db */
+    /** @var $db DBCommon */
     protected $db;
 
+    /** @param $db DBCommon */
     public function setDb($db)
     {
         $this->db = $db;
@@ -39,11 +41,12 @@ class MapService
 
     /**
      * @param $user IMappable
+     * @param $distance int
      * @return Mapzone
      */
     public function GetARandomMove(IMappable &$user, $distance = 1) {
 
-        $query = 'SELECT * FROM mapzone WHERE x>=' .($user->x - $distance). ' AND y>=' .($user->y - $distance).' AND x<=' .($user->x + $distance). ' AND y<=' .($user->y + $distance). ' ORDER BY Rand() LIMIT 1;';
+        $query = 'SELECT * FROM mapzone WHERE x>=' .($user->getX() - $distance). ' AND y>=' .($user->getY() - $distance).' AND x<=' .($user->getX() + $distance). ' AND y<=' .($user->getY() + $distance). ' ORDER BY Rand() LIMIT 1;';
         $this->db->setQuery($query);
         $this->db->query();
         return $this->db->loadObject();
@@ -81,5 +84,17 @@ class MapService
         $query = 'INSERT INTO tradegood_token(mapzone, tg) VALUES(' . $mz->getId() . ', ' . $tg->getId() . ');';
         $this->db->setQuery($query);
         $this->db->query();
+    }
+
+    /**
+     * @param $x
+     * @param $y
+     * @return string
+     */
+    public function getGeotypeByMapzone($x, $y) {
+        $query = "SELECT geotype FROM mapzone WHERE x=" .$x. " AND y=" .$y. ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        return $this->db->loadResult();
     }
 }

@@ -1,52 +1,28 @@
 services:
-    ## DB layer ##
     db:
         class: GameBundle\Game\DBCommon
         arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
-
-    ## Website-related services ##
     service_login:
         class: GameBundle\Services\LoginService
         calls:
             - [setDb, ["@db"]]
-
-    ## Game-related services ##
     service_map:
         class: GameBundle\Services\MapService
         calls:
             - [setDb, ["@db"]]
     service_tribe:
-        class: GameBundle\Services\MapService
+        class: GameBundle\Services\TribeService
         calls:
             - [setDb, ["@db"]]
     dice:
         class: GameBundle\Game\Rules\Dice
         calls:
             - [setDb, ["@db"]]
-    checks:
-        class: GameBundle\Game\Rules\Checks
-        calls:
-            - [setDb, ["@db"]]
     actions:
         class: GameBundle\Game\Rules\Actions
         calls:
-            - [setDb, ["@db"]]
-    rules:
-        class: GameBundle\Game\Rules\Rules
-        arguments:
-            - [setChecks, ["@checks"], setActions, ["@actions"], setDice, ["@dice"]]
-
-    ## probably-shouldn't-be-services layer ##
-    action_round:
-        class: GameBundle\Game\Simulation\ActionRound
-        aguments:
-            - [setDb, ["@db"]]
-    random_events:
-        class: GameBundle\Game\Simulation\RandomEvents\RandomEvents
-        arguments:
             - [setDb, ["@db"]]
     service_newgame:
         class: GameBundle\Services\NewgameService
         calls:
             - [setDb, ["@db"]]
-

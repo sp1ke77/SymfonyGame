@@ -15,7 +15,6 @@ use GameBundle\Game\Rules\Checks;
 use GameBundle\Game\Rules\Actions;
 use GameBundle\Game\Model\Clan;
 use GameBundle\Game\Model\Depot;
-use GameBundle\GameBundle;
 
 
 /**
@@ -23,8 +22,6 @@ use GameBundle\GameBundle;
  *
  * Obviously, this should be constructed with the db and if you don't lols wil ensue.
  *
- * @param $check Checks
- * @param $action Actions
  * @package GameBundle\Game\Rules
  */
 class Rules
@@ -58,7 +55,7 @@ class Rules
      */
     public function setChecks($checks)
     {
-        $this->check = $checks;
+        $this->checks = $checks;
     }
 
     /**
@@ -216,13 +213,16 @@ class Rules
 
     public function travel(IMappable $issuer, $x2, $y2)
     {
+            $checks = new Checks();
+            $actions = new Actions();
+
             // Get the issuer's current location
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
-            if ($this->checks->checkLegalMove($x1, $y1, $x2, $y2))
+            if ($checks->checkLegalMove($x1, $y1, $x2, $y2))
             {
-                $result = $this->actions->mapTravel($issuer, $x2, $y2);
+                $result = $actions->mapTravel($issuer, $x2, $y2);
                 return $this->getResult('Success', $result);
             } else {
                 return $this->getResult('Illegal move', 'Destination is too far or is not passable');

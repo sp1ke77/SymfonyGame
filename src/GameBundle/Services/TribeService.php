@@ -7,19 +7,24 @@
  */
 
 namespace GameBundle\Services;
+use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
-use GameBundle\Game\Model\Tribe;
 
 class TribeService
 {
 
+    /** @var $db DBCommon */
     protected $db;
 
+    /**
+     * @param $db DBCommon
+     */
     public function setDb($db)
     {
         $this->db = $db;
     }
 
+    /** @return Clan */
     function getAllClans() {
         $query = 'SELECT * FROM clan;';
         $this->db->setQuery($query);

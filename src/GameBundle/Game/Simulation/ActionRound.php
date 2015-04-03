@@ -8,29 +8,19 @@
 
 namespace GameBundle\Game\Simulation;
 use GameBundle\Game\Simulation\AI\Clans\Behavior;
-use GameBundle\Game\DBCommon;
 use GameBundle\Services\TribeService;
 
 class ActionRound {
 
-    /** @var $db DBCommon */
-    protected $db;
-
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     public function execute()
     {
         $behavior = new Behavior();
-
         $tribeService = new TribeService();
+
         $clans = $tribeService->getAllClans();
 
         foreach ($clans as $clan) {
             $behavior->TakeAction($clan->id);
         }
     }
-
 }

@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Temporary
-use GameBundle\Game\Rules\Rules;
-use GameBundle\Game\Model\Mapzone;
+use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
+use GameBundle\Game\Simulation\ActionRound;
 
 class AdminController extends Controller
 {
@@ -50,6 +50,11 @@ class AdminController extends Controller
         $path = $this->get('kernel')->getRootDir();
 
         // Swap this whatever service is to be tested
+
+        $events = new RandomEvents();
+        $events->rollDice();
+        $actionround = new ActionRound();
+        $actionround->execute();
 
         return new RedirectResponse('/admin');
     }

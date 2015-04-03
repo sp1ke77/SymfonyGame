@@ -10,7 +10,6 @@ namespace GameBundle\Game\Simulation\RandomEvents;
 use GameBundle\Game\DBCommon;
 use GameBundle\Services\MapService;
 use GameBundle\Game\Rules\Dice;
-use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\News;
 
 class RandomEvents

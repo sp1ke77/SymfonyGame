@@ -22,7 +22,7 @@ class Actions
     public function mapTravel(IMappable $issuer, $x2, $y2)
     {
         $tablename = $this->getClass($issuer);
-        $query = 'UPDATE ' . strtolower($tablename) . ' SET x=' . (int)$x2 . ', y=' . (int)$y2 . ' WHERE id=' . $issuer->getId() . ';';
+        $query = 'UPDATE ' . strtolower($tablename) . ' WHERE id=' . $issuer->getId() . ' SET x=' . (int)$x2 . ', SET  y=' . (int)$y2 . ';';
         $this->db->setQuery($query);
         $this->db->query();
         $tablename = $this->getClass($issuer);
