@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;
-use GameBundle\Game\Rules\EnforceParams;
+use GameBundle\Game\Simulation\EnforceParams\EnforceParams;
 
 class EnforceParamsCommand extends ContainerAwareCommand
 {

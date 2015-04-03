@@ -16,7 +16,7 @@
 
         <!--- BOTTOM BAR --->
 
-            <div class="row navbar-fixed-bottom">
+            <div class="row navbar-fixed-bottom info-panels">
                 <div class="col-md-3 bottom">
                     <div class="panel panel-default">
                         <h4>[ContextName]</h4>
@@ -38,7 +38,7 @@
                                     </ul></small>
                                 </div>
                                 <div class="col-md-6">
-                                    <form name="inspector_controls" action="/control" method="post">
+                                    <form name="inspector_controls" action="/control" method="post" id="form-controls">
                                         <p>
                                             <input type="button" name="sample2" class="button btn-default" value="Trade">
                                             <input type="button" name="sample2" class="button btn-default" value="Diplomacy">
@@ -74,6 +74,7 @@
 
 $(document).ready(function() {
 
+    // Load the images
     var plains = new Image();
     plains.src = "\\tiles\\plains_tile.png";
     var hills = new Image();
@@ -95,13 +96,17 @@ $(document).ready(function() {
     var clan = new Image();
     clan.src = "\\tiles\\clan.png";
 
+    // Make the ajax call
     $.ajax({
         url: "/map",
         type: "GET",
         dataType: "json",
-        setInterval: 3300,
         success: function (data) {
-
+            //
+            // Instantiate the gameboard area
+            //
+            // Draw a field of mapzones defined by geotype on the bottom layer
+            //
             var c = document.getElementById("map");
             var ctx = c.getContext("2d");
             ctx.beginPath();
@@ -138,7 +143,8 @@ $(document).ready(function() {
                         break;
                 }
             }
-
+            
+            // If there are some cities, draw those on the bottom layer
             if (data['cities'])
             {
                 for(var n = 0; n < (data['cities'].length); n++)
@@ -148,8 +154,24 @@ $(document).ready(function() {
                 }
             }
 
-            var timer = setInterval(function() {
+            // Populate a listbox with the current clans, if any exist here
+            // If none do, erase the listbox
+            var p = document.getElementById('p-listbox');
+            if (data['clans'].length > 0) {
+                while (p.firstChild) p.removeChild(p.firstChild);
+                var lststr = "Nearby tribes ";
+                lststr += '<select name="clans-list" style="width:150px; color:black;">';
+                for (i = 0; i < data['clans'].length; i++) {
+                    lststr += '<option value="' + data['clans'][i].named + '">' + data['clans'][i].named + '</option>';
+                }
+                lststr += '</select>';
+                p.innerHTML = lststr;
+            } else {
+                while (p.firstChild) p.removeChild(p.firstChild);
+            }
 
+            // If there are some clans, draw them on the top layer and refresh every 5000ms
+            var timer = setInterval(function() {
                 if (data['clans'])
                 {
                     var c = document.getElementById("stuff");
@@ -160,13 +182,14 @@ $(document).ready(function() {
                     for(var n = 0; n < (data['clans'].length); n++)
                     {
                         var fx = Math.floor((Math.random() * 60) + -30);
-                        var fy = Math.floor((Math.random() * 20) + 50);
+                        var fy = Math.floor((Math.random() * 20) + 70);
                         ctx.drawImage(clan, (data['clans'][n].x * plains.width) + fx, (data['clans'][n].y * plains.height + fy));
                         ctx.fillText(data['clans'][n].named, (data['clans'][n].x * plains.width) + fx + 8, (data['clans'][n].y * plains.height) + fy + 10);
                     }
                 }
             }, 5000);
 
+            // Store whatever data we got in session so that it can be accessed later
             sessionStorage.setItem("data", JSON.stringify(data));
         }
     });
@@ -175,6 +198,7 @@ $(document).ready(function() {
 $(document).bind('click', function () {
     // Add a click-handler to the image.
     $('#stuff').bind('click', function (ev) {
+        // Deduce the abstract x,y coordinates the user clicked
         var $img = $(ev.target);
 
         var offset = $img.offset();
@@ -183,9 +207,13 @@ $(document).bind('click', function () {
 
         x = Math.floor(x / 100);
         y = Math.floor(y / 100);
-
+        
+        // Get the data out of storage
         var data = JSON.parse(sessionStorage.getItem("data"));
 
+        // If there's some data, fill in the inspector with whatever is in the
+        // current square. Cities take precedence, with mapzone properties as a 
+        // fallback only
         if (typeof data != 'undefined') {
             var name = document.getElementById("txt-inspector-name");
             var citySelected = false;
@@ -206,26 +234,10 @@ $(document).bind('click', function () {
                     }
                 }
             }
-
-            var p = document.getElementById('p-listbox');
-            if (data['clans'].length > 0) {
-                var lststr = "";
-                while (p.firstChild) p.removeChild(p.firstChild);
-
-                    lststr += '<select name="clans-list" style="width:150px;">';
-                    for (i = 0; i < data['clans'].length; i++) {
-                        if ((data['clans'][i].x == x) && (data['clans'][i].y == y)) {
-                            lststr += '<option value="' + data['clans'][i].named + '">' + data['clans'][i].named + '</option>';
-                        }
-                    }
-                    lststr += '</select>';
-                    p.innerHTML = lststr;
-                } else {
-                    while (p.firstChild) p.removeChild(p.firstChild);
-                }
-            }
+        }
     });
 });
+
 </script>
 
 {% endblock %}

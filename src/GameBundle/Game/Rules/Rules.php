@@ -38,36 +38,35 @@ class Rules
 
     /**
      * Components
-     * @var $check Checks
-     * @var $action Actions
+     * @var $checks Checks
+     * @var $actions Actions
      */
-    protected $check;
-    protected $action;
+    protected $checks;
+    protected $actions;
+    protected $dice;
 
     /**
-     * @param $action
+     * @param $actions Actions
      */
-    public function setAction($action)
+    public function setActions($actions)
     {
-        $this->action = $action;
-    }
-
-    /**
-     * @param $check
-     */
-    public function setCheck($check)
-    {
-        $this->check = $check;
+        $this->actions = $actions;
     }
 
     /**
      * @param $checks Checks
-     * @param $actions Actions
      */
-    public function __construct($checks, $actions)
+    public function setChecks($checks)
     {
         $this->check = $checks;
-        $this->action = $actions;
+    }
+
+    /**
+     * @param $dice
+     */
+    public function setDice($dice)
+    {
+        $this->dice = $dice;
     }
 
     /**
@@ -99,7 +98,7 @@ class Rules
         }
 
         // Get the parameters and optional args
-        $action = $request['Action'];
+        $action = strtolower($request['Action']);
         $issuer = $request['Issuer'];
         if (empty($request['Args'])) {
             $args = null;
@@ -109,7 +108,7 @@ class Rules
 
         // Pick a strategy
         switch ($action) {
-            case 'Travel':
+            case 'travel':
                 // The interface for travel is IMappable; Clans, Armies and Characters have it.
                 // Implementing IMappable means having fields $x and $y (that is, a location) and
                 // methods for getting and updating them.
@@ -132,7 +131,7 @@ class Rules
 
                 break;
 
-            case 'Holiday':
+            case 'holiday':
 
                 // Check if it's a Clan and if so, if it has enough food and if so, ->holiday()
                 // No other class can take this action
@@ -145,7 +144,7 @@ class Rules
 
                 break;
 
-            case 'Buy Goods':
+            case 'buy goods':
 
                 // The interface for trading is IDepotHaver; Clans and Characters have it
                 // (Cities technically have depots too, but they do not initiate trades).
@@ -173,7 +172,7 @@ class Rules
 
                 break;
 
-            case 'Sell Goods':
+            case 'sell goods':
 
                 // Check if the issuer implements IDepotHaver
 
@@ -184,7 +183,7 @@ class Rules
                 // Args:
                 // a => Sell all nonfood
 
-            case 'Attack':
+            case 'attack':
 
                 // Check if the issuer is IMappable and ICombatable, and if the target
                 // is valid.
@@ -221,9 +220,9 @@ class Rules
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
-            if ($this->check->checkLegalMove($x1, $y1, $x2, $y2))
+            if ($this->checks->checkLegalMove($x1, $y1, $x2, $y2))
             {
-                $result = $this->action->mapTravel($issuer, $x2, $y2);
+                $result = $this->actions->mapTravel($issuer, $x2, $y2);
                 return $this->getResult('Success', $result);
             } else {
                 return $this->getResult('Illegal move', 'Destination is too far or is not passable');

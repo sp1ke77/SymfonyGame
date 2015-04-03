@@ -512,6 +512,10 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
+        $query = "DROP TABLE news;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
     }
 
     /**
@@ -708,10 +712,15 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.battle (
+        $query = "CREATE TABLE game.news (
                           id INT NOT NULL AUTO_INCREMENT,
-                          mapzone INT NULL,
-                          clans NOT NULL,
-                          PRIMARY KEY (id));)";
+                          text VARCHAR(144) NOT NULL,
+                          x INT NULL,
+                          y INT NULL,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+
     }
 }

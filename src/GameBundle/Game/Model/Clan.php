@@ -126,6 +126,13 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     }
 
     /**
+     * @return string
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+    /**
      * @param mixed $activity
      */
     public function setActivity($activity)

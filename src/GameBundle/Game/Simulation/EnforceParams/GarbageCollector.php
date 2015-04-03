@@ -1,10 +1,10 @@
 <?php
 
-namespace GameBundle\Game\Rules\EnforceParams;
+namespace GameBundle\Game\Simulation\EnforceParams;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
 
-class ClanParams
+class GarbageCollector
 {
     /**
      * Components

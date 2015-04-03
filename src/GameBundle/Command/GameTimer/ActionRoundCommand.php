@@ -2,11 +2,10 @@
 
 namespace GameBundle\Command\GameTimer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;
+use GameBundle\Game\Simulation\ActionRound;
 
 class ActionRoundCommand extends ContainerAwareCommand
 {
@@ -21,10 +20,15 @@ class ActionRoundCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $db = $this->getContainer()->get('db');
 
         /** @var $logger LoggerInterface */
         $logger = $this->getContainer()->get('logger');
         $logger->info('ActionRound begun ... ');
+
+        $action = new ActionRound();
+        $action->setDb($db);
+        $action->execute();
 
         $logger->info('ActionRound complete ... ');
 

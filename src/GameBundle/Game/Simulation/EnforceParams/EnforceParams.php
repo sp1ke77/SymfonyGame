@@ -1,10 +1,9 @@
 <?php
 
-namespace GameBundle\Game\Rules;
+namespace GameBundle\Game\Simulation\EnforceParams;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
-
-use GameBundle\Game\Rules\EnforceParams\ClanParams;
+use GameBundle\Game\Simulation\EnforceParams\GarbageCollector;
 
 class EnforceParams
 {
@@ -34,10 +33,10 @@ class EnforceParams
 
     public function enforce()
     {
-        $ClanParam = new ClanParams();
-        $ClanParam->setDb($this->db);
-        $ClanParam->trashDeadObjects();
-        $this->status .= $ClanParam->getStatus();
+        $janitor = new GarbageCollector();
+        $janitor->setDb($this->db);
+        $janitor->trashDeadObjects();
+        $this->status .= $janitor->getStatus();
     }
 
 
