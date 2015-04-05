@@ -10,6 +10,7 @@ namespace GameBundle\Game\Simulation;
 use GameBundle\Game\Simulation\AI\Clans\Behavior;
 use GameBundle\Services\TribeService;
 use GameBundle\Game\DBCommon;
+use GameBundle\Game\Model\Clan;
 
 class ActionRound {
 
@@ -33,6 +34,7 @@ class ActionRound {
         $result=[];
         foreach ($clans as $clan) {
             $result[] = $behavior->TakeAction($clan->id);
+
         }
         return $result;
     }

@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Anon
- * Date: 4/3/2015
- * Time: 2:09 PM
- */
-
 namespace GameBundle\Game\Model;
 
-class Tradegood_Platonic extends GameEntity
+/**
+ * Class TradegoodPlatonic
+ * @package GameBundle\Game\Model
+ * @entity TradegoodPlatonic
+ * @table tradegood_platonic
+ */
+class TradegoodPlatonic extends GameEntity
 {
 
     protected $named;

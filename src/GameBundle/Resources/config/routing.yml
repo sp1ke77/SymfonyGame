@@ -37,3 +37,11 @@ map_view:
 get_map:
     path:   /map
     defaults: { _controller: GameBundle:Mapview:getmap }
+
+get_entities:
+    path:   /entities
+    defaults: { _controller: GameBundle:Mapview:getEntities }
+
+get_news:
+    path:   /news
+    defaults: { _controller: GameBundle:Mapview:getNews }

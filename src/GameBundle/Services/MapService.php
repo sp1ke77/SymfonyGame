@@ -10,8 +10,8 @@ namespace GameBundle\Services;
 
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Mapzone;
-use GameBundle\Game\Model\Tradegood_Token;
-use GameBundle\Game\Model\Tradegood_Platonic;
+use GameBundle\Game\Model\TradegoodToken;
+use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
 class MapService
@@ -67,37 +67,42 @@ class MapService
      * @return Array
      */
     public function searchZoneForTradegoodTokens(Mapzone $mz) {
-
-        $query = 'SELECT * FROM tradegood_token WHERE mapzone="' .$mz->getId(). '";';
+        $tokens = [];
+        $query = 'SELECT id FROM tradegoodtoken WHERE mapzone="' .$mz->getId(). '";';
         $this->db->setQuery($query);
         $this->db->query();
-        return $this->db->loadObjectList();
+        $loadObj = $this->db->loadObjectList();
+        foreach ($loadObj as $obj) {
+            $tgt = new TradegoodToken($obj->id);
+            $tgt->setDb($this->db);
+            $tgt->load();
+            $tokens[] = $tgt;
+        }
+        return $tokens;
     }
 
     /**
-     * @return Tradegood_Platonic
+     * @return TradegoodPlatonic
      */
     public function getARandomTradegoodPlatonic()
     {
-        $query = 'SELECT id from tradegood_platonic ORDER BY Rand() LIMIT 1;';
+        $query = 'SELECT id from tradegoodplatonic ORDER BY Rand() LIMIT 1;';
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
-
-        $tradegood = new Tradegood_Platonic($loadObj->id);
+        $tradegood = new TradegoodPlatonic($loadObj->id);
+        $tradegood->setDb($this->db);
         $tradegood->load();
-        var_dump($tradegood);
-        die();
         return $tradegood;
     }
 
     /**
      * @param Mapzone $mz
-     * @param Tradegood_Platonic $tg
+     * @param TradegoodPlatonic $tg
      */
-    public function insertANewTradegoodToken(Mapzone $mz, Tradegood_Platonic $tg)
+    public function insertANewTradegoodToken(Mapzone $mz, TradegoodPlatonic $tg)
     {
-        $query = 'INSERT INTO tradegood_token(mapzone, tg) VALUES(' . $mz->getId() . ', ' . $tg->getId() . ');';
+        $query = 'INSERT INTO tradegoodtoken(mapzone, tg) VALUES(' . $mz->getId() . ', ' . $tg->getId() . ');';
         $this->db->setQuery($query);
         $this->db->query();
     }

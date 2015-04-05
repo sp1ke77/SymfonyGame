@@ -4,22 +4,21 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container-fluid">
         <!--- MAP CONTAINER --->
 
-            <div class="row">
-                <div class="col-md-12">
-                    <canvas height="500px" width="1200px" id="map" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
-                    <canvas height="500px" width="1200px" id="stuff" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+            <div class="row-fluid">
+                <div class="col-md-12" oncontextmenu="return false;">
+                    <canvas height="600px" width="1200px" id="map" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                    <canvas height="600px" width="1200px" id="stuff" style="margin-left:-70px; margin-top:5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
                 </div>
             </div>
 
         <!--- BOTTOM BAR --->
 
-            <div class="row navbar-fixed-bottom info-panels">
-                <input type="button" name="sample1" class="button btn-default" value="Hide Panels" id="showhide">
+            <div class="row-fluid navbar-fixed-bottom" id="info-panes">
                 <div class="col-md-3 bottom">
-                    <div class="panel panel-default">
+                    <div class="panel pane-default">
                         <h4>[ContextName]</h4>
                         <p>[ContextProperties]</p>
                         <ul>
@@ -32,10 +31,10 @@
                         <div class="panel panel-default">
                             <div class="row">
                                 <div class="col-md-6">
-                                <h4 id="txt-inspector-name">Inspector</h4>
+                                <h4 id="txt-inspector-name"></h4>
                                 <small>[ContextProperties]</p>
                                     <ul id="txt-inspector-properties">
-                                        <li>[Key] => [Value]</li>
+                                        <li></li>
                                     </ul></small>
                                 </div>
                                 <div class="col-md-6">
@@ -58,9 +57,9 @@
                 <div class="col-md-3 pull-right">
                     <div class="panel panel-default">
                         <h4>News</h4>
-                        <ul>
-                            <li>[MostRecentItems]</li>
-                        </ul>
+                        <small>
+                        <ul style="list-style-type: hebrew;" id="ul-newsbox">
+                        </ul></small>
                     </div>
                 </div>
             </div>
@@ -73,29 +72,30 @@
 <script src="{{ asset('js/bootstrap.js') }}" type="text/javascript"></script>
 <script>
 
+
 $(document).ready(function() {
 
-    // Load the images
-    var plains = new Image();
-    plains.src = "\\tiles\\plains_tile.png";
-    var hills = new Image();
-    hills.src = "\\tiles\\hills_tile.png";
-    var desert = new Image();
-    desert.src = "\\tiles\\desert_tile.png";
-    var mountains = new Image();
-    mountains.src = "\\tiles\\mountains_tile.png";
-    var swamp = new Image();
-    swamp.src = "\\tiles\\swamp_tile.png";
-    var forest = new Image();
-    forest.src = "\\tiles\\forest_tile.png";
-    var shallowsea = new Image();
-    shallowsea.src = "\\tiles\\shallowsea_tile.png";
-    var deepsea = new Image();
-    deepsea.src = "\\tiles\\deepsea_tile.png";
-    var city = new Image();
-    city.src = "\\tiles\\city.png";
-    var clan = new Image();
-    clan.src = "\\tiles\\clan.png";
+        // Load the images
+        var plains = new Image();
+        plains.src = "\\tiles\\plains_tile.png";
+        var hills = new Image();
+        hills.src = "\\tiles\\hills_tile.png";
+        var desert = new Image();
+        desert.src = "\\tiles\\desert_tile.png";
+        var mountains = new Image();
+        mountains.src = "\\tiles\\mountains_tile.png";
+        var swamp = new Image();
+        swamp.src = "\\tiles\\swamp_tile.png";
+        var forest = new Image();
+        forest.src = "\\tiles\\forest_tile.png";
+        var shallowsea = new Image();
+        shallowsea.src = "\\tiles\\shallowsea_tile.png";
+        var deepsea = new Image();
+        deepsea.src = "\\tiles\\deepsea_tile.png";
+        var city = new Image();
+        city.src = "\\tiles\\city.png";
+        var clan = new Image();
+        clan.src = "\\tiles\\clan.png";
 
     // Make the ajax call
     $.ajax({
@@ -103,11 +103,8 @@ $(document).ready(function() {
         type: "GET",
         dataType: "json",
         success: function (data) {
-            //
             // Instantiate the gameboard area
-            //
             // Draw a field of mapzones defined by geotype on the bottom layer
-            //
             var c = document.getElementById("map");
             var ctx = c.getContext("2d");
             ctx.beginPath();
@@ -154,36 +151,16 @@ $(document).ready(function() {
                 }
             }
 
-            // Populate a listbox with the current clans, if any exist here
-            // If none do, erase the listbox
-            var p = document.getElementById('p-listbox');
-            if (data['clans'].length > 0) {
-                while (p.firstChild) p.removeChild(p.firstChild);
-                var lststr = "Nearby tribes ";
-                lststr += '<select name="clans-list" style="width:150px; color:black;">';
-                for (i = 0; i < data['clans'].length; i++) {
-                    lststr += '<option value="' + data['clans'][i].named + '">' + data['clans'][i].named + '</option>';
-                }
-                lststr += '</select>';
-                p.innerHTML = lststr;
-            } else {
-                while (p.firstChild) p.removeChild(p.firstChild);
-            }
-
             // Store whatever data we got in session so that it can be accessed later
             sessionStorage.setItem("data", JSON.stringify(data));
 
             // If there are some clans, draw them on the top layer and refresh every 5000ms
             (function worker() {
                 $.ajax({
-                    url: "/map",
+                    url: "/entities",
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        // Store whatever data we got in session so that it can be accessed later
-                        console.log('Updated!');
-                        console.log(data);
-
                         if (data['clans']) {
                             var c = document.getElementById("stuff");
                             var ctx = c.getContext("2d");
@@ -198,11 +175,54 @@ $(document).ready(function() {
                             }
                         }
 
-                        sessionStorage.setItem("data", JSON.stringify(data));
+                        // Populate a listbox with the current clans, if any exist here
+                        // If none do, erase the listbox
+                        var p = document.getElementById('p-listbox');
+                        if (data['clans'].length > 0) {
+                            while (p.firstChild) p.removeChild(p.firstChild);
+                            var lststr = "Nearby tribes ";
+                            lststr += '<select name="clans-list" style="width:150px; color:black;">';
+                            for (i = 0; i < data['clans'].length; i++) {
+                                lststr += '<option value="' + data['clans'][i].named + '">' + data['clans'][i].named + '</option>';
+                            }
+                            lststr += '</select>';
+                            p.innerHTML = lststr;
+                        } else {
+                            while (p.firstChild) p.removeChild(p.firstChild);
+                        }
+
+                        sessionStorage.setItem("entities", JSON.stringify(data));
                     },
                     complete: function() {
                         // Schedule the next request when the current one's complete
-                        setTimeout(worker, 2500);
+                        setTimeout(worker, 16000);
+                    }
+                });
+            })();
+
+            (function worker() {
+                $.ajax({
+                    url: "/news",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        var newsbox = document.getElementById('ul-newsbox');
+                        if (data['news'].length > 0) {
+                            while (newsbox.firstChild) newsbox.removeChild(newsbox.firstChild);
+                            var ulstr = "";
+                            for (i = 0; i < data['news'].length; i++) {
+                                ulstr += "<li>" + data['news'][i].text + "</li>";
+                            }
+                            newsbox.innerHTML = ulstr;
+                        } else {
+                            while (newsbox.firstChild) newsbox.removeChild(newsbox.firstChild);
+                        }
+
+                        sessionStorage.setItem("news", JSON.stringify(data));
+                    },
+                    complete: function() {
+                        // Schedule the next request when the current one's complete
+                        setTimeout(worker, 7500);
                     }
                 });
             })();
@@ -210,54 +230,59 @@ $(document).ready(function() {
     });
 });
 
-$(document).bind('click', function () {
+$(document).bind('mouseup', function () {
     // Add a click-handler to the image.
-    $('#stuff').bind('click', function (ev) {
-        // Deduce the abstract x,y coordinates the user clicked
-        var $img = $(ev.target);
+    $('#stuff').bind('mouseup', function (ev) {
+        switch (event.which)
+        {
+            case 1:
+                var $img = $(ev.target);
 
-        var offset = $img.offset();
-        var x = ev.clientX - offset.left;
-        var y = ev.clientY - offset.top;
+                var offset = $img.offset();
+                var x = ev.clientX - offset.left;
+                var y = ev.clientY - offset.top;
 
-        x = Math.floor(x / 100);
-        y = Math.floor(y / 100);
-        
-        // Get the data out of storage
-        var data = JSON.parse(sessionStorage.getItem("data"));
+                x = Math.floor(x / 100);
+                y = Math.floor(y / 100);
 
-        // If there's some data, fill in the inspector with whatever is in the
-        // current square. Cities take precedence, with mapzone properties as a 
-        // fallback only
-        if (typeof data != 'undefined') {
-            var name = document.getElementById("txt-inspector-name");
-            var citySelected = false;
+                // Get the data out of storage
+                var data = JSON.parse(sessionStorage.getItem("data"));
 
-            if (data['cities'].length > 0) {
-                for (var i = 0; i < data['cities'].length; i++) {
-                    if ((data['cities'][i].x == x) && (data['cities'][i].y == y)) {
-                        name.innerText = data['cities'][i].named;
-                        citySelected = true;
+                // If there's some data, fill in the inspector with whatever is in the
+                // current square. Cities take precedence, with mapzone properties as a
+                // fallback only
+                if (typeof data != 'undefined') {
+                    var name = document.getElementById("txt-inspector-name");
+                    var citySelected = false;
+
+                    if (data['cities'].length > 0) {
+                        for (var i = 0; i < data['cities'].length; i++) {
+                            if ((data['cities'][i].x == x) && (data['cities'][i].y == y)) {
+                                name.innerText = data['cities'][i].named;
+                                citySelected = true;
+                            }
+                        }
+                    }
+
+                    if (!citySelected) {
+                        for (i = 0; i < data['data'].length; i++) {
+                            if ((data['data'][i].x == x) && (data['data'][i].y == y)) {
+                                name.innerText = data['data'][i].geotype;
+                            }
+                        }
                     }
                 }
-            }
-
-            if (!citySelected) {
-                for (i = 0; i < data['data'].length; i++) {
-                    if ((data['data'][i].x == x) && (data['data'][i].y == y)) {
-                        name.innerText = data['data'][i].geotype;
-                    }
-                }
-            }
+                break;
+            case 2:
+                break;
+            case 3:
+                var $infopanes = $('#info-panes');
+                $infopanes.stop();
+                $infopanes.fadeToggle();
+                break;
+            default:
+                break;
         }
-    });
-
-    $('#showhide').bind('click', function() {
-        $('.info-panels').slideDown();
-    });
-
-    $('body').bind('click', function() {
-        $('.info-panels').slideUp();
     });
 });
 

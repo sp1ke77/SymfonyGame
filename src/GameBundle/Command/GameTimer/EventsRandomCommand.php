@@ -25,16 +25,15 @@ class EventsRandomCommand extends ContainerAwareCommand
         $logger->info('EventsRandom round begun ... ');
         $db = $this->getContainer()->get('db');
 
-        for ($i = 0; $i < 7; $i++) {
-            $randomEvents = new RandomEvents();
-            $randomEvents->setDb($db);
-            $msg[] = $randomEvents->rollDice();
+        $randomEvents = new RandomEvents();
+        $randomEvents->setDb($db);
 
-            if (!empty($msg)) {
-                $logger->info(print_r($msg));
-            } else {
-                continue;
-            }
+        for ($i = 0; $i < 7; $i++) {
+            $msg[] = $randomEvents->rollDice();
+        }
+
+        if (!empty($msg)) {
+            $logger->info(print_r($msg));
         }
 
         $logger->info('EventsRandom round complete');

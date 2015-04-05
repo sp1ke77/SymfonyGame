@@ -8,9 +8,11 @@
 
 namespace GameBundle\Game\Simulation\RandomEvents;
 use GameBundle\Game\DBCommon;
+use GameBundle\Game\Model\TradegoodToken;
 use GameBundle\Services\MapService;
 use GameBundle\Game\Rules\Dice;
 use GameBundle\Game\Model\News;
+use GameBundle\Services\NewsService;
 
 class RandomEvents
 {
@@ -59,6 +61,8 @@ class RandomEvents
            fail sometimes because it drew a mapzone with three tokens already present. */
         $mapService = new MapService();
         $mapService->setDb($this->db);
+        $newsService = new NewsService();
+        $newsService->setDb($this->db);
         $mz = $mapService->getRandomPassableMapZone();
         $tradegood = $mapService->searchZoneForTradegoodTokens($mz);
 
@@ -66,7 +70,7 @@ class RandomEvents
         {
             $tg = $mapService->getARandomTradegoodPlatonic();
             $mapService->insertANewTradegoodToken($mz, $tg);
-            $this->createSomeNews(ucwords($tg->getNamed()). ' will now be produced in ' .$mz->getX(). ', ' .$mz->getY(). '', $mz->getX(), $mz->getY());
+            $newsService->createSomeNews(ucwords($tg->getNamed()). ' will now be produced in ' .$mz->getX(). ', ' .$mz->getY(). '', $mz->getX(), $mz->getY());
             return ucwords($tg->getNamed()). ' will now be produced in ' .$mz->getX(). ', ' .$mz->getY();
         }
     }
@@ -74,6 +78,7 @@ class RandomEvents
     private function createSomeNews($msg, $x, $y)
     {
         $news = new News(null);
+        $news->setDb($this->db);
         $news->setText($msg);
         $news->setX($x);
         $news->setY($y);

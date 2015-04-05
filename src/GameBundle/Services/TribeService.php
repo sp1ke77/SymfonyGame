@@ -29,6 +29,12 @@ class TribeService
         $query = 'SELECT * FROM clan;';
         $this->db->setQuery($query);
         $this->db->query();
+        $loadObj = $this->db->loadObjectList();
+        foreach ($loadObj as $obj) {
+            $clan = New Clan($obj->id);
+            $clan->load();
+            $clans[] = $clan;
+        }
         return $this->db->loadObjectList();
     }
 

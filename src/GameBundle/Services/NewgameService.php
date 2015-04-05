@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Tribe;
+use GameBundle\Game\Model\Tradegood_Platonic;
+use GameBundle\Game\Model\Tradegood_Token;
 use GameBundle\Services\MapService;
 use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
 
@@ -106,7 +108,7 @@ class NewgameService
             }
         }
         // Create the Mediterranean sea
-        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<=47 AND y>20 AND y<40;";
+        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<=47 AND y>20 AND y<34;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -137,6 +139,11 @@ class NewgameService
         // Create Syria and Turkey
         $query = "UPDATE mapzone SET geotype='hills' WHERE y<20 AND geotype='desert'"
             . " OR x<20 AND geotype='swamp';";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        // Create the fictional island of Phaito
+        $query = "UPDATE mapzone SET geotype='hills' WHERE x>3 AND x<8 AND y>0 AND y<4;";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -220,12 +227,12 @@ class NewgameService
                 'y' => 34,
                 'Region' => 'Goshen',
                 'God' => 'Amun'),
-            'Menfer' => array(
+            'Bubastis' => array(
                 'Description' => '',
                 'x' => 33,
                 'y' => 47,
                 'Region' => 'Egypt',
-                'God' => 'Ptah'),
+                'God' => 'Bast'),
             );
 
         foreach ($cities as $k => $v)
@@ -250,11 +257,9 @@ class NewgameService
         // Decode the json document and spit it out as an associative array
         $file = file_get_contents($this->path . "/Resources/Scenario/tradegoods.json");
         $tradegoods[] = json_decode($file, true);
-        for ($i = 0; $i < 40; $i++)
+        foreach ($tradegoods[0] as $k => $v)
         {
-            // Get a random key from the array (nesting depth one)
-            $rk = array_rand($tradegoods[0]);
-            $tradegood = $tradegoods[0][$rk];   // Pull the specific object
+            $tradegood = $tradegoods[0][$k];   // Pull the specific object
 
             // Get the data from the random tradegood
             $name = $tradegood['Name'];
@@ -372,7 +377,7 @@ class NewgameService
      */
     private function createTradeGood($named, $description, $tv, $fv, $tgtype)
     {
-        $query = "INSERT INTO tradegood_platonic(named, description, tradevalue, foodvalue, tgtype) VALUES('" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
+        $query = "INSERT INTO tradegoodplatonic(named, description, tradevalue, foodvalue, tgtype) VALUES('" . $named . "','" . $description . "'," . $tv . "," . $fv . "," . $tgtype . ");";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -484,7 +489,11 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE tradegood;";
+        $query = "DROP TABLE tradegoodplatonic;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "DROP TABLE tradegoodtoken;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -512,11 +521,11 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE diplomatic_relation;";
+        $query = "DROP TABLE diplomaticrelation;";
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE diplomatic_status;";
+        $query = "DROP TABLE diplomaticstatus;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -578,7 +587,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.tradegood_platonic (
+        $query = "CREATE TABLE game.tradegoodplatonic (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
                           imgfull VARCHAR(45) NULL,
@@ -590,7 +599,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.tradegood_token (
+        $query = "CREATE TABLE game.tradegoodtoken (
                           id INT NOT NULL AUTO_INCREMENT,
                           mapzone INT NULL,
                           tg VARCHAR(45) NULL,
@@ -698,7 +707,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.diplomatic_relation (
+        $query = "CREATE TABLE game.diplomaticrelation (
                           id INT NOT NULL AUTO_INCREMENT,
                           ownerid INT NULL,
                           ownertype ENUM('player', 'agent', 'tribe', 'nation'),
@@ -710,7 +719,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.diplomatic_status (
+        $query = "CREATE TABLE game.diplomaticstatus (
                           id INT NOT NULL AUTO_INCREMENT,
                           ownerid INT NULL,
                           ownertype ENUM('nation', 'tribe'),
@@ -726,6 +735,7 @@ class NewgameService
                           text VARCHAR(144) NOT NULL,
                           x INT NULL,
                           y INT NULL,
+                          dated TIMESTAMP,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();

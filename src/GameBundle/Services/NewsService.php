@@ -8,10 +8,11 @@
 
 namespace GameBundle\Services;
 use GameBundle\Game\Model\News;
+use GameBundle\Game\DBCommon;
 
 class NewsService
 {
-
+    /** @var $db DBCommon */
     protected $db;
 
     public function setDb($db)
@@ -21,12 +22,9 @@ class NewsService
 
     public function createSomeNews($msg, $x, $y)
     {
-        $news = new News(null);
-        $news->setDb($this->db);
-        $news->setText($msg);
-        $news->setX($x);
-        $news->setY($y);
-        $news->update();
+        $query = "INSERT INTO news(text, x, y) VALUES('" .$msg. "', " .$x. ", " .$y. ");";
+        $this->db->setQuery($query);
+        $this->db->query();
     }
 
 }

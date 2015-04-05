@@ -25,12 +25,15 @@ class AdminController extends Controller
     }
 
     public function newgameAction() {
+
+        $db = $this->get('db');
         $passphrase = $_POST['passphrase'];
 
         if ($passphrase == "restarttheworld")
         {
             // Get the services we need to invoke a new game
             $newgameService = $this->get('service_newgame');
+            $newgameService->setDb($db);
             $path = $this->get('kernel')->getRootDir();
 
             // Configure NewgameService and execute createGame()

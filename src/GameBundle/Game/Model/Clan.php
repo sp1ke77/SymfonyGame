@@ -39,8 +39,8 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
 
     /**
      * References
-     * @var $depotId
-     * @var $tribeId
+     * @var $depot
+     * @var $tribe
      */
     protected $depot;
     protected $tribe;
@@ -99,6 +99,11 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     public function getFood()
     {
         return $this->food;
+    }
+
+    public function setFood($food)
+    {
+        $this->food = $food;
     }
 
     /**
@@ -181,7 +186,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      */
     public function getDepot()
     {
-        return $this->depotId;
+        return $this->depot;
     }
 
     /*
@@ -208,42 +213,4 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
 
     }
 
-    /*
-     *
-     *
-     *
-     *               CLAN SPECIFIC FUNCTIONS
-     *
-     *
-     *
-     */
-
-    public function checkLarder()
-    {
-        $depot = New Depot($this->depotId);
-        $depot->load();
-
-        // This should be made more extensible, probably by using reflection some more
-        $this->food = (($depot->getWheat() * 1) + ($depot->getOlives() * 1.2) +
-                        ($depot->getFish() * 1.2) + ($depot->getCattle() * 2.8));
-        $depot->setWheat(0);
-        $depot->setOlives(0);
-        $depot->setFish(0);
-        $depot->setCattle(0);
-        $depot->update();
-    }
-
-    public function consumeFood($amt)
-    {
-        if ($this->food > $amt) {
-            $this->food -= $amt;
-            $this->update();
-            return true;
-        } else {
-            // Generate some news about famine and bad shit
-            $this->population -= 1;
-            $this->update();
-            return false;
-        }
-    }
 }
