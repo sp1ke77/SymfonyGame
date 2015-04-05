@@ -17,6 +17,7 @@
         <!--- BOTTOM BAR --->
 
             <div class="row navbar-fixed-bottom info-panels">
+                <input type="button" name="sample1" class="button btn-default" value="Toggle Panels" id="showhide">
                 <div class="col-md-3 bottom">
                     <div class="panel panel-default">
                         <h4>[ContextName]</h4>
@@ -142,13 +143,12 @@ $(document).ready(function() {
                         ctx.drawImage(shallowsea, x2, y2);
                         break;
                 }
+                ctx.fillText('id=' + data['data'][i].id, x2 + 15, y2 + 15);
             }
-            
+
             // If there are some cities, draw those on the bottom layer
-            if (data['cities'])
-            {
-                for(var n = 0; n < (data['cities'].length); n++)
-                {
+            if (data['cities']) {
+                for (var n = 0; n < (data['cities'].length); n++) {
                     ctx.drawImage(city, (data['cities'][n].x * plains.width) + 28, (data['cities'][n].y * plains.height) + 10);
                     ctx.fillText(data['cities'][n].named, (data['cities'][n].x * plains.width) + 33, (data['cities'][n].y * plains.height) + 20);
                 }
@@ -170,27 +170,42 @@ $(document).ready(function() {
                 while (p.firstChild) p.removeChild(p.firstChild);
             }
 
-            // If there are some clans, draw them on the top layer and refresh every 5000ms
-            var timer = setInterval(function() {
-                if (data['clans'])
-                {
-                    var c = document.getElementById("stuff");
-                    var ctx = c.getContext("2d");
-                    ctx.clearRect(0, 0, c.width, c.height);
-                    ctx.beginPath();
-
-                    for(var n = 0; n < (data['clans'].length); n++)
-                    {
-                        var fx = Math.floor((Math.random() * 60) + -30);
-                        var fy = Math.floor((Math.random() * 20) + 70);
-                        ctx.drawImage(clan, (data['clans'][n].x * plains.width) + fx, (data['clans'][n].y * plains.height + fy));
-                        ctx.fillText(data['clans'][n].named, (data['clans'][n].x * plains.width) + fx + 8, (data['clans'][n].y * plains.height) + fy + 10);
-                    }
-                }
-            }, 5000);
-
             // Store whatever data we got in session so that it can be accessed later
             sessionStorage.setItem("data", JSON.stringify(data));
+
+            // If there are some clans, draw them on the top layer and refresh every 5000ms
+            (function worker() {
+                $.ajax({
+                    url: "/map",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        // Store whatever data we got in session so that it can be accessed later
+                        console.log('Updated!');
+                        console.log(data);
+
+                        if (data['clans']) {
+                            var c = document.getElementById("stuff");
+                            var ctx = c.getContext("2d");
+                            ctx.clearRect(0, 0, c.width, c.height);
+                            ctx.beginPath();
+
+                            for (var n = 0; n < (data['clans'].length); n++) {
+                                var fx = Math.floor((Math.random() * 60) + -30);
+                                var fy = Math.floor((Math.random() * 20) + 70);
+                                ctx.drawImage(clan, (data['clans'][n].x * plains.width) + fx, (data['clans'][n].y * plains.height + fy));
+                                ctx.fillText(data['clans'][n].named, (data['clans'][n].x * plains.width) + fx + 8, (data['clans'][n].y * plains.height) + fy + 10);
+                            }
+                        }
+
+                        sessionStorage.setItem("data", JSON.stringify(data));
+                    },
+                    complete: function() {
+                        // Schedule the next request when the current one's complete
+                        setTimeout(worker, 5000);
+                    }
+                });
+            })();
         }
     });
 });
@@ -235,6 +250,10 @@ $(document).bind('click', function () {
                 }
             }
         }
+    });
+
+    $('#showhide').bind('click', function() {
+        $('#info-panels').slideToggle();
     });
 });
 

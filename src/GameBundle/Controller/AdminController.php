@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 // Temporary
 use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
 use GameBundle\Game\Simulation\ActionRound;
+use GameBundle\Game\DBCommon;
 
 class AdminController extends Controller
 {
@@ -47,13 +48,10 @@ class AdminController extends Controller
     public function testAction()
     {
         $db = $this->get('db');
-        $path = $this->get('kernel')->getRootDir();
-
         // Swap this whatever service is to be tested
 
-        $events = new RandomEvents();
-        $events->rollDice();
         $actionround = new ActionRound();
+        $actionround->setDb($db);
         $actionround->execute();
 
         return new RedirectResponse('/admin');

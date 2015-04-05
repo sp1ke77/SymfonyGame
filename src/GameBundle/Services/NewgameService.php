@@ -272,7 +272,7 @@ class NewgameService
             'Canaanite' => array("Arsai", "Baalat", "Eshmun", "Wakhasir", "Lotan",
                 "Margod", "Mawat", "Melwart", "Nikkal", "Shalim", "Shachar", "Qadeshtu", "Yarikh", "Yaw"),
             'Hurrian' => array("Matarum", "Yariha-amu", "Ihid", "Iniru", "Sin-mslim", "Abbana-el",
-                "Yai-tobal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh", "Zakija-Hamu", "Zunan"),
+                "Yai-tobal", "Yimsi-el", "Mut-rame", "Habdu-ami", "Kabi-epuh", "Zakija-Ham", "Zunan"),
             'Luwian' => array("Madunani", "Kuruntya", "Runtya", "Hantawti", "Tarkasn", "Zupari",
                 "Tupana", "Tuwrsanza", "Tibe", "Esi-tmata", "Manaha", "Umanaddu", "Musisipa"),
             'Tejenu' => array("Andronak", "Etewokwt", "Klonak", "Nikostur",
@@ -400,10 +400,10 @@ class NewgameService
         $MapService = new MapService();
         $MapService->setDb($this->db);
         $mz = $MapService->getRandomPassableMapZone();
-        $x = $mz->x;
-        $y = $mz->y;
-        $query = "INSERT INTO clan(named, tribe, x, y, depot, population, fighters, food, coin) VALUES('"
-                    .$tribeName. "', " .$tribeId. ", " .$x. ', ' .$y. ', ' .$depotId. ", 100, 60, 35, 0);";
+        $x = $mz->getX();
+        $y = $mz->getY();
+        $query = "INSERT INTO clan(named, tribe, x, y, depot, population, fighters, morale, food, coin, activity) VALUES('"
+                    .$tribeName. "', " .$tribeId. ", " .$x. ', ' .$y. ', ' .$depotId. ", 100, 60, 100, 35, 0, 'wandering');";
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -643,6 +643,7 @@ class NewgameService
                           y INT NULL,
                           population INT NULL,
                           fighters INT NULL,
+                          morale INT NULL,
                           food INT NULL,
                           coin INT NULL,
                           depot INT NULL,

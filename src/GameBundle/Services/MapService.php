@@ -31,12 +31,16 @@ class MapService
      */
     public function getRandomPassableMapZone()
     {
-        $query = "SELECT * FROM mapzone WHERE geotype!='deepsea' AND geotype !='shallowsea' ORDER BY Rand() LIMIT 1;";
+        $query = "SELECT id FROM mapzone WHERE geotype!='deepsea' AND geotype !='shallowsea' ORDER BY Rand() LIMIT 1;";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
 
-        return $loadObj;
+        $mz = new Mapzone($loadObj->id);
+        $mz->setDb($this->db);
+        $mz->load();
+
+        return $mz;
     }
 
     /**
@@ -44,12 +48,18 @@ class MapService
      * @param $distance int
      * @return Mapzone
      */
-    public function GetARandomMove(IMappable &$user, $distance = 1) {
-
-        $query = 'SELECT * FROM mapzone WHERE x>=' .($user->getX() - $distance). ' AND y>=' .($user->getY() - $distance).' AND x<=' .($user->getX() + $distance). ' AND y<=' .($user->getY() + $distance). ' ORDER BY Rand() LIMIT 1;';
+    public function GetARandomMove(IMappable $user, $distance = 1)
+    {
+        $query = 'SELECT id FROM mapzone WHERE x>=' .($user->getX() - $distance). ' AND y>=' .($user->getY() - $distance).' AND x<=' .($user->getX() + $distance). ' AND y<=' .($user->getY() + $distance). ' ORDER BY Rand() LIMIT 1;';
         $this->db->setQuery($query);
         $this->db->query();
-        return $this->db->loadObject();
+        $loadObj = $this->db->loadObject();
+
+        $mz = new Mapzone($loadObj->id);
+        $mz->setDb($this->db);
+        $mz->load();
+
+        return $mz;
     }
 
     /**

@@ -35,36 +35,13 @@ class Rules
 
     /**
      * Components
-     * @var $checks Checks
+     * @var $db DBCommon
+     * @var $checks \GameBundle\Game\Rules\Checks
      * @var $actions Actions
      */
+    protected $db;
     protected $checks;
     protected $actions;
-    protected $dice;
-
-    /**
-     * @param $actions Actions
-     */
-    public function setActions($actions)
-    {
-        $this->actions = $actions;
-    }
-
-    /**
-     * @param $checks Checks
-     */
-    public function setChecks($checks)
-    {
-        $this->checks = $checks;
-    }
-
-    /**
-     * @param $dice
-     */
-    public function setDice($dice)
-    {
-        $this->dice = $dice;
-    }
 
     /**
      * Create a request packaged for submission
@@ -81,6 +58,14 @@ class Rules
         $request['Issuer'] = $issuer;
         $request['Args'] = $args;
         return $request;
+    }
+
+    /**
+     * @param DBCommon $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
     }
 
     /**
@@ -214,9 +199,12 @@ class Rules
     public function travel(IMappable $issuer, $x2, $y2)
     {
             $checks = new Checks();
+            $checks->setDb($this->db);
             $actions = new Actions();
+            $actions->setDb($this->db);
 
             // Get the issuer's current location
+
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
@@ -225,7 +213,7 @@ class Rules
                 $result = $actions->mapTravel($issuer, $x2, $y2);
                 return $this->getResult('Success', $result);
             } else {
-                return $this->getResult('Illegal move', 'Destination is too far or is not passable');
+                return $this->getResult('Illegal move', $x2. ', ' .$y2. ' is too far or is not passable');
             }
     }
 

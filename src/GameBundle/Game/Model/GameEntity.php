@@ -56,18 +56,22 @@ abstract class GameEntity
 
     public function load()
     {
-        $table = get_called_class();
-        $reflectionClass = new ReflectionClass($table);
+        $called_class = get_called_class();
+        $class_name = explode('\\', get_class($this));
+        $table = strtolower(array_pop($class_name));
+
+        $reflectionClass = new ReflectionClass($called_class);
         $properties = $reflectionClass->getProperties();
 
         foreach($properties as $node)
         {
-            $query = "SELECT " . $node->getName() . " FROM " . $table . " WHERE id=" . (int)$this->getId() . ";";
-            $this->db->setQuery($query);
-            $result = $this->db->query();
-            if($node->getName() != 'id')
+            if($node->getName() != 'db' && $node->getName() != 'id')
             {
-                $this->{$node->getName()} = $result;
+                $query = "SELECT * FROM " . $table . " WHERE id=" . (int)$this->getId() . ";";
+                $this->db->setQuery($query);
+                $this->db->query();
+                $obj = $this->db->loadObject();
+                $this->{$node->getName()} = $obj->{$node->getName()};
             }
         }
     }
@@ -84,7 +88,7 @@ abstract class GameEntity
 
         foreach($properties as $node){
             $propertyName = $node->getName();
-            if($propertyName != 'id')
+            if($propertyName != 'id' && $propertyName != 'db')
             {
                 $values[$propertyName] = $this->{$propertyName};
             }

@@ -24,7 +24,7 @@ class Tribe extends GameEntity
     protected $insularity;
     protected $belligerence;
     protected $tenacity;
-    protected $spiritualty;
+    protected $spirituality;
     protected $sumptuousness;
 
     /**

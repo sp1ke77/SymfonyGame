@@ -10,6 +10,7 @@ namespace GameBundle\Game\Simulation\AI\Clans;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
 use GameBundle\Game\Rules\Rules;
+use GameBundle\Services\MapService;
 use GameBundle\Services\NewsService;
 
 class Behavior
@@ -30,8 +31,13 @@ class Behavior
     public function TakeAction($clanId)
     {
         $rules = new Rules();
+        $rules->setDb($this->db);
         $news = new NewsService();
+        $news->setDb($this->db);
+        $map = new MapService();
+        $map->setDb($this->db);
         $clan = new Clan($clanId);
+        $clan->setDb($this->db);
         $clan->load();
 
         $action = [];
@@ -40,11 +46,17 @@ class Behavior
         {
             case 'wandering':
                 $action['Action'] = 'travel';
-                $action['Issuer'] = &$clan;
-                $mz = $this->GetARandomMove($clan);
-                $action['Args'] = $mz->x. ',' .$mz->y;
+                $action['Issuer'] = $clan;
+                $mz = $map->GetARandomMove($clan);
+                $action['Args'] = $mz->getX(). ',' .$mz->getY();
+                $result = $rules->submit($action);
 
-                $news->createSomeNews($rules->submit($action), $mz->x, $mz->y);
+                if ($result['Type'] == 'Success') {
+                    $test[] = $result['Description'];
+                } else {
+                    $test[] = $result['Description'];
+                }
+                return $result;
             break;
 
             default:

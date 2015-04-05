@@ -14,15 +14,15 @@ services:
         class: GameBundle\Services\TribeService
         calls:
             - [setDb, ["@db"]]
-    dice:
-        class: GameBundle\Game\Rules\Dice
+    service_newgame:
+        class: GameBundle\Services\NewgameService
         calls:
             - [setDb, ["@db"]]
-    actions:
+    service_actions:
         class: GameBundle\Game\Rules\Actions
         calls:
             - [setDb, ["@db"]]
-    service_newgame:
-        class: GameBundle\Services\NewgameService
+    behavior:
+        class: GameBundle\Game\Simulation\AI\Behavior
         calls:
             - [setDb, ["@db"]]
