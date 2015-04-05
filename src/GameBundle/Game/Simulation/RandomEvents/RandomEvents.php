@@ -30,6 +30,8 @@ class RandomEvents
         if ($dice->Odds(5))
         {
             return $this->NewTradeTokenEvent();
+        } else {
+            return 'Nothing happened';
         }
     }
 
@@ -50,7 +52,7 @@ class RandomEvents
     /**
      * @return string
      */
-    private function NewTradeTokenEvent()
+    public function NewTradeTokenEvent()
     {
         /* This event causes a random tradegood_token to appear in a mapzone where
            there are currently fewer than three tradegoods. Note that this event will

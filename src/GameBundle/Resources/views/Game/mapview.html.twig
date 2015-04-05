@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="container-fluid">
+    <div class="container">
         <!--- MAP CONTAINER --->
 
             <div class="row">
@@ -17,7 +17,7 @@
         <!--- BOTTOM BAR --->
 
             <div class="row navbar-fixed-bottom info-panels">
-                <input type="button" name="sample1" class="button btn-default" value="Toggle Panels" id="showhide">
+                <input type="button" name="sample1" class="button btn-default" value="Hide Panels" id="showhide">
                 <div class="col-md-3 bottom">
                     <div class="panel panel-default">
                         <h4>[ContextName]</h4>
@@ -202,7 +202,7 @@ $(document).ready(function() {
                     },
                     complete: function() {
                         // Schedule the next request when the current one's complete
-                        setTimeout(worker, 5000);
+                        setTimeout(worker, 2500);
                     }
                 });
             })();
@@ -253,7 +253,11 @@ $(document).bind('click', function () {
     });
 
     $('#showhide').bind('click', function() {
-        $('#info-panels').slideToggle();
+        $('.info-panels').slideDown();
+    });
+
+    $('body').bind('click', function() {
+        $('.info-panels').slideUp();
     });
 });
 

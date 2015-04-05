@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Tribe;
 use GameBundle\Services\MapService;
+use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
 
 /**
  * Class NewgameService
@@ -65,6 +66,13 @@ class NewgameService
 
             $this->initializeCities();
             $this->initializeTradeGoods();
+
+            $ev = New RandomEvents();
+            $ev->setDb($this->db);
+            for ($i = 0; $i < 400; $i++)
+            {
+                $ev->NewTradeTokenEvent();
+            }
 
             // $this->createTradeGoodTokens();
             $this->createSomeTribes();

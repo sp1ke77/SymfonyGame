@@ -30,7 +30,7 @@ class ActionRoundCommand extends ContainerAwareCommand
         $action->setDb($db);
         $result = $action->execute();
 
-        $logger->info($result);
+        $logger->info(print_r($result));
         $logger->info('ActionRound complete ... ');
     }
 }

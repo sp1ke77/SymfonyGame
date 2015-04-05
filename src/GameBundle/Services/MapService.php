@@ -79,10 +79,16 @@ class MapService
      */
     public function getARandomTradegoodPlatonic()
     {
-        $query = 'SELECT * from tradegood_platonic ORDER BY Rand() LIMIT 1;';
+        $query = 'SELECT id from tradegood_platonic ORDER BY Rand() LIMIT 1;';
         $this->db->setQuery($query);
         $this->db->query();
-        return $this->db->loadObject();
+        $loadObj = $this->db->loadObject();
+
+        $tradegood = new Tradegood_Platonic($loadObj->id);
+        $tradegood->load();
+        var_dump($tradegood);
+        die();
+        return $tradegood;
     }
 
     /**
