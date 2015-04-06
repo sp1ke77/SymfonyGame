@@ -12,6 +12,7 @@ use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\TradegoodToken;
 use GameBundle\Game\Model\TradegoodPlatonic;
+use GameBundle\Game\Model\City;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
 class MapService
@@ -154,5 +155,35 @@ class MapService
         $mapzone->setDb($this->db);
         $mapzone->load();
         return $mapzone;
+    }
+
+    public function findNearestCity($x, $y) {
+        $query = "SELECT id FROM city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $loadObj = $this->db->loadObject();
+
+        if (isset($loadObj)) {
+            $city = new City($loadObj->id);
+            $city->setDb($this->db);
+            $city->load();
+            return $city;
+        } else {
+            return null;
+        }
+    }
+
+    public function teleportCity(IMappable $mappable, City $city)
+    {
+        $query = 'UPDATE ' .$this->getClass($mappable). ' SET x=' .$city->getX(). ' AND y=' .$city->getY(). ' WHERE ' .$mappable->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
+    }
+
+    private function getClass($issuer)
+    {
+        $getclass = explode('\\', get_class($issuer));
+        $name = array_pop($getclass);
+        return strtolower($name);
     }
 }

@@ -10,6 +10,7 @@ namespace GameBundle\Game\Simulation\AI\Clans;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
 use GameBundle\Game\Model\TradegoodToken;
+use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Rules\Rules;
 use GameBundle\Services\MapService;
 use GameBundle\Game\Rules\Interfaces\IDepotHaver;
@@ -88,26 +89,55 @@ class Behavior
                 return null;
 
             case 'working':
+
                 // If I am producing anything, produce one and deposit it
                 // into my depot. If I am full up, change activity to
-                // 'seeking to trade'
+                // 'trading'
 
-                break;
+                $tgp = new TradegoodPlatonic($clan->getProducing());
+                $tgp->setDb($this->db);
+                $tgp->load();
+                $depot = new Depot($clan->getDepot());
+                $depot->setDb($this->db);
+                $depot->load();
+                $depot->Produce(strtolower($tgp->getNamed()));
 
-            case 'seeking to trade':
-                // If I am within range of a city, teleport there
-                // and change activity to 'trading'
+                $result = 'Clan' .$clan->getId(). ' produced ' .$tgp->getNamed(). ' in ' .$clan->getX(). ', ' .$clan->getY();
 
-                break;
+                if ($depot->CheckOne(strtolower($tgp->getNamed())) >= 10)
+                {
+                    $this->changeProducing($clan, null);
+                    $this->changeActivity($clan, 'trading');
+                }
+
+                return $result;
+
             case 'trading':
-                // If I have any nonfood goods, sell them
 
-                // If I have any spare coin, buy food
+                // Find out if I'm in range of a city; if so teleport to the nearest
+                $city = $this->map->findNearestCity($clan->getX(), $clan->getY());
+                if (isset($city))
+                {
+                    if (($city->getX() == $clan->getX()) && ($city->getY() == $clan->getY())) {
+                        $depot = new Depot($clan->getDepot());
+                        $depot->setDb($this->db);
+                        $depot->load();
 
-                // If buying food leaves me with sufficient food, change
-                // activity to 'celebrating' otherwise change to 'wandering'
+                        // If I have any nonfood goods, sell them
+                        $profit = $depot->sellAllNonfood();
+                        $result = 'Clan' .$clan->getId() . ' traded for ' .$profit. ' coin in the market of ' .$city->getNamed();
+                        $clan->setCoin($clan->getCoin() + $profit);
+                        $depot->buyAllFood($clan->getCoin());
+                        return $result;
+                    } else {
+                        $this->map->teleportCity($clan, $city);
+                        return 'Clan' . $clan->getId() . ' traveled to ' . $city->getNamed();
+                    }
+                } else {
+                    $this->changeActivity($clan, 'wandering');
+                    break;
+                }
 
-                break;
             case 'celebrating':
                 // Consume 5 food and prouce 5 population
                 // If (population >= 250 && Odds(population / 10))
@@ -173,5 +203,12 @@ class Behavior
         $query = 'UPDATE clan SET producing="' .$producing. '" WHERE id=' .$clan->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
+    }
+
+    private function getClass($issuer)
+    {
+        $getclass = explode('\\', get_class($issuer));
+        $name = array_pop($getclass);
+        return $name;
     }
 }

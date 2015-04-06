@@ -252,4 +252,54 @@ class Depot extends GameEntity
             return 0;
         }
     }
+
+    /** @param $good string */
+    public function Produce($good) {
+        $reflection = New ReflectionClass($this);
+        $properties = $reflection->getProperties();
+
+        foreach ($properties as $node) {
+            $propertyName = $node->getName();
+            if ($propertyName == $good) {
+                $query = 'UPDATE depot SET ' .$propertyName. '=' .($this->{$propertyName} + 1). ' WHERE id=' .$this->getId() . ';';
+                $this->db->setQuery($query);
+                $this->db->query();
+            }
+        }
+    }
+
+    /**
+     * @param $good string
+     * @return int */
+    public function CheckOne($good)
+    {
+        $reflection = New ReflectionClass($this);
+        $properties = $reflection->getProperties();
+
+        foreach ($properties as $node) {
+            $propertyName = $node->getName();
+            if ($propertyName == $good) {
+                $n = $this->{$propertyName};
+                return $n;
+            }
+        }
+    }
+
+    public function sellAllNonfood() {
+        $total = 0;
+        $total += $this->Sell('wood', 5);
+        $total += $this->Sell('incense', 5);
+        $total += $this->Sell('gold', 5);
+        $total += $this->Sell('copper', 5);
+        $total += $this->Sell('dyes', 5);
+        $total += $this->Sell('linen', 5);
+        return $total;
+    }
+
+    public function buyAllFood()
+    {
+        $query = 'UPDATE depot SET wheat=' .($this->wheat + 10). ' WHERE id=' .$this->getId();
+        $this->db->setQuery($query);
+        $this->db->query();
+    }
 }
