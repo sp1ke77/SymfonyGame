@@ -242,15 +242,18 @@ class Depot extends GameEntity
 
     public function Sell($good, $amt)
     {
-        $reflection = New ReflectionClass($this);
-        if ($reflection->{$good} > $amt)
-        {
-            $reflection->{$good} -= $amt;
-            $this->update();
-            return ($amt * $this->getPlatonic($good)->tradevalue);
-        } else {
-            return 0;
-        }
+            $query = 'SELECT * FROM tradegoodplatonic WHERE named="' .$good. '";';
+            $this->db->setQuery($query);
+            $this->db->query();
+            $loadObj = $this->db->loadObject();
+
+            if (isset($loadObj)) {
+                if ($this->{$good} > $amt) {
+                    $this->{$good} -= $amt;
+                    $profit = $amt * $loadObj->tradevalue;
+                    return $profit;
+                }
+            }
     }
 
     /** @param $good string */
@@ -266,6 +269,8 @@ class Depot extends GameEntity
                 $this->db->query();
             }
         }
+
+        $this->update();
     }
 
     /**

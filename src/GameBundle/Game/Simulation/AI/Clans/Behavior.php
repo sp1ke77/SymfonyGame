@@ -86,7 +86,7 @@ class Behavior
                     $this->changeActivity($clan, 'working');
                 }
 
-                return null;
+                return 'Clan' .$clan->getId(). ' explored ' .$clan->getX(). ', ' .$clan->getY();
 
             case 'working':
 
@@ -126,8 +126,16 @@ class Behavior
                         // If I have any nonfood goods, sell them
                         $profit = $depot->sellAllNonfood();
                         $result = 'Clan' .$clan->getId() . ' traded for ' .$profit. ' coin in the market of ' .$city->getNamed();
-                        $clan->setCoin($clan->getCoin() + $profit);
+
                         $depot->buyAllFood($clan->getCoin());
+                        $depot->update();
+
+                        $clan->setCoin($clan->getCoin() + $profit);
+                        $clan->update();
+
+                        if ($clan->getFood() >= 35) { $this->changeActivity($clan, 'celebrating'); }
+                        if ($clan->getCoin() <= 5) { $this->changeActivity($clan, 'wandering'); }
+
                         return $result;
                     } else {
                         $this->map->teleportCity($clan, $city);
@@ -139,14 +147,29 @@ class Behavior
                 }
 
             case 'celebrating':
-                // Consume 5 food and prouce 5 population
-                // If (population >= 250 && Odds(population / 10))
-                // {
-                //     population -= 100;
-                //     create a new tribe based on this one;
-                // }
+
+                $depot = new Depot($clan->getDepot());
+                $depot->setDb($this->db);
+                $depot->load();
+
+                // Gather all the perishables into the larder, so to speak
+                $clan->setFood(($depot->getWheat() + $depot->getCattle() + $depot->getFish() + $depot->getOlives()));
+                $depot->setWheat(0);
+                $depot->setCattle(0);
+                $depot->setOlives(0);
+                $depot->setFish(0);
+                $depot->update(0);
+
+                // If we can afford to, let's party
+                if ($clan->getFood() >= 35) {
+                    $clan->setFood($clan->getFood() - 5);
+                    $clan->setPopulation($clan->getPopulation() + 10);
+                    $clan->update();
+                    return 'Clan ' .$clan->getId(). ' celebrated a holy day';
+                }
 
                 break;
+
             default:
                 // Nothing
 

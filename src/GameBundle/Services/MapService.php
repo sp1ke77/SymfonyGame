@@ -175,7 +175,10 @@ class MapService
 
     public function teleportCity(IMappable $mappable, City $city)
     {
-        $query = 'UPDATE ' .$this->getClass($mappable). ' SET x=' .$city->getX(). ' AND y=' .$city->getY(). ' WHERE ' .$mappable->getId(). ';';
+        $query = 'UPDATE ' .$this->getClass($mappable). ' SET x=' .$city->getX(). ' WHERE id=' .$mappable->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
+        $query = 'UPDATE ' .$this->getClass($mappable). ' SET y=' .$city->getY(). ' WHERE id=' .$mappable->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
     }
