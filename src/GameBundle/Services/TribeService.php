@@ -24,18 +24,19 @@ class TribeService
         $this->db = $db;
     }
 
-    /** @return Clan */
+    /** @return Array|Clan */
     function getAllClans() {
         $query = 'SELECT * FROM clan;';
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObjectList();
+        $clans = [];
         foreach ($loadObj as $obj) {
             $clan = New Clan($obj->id);
+            $clan->setDb($this->db);
             $clan->load();
             $clans[] = $clan;
         }
-        return $this->db->loadObjectList();
+        return $clans;
     }
-
 }

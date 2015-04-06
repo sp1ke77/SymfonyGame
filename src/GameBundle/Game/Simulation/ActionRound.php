@@ -24,8 +24,7 @@ class ActionRound {
 
     public function execute()
     {
-        $behavior = new Behavior();
-        $behavior->setDb($this->db);
+        $behavior = new Behavior($this->db);
         $tribeService = new TribeService();
         $tribeService->setDb($this->db);
 
@@ -33,7 +32,7 @@ class ActionRound {
 
         $result=[];
         foreach ($clans as $clan) {
-            $result[] = $behavior->TakeAction($clan->id);
+            $result[] = $behavior->TakeAction($clan->getId());
 
         }
         return $result;

@@ -36,6 +36,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     protected $food;
     protected $morale;
     protected $activity;
+    protected $producing;
 
     /**
      * References
@@ -152,15 +153,6 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     {
         $this->fighters = $fighters;
     }
-
-    /**
-     * @param int
-     */
-
-    public function setFood($food)
-    {
-        $this->food = $food;
-    }
     /**
      * @return int
      */
@@ -174,7 +166,7 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
      */
     public function getTribeId()
     {
-        return $this->tribeId;
+        return $this->tribe;
     }
 
     /*
@@ -203,6 +195,22 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
 
     }
 
+    /**
+     * @return mixed
+     */
+    public function getProducing()
+    {
+        return $this->producing;
+    }
+
+    /**
+     * @param mixed $producing
+     */
+    public function setProducing($producing)
+    {
+        $this->producing = $producing;
+    }
+
     public function Attack()
     {
 
@@ -212,5 +220,4 @@ class Clan extends GameEntity implements IMappable, IDepotHaver, ICombatant
     {
 
     }
-
 }

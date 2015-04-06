@@ -64,14 +64,14 @@ class NewgameService
             $this->trashGameworldTables();
             $this->setupGameworldTables();
 
-            $this->randomizeMap();
+            $this->createMap();
 
             $this->initializeCities();
             $this->initializeTradeGoods();
 
             $ev = New RandomEvents();
             $ev->setDb($this->db);
-            for ($i = 0; $i < 400; $i++)
+            for ($i = 0; $i < 1440; $i++)
             {
                 $ev->NewTradeTokenEvent();
             }
@@ -96,7 +96,7 @@ class NewgameService
      *  that bounds. Rows and columns will be equal to square_root($mapsize).
      *
      */
-    protected function randomizeMap()
+    protected function createMap()
     {
         // Create 400 map zones, randomize geotype and link each with an abstract x,y
         for ($x = 0; $x < 60; $x++) {
@@ -269,7 +269,7 @@ class NewgameService
             $tgtype = $tradegood['Type'];
 
             // Insert into game.tradegood
-            $this->createTradeGood($name, $description, $fv, $tv, $tgtype);
+            $this->createTradeGood($name, $description, $tv, $fv, $tgtype);
         }
     }
 
@@ -602,7 +602,10 @@ class NewgameService
         $query = "CREATE TABLE game.tradegoodtoken (
                           id INT NOT NULL AUTO_INCREMENT,
                           mapzone INT NULL,
-                          tg VARCHAR(45) NULL,
+                          tg INT NULL,
+                          named VARCHAR(45) NULL,
+                          tradevalue NUMERIC(2,1) NULL,
+                          foodvalue NUMERIC(2,1) NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -665,6 +668,7 @@ class NewgameService
                           coin INT NULL,
                           depot INT NULL,
                           activity ENUM('wandering', 'exploring', 'working', 'trading', 'holiday', 'fighting'),
+                          producing VARCHAR(45) NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();

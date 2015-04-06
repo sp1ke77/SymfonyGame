@@ -64,11 +64,11 @@ class MapService
 
     /**
      * @param Mapzone $mz
-     * @return Array
+     * @return Array|TradegoodToken
      */
     public function searchZoneForTradegoodTokens(Mapzone $mz) {
         $tokens = [];
-        $query = 'SELECT id FROM tradegoodtoken WHERE mapzone="' .$mz->getId(). '";';
+        $query = 'SELECT id FROM tradegoodtoken WHERE mapzone=' .$mz->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObjectList();
@@ -79,6 +79,25 @@ class MapService
             $tokens[] = $tgt;
         }
         return $tokens;
+    }
+
+    /**
+     * Returns the id of the most valuable game.tradegoodplatonic in the mapzone
+     *
+     * @param Mapzone $mz
+     * @return int
+     */
+    public function exploreForTrade(Mapzone $mz)
+    {
+        $query = 'SELECT tg FROM tradegoodtoken WHERE mapzone=' .$mz->getId(). ' ORDER BY tradevalue ASC LIMIT 1;';
+        $this->db->setQuery($query);
+        $this->db->query();
+        $loadObj = $this->db->loadObject();
+        if (isset($loadObj)) {
+            return $loadObj->tg;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -102,7 +121,7 @@ class MapService
      */
     public function insertANewTradegoodToken(Mapzone $mz, TradegoodPlatonic $tg)
     {
-        $query = 'INSERT INTO tradegoodtoken(mapzone, tg) VALUES(' . $mz->getId() . ', ' . $tg->getId() . ');';
+        $query = 'INSERT INTO tradegoodtoken(mapzone, tg, named, tradevalue, foodvalue) VALUES(' .$mz->getId(). ', ' .$tg->getId(). ', "' .$tg->getNamed(). '", ' .$tg->getTradevalue(). ', ' .$tg->getFoodvalue(). ');';
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -112,10 +131,28 @@ class MapService
      * @param $y
      * @return string
      */
-    public function getGeotypeByMapzone($x, $y) {
+    public function getGeotypeByMapzone($x, $y)
+    {
         $query = "SELECT geotype FROM mapzone WHERE x=" .$x. " AND y=" .$y. ";";
         $this->db->setQuery($query);
         $this->db->query();
         return $this->db->loadResult();
+    }
+
+    /**
+     * @param $x
+     * @param $y
+     * @return Mapzone
+     */
+    public function getMapzoneFromAbstract($x, $y)
+    {
+        $query = "SELECT * FROM mapzone WHERE x=" .$x. " AND y=" .$y. ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $loadObj = $this->db->loadObject();
+        $mapzone = new Mapzone($loadObj->id);
+        $mapzone->setDb($this->db);
+        $mapzone->load();
+        return $mapzone;
     }
 }
