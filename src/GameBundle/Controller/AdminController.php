@@ -79,11 +79,16 @@ class AdminController extends Controller
         foreach ($possessions as $possession) {
             if ($possession->getTgtype() == 'food') {
                 $amt = $depot->{strtolower($possession->getNamed())};
+
                 $request = $rules->createRequest($clan, 'sell goods', $possession->getId().','.$amt);
-                $output .= print_r($rules->submit($request)).' +++++ ';
+
+                $result = $rules->submit($request);
+
+                $output .= 'Clan' .$clan->getId(). ' ' .$result['Description'];
             }
         }
-        var_dump($output);
+        echo '<pre>';
+        print_r($output);
         die();
         return new RedirectResponse('/admin');
     }

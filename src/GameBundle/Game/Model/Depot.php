@@ -281,4 +281,72 @@ class Depot extends GameEntity
         }
         return $output;
     }
+
+
+    public function SetValueByString($string, $value){
+
+        $good = strtolower($string);
+
+        switch ($good) {
+            case 'wheat':
+                $this->wheat += $value;
+                break;
+            case 'olives':
+                $this->olives += $value;
+                break;
+            case 'fish':
+                $this->fish += $value;
+                break;
+            case 'cattle':
+                $this->cattle += $value;
+                break;
+            case 'wood':
+                $this->wood += $value;
+                break;
+            case 'copper':
+                $this->copper += $value;
+                break;
+            case 'linen':
+                $this->linen += $value;
+                break;
+            case 'incense':
+                $this->incense += $value;
+                break;
+            case 'dyes':
+                $this->dyes += $value;
+                break;
+            case 'gold':
+                $this->gold += $value;
+                break;
+        }
+        $this->update();
+    }
+
+    public function GetValueByString($string){
+
+        $good = strtolower($string);
+
+        switch ($good) {
+            case 'wheat':
+                return $this->wheat;
+            case 'olives':
+                return $this->olives;
+            case 'fish':
+                return $this->fish;
+            case 'cattle':
+                return $this->cattle;
+            case 'wood':
+                return $this->wood;
+            case 'copper':
+                return $this->copper;
+            case 'linen':
+                return $this->linen;
+            case 'incense':
+                return $this->incense;
+            case 'dyes':
+                return $this->dyes;
+            case 'gold':
+                return $this->gold;
+        }
+    }
 }

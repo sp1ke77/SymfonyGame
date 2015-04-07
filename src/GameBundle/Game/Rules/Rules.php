@@ -8,6 +8,7 @@
 
 namespace GameBundle\Game\Rules;
 use GameBundle\Game\DBCommon;
+use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 use GameBundle\Game\Rules\Interfaces\IDepotHaver;
 use GameBundle\Game\Rules\Interfaces\ICombatant;
@@ -169,7 +170,7 @@ class Rules
                     {
                         return $this->getResult('Invalid request', 'Sell Goods requires Args: string "{good},{amount}"');
                     }
-                    return $this->buyGoods($issuer, $xy[0], $xy[1]);
+                    return $this->sellGoods($issuer, $xy[0], $xy[1]);
                 }
 
                 // Args {good},{amount}. Note that {good} must be lowercase and must match a field in game.depot.
@@ -241,9 +242,40 @@ class Rules
             }
     }
 
-    public function buyGoods(IDepotHaver $issuer, $args)
+    public function buyGoods(IDepotHaver $issuer, $good, $amt)
     {
         return $this->getResult('Success', 'Request reached the end of the path');
+    }
+
+    public function sellGoods(IDepotHaver $issuer, $good, $amt)
+    {
+        $depot = new Depot($issuer->getDepot());
+        $depot->setDb($this->db);
+        $depot->load();
+
+        $tgp = new TradegoodPlatonic($good);
+        $tgp->setDb($this->db);
+        $tgp->load();
+
+        if ((empty($depot)) | (empty($tgp))) { return $this->getResult('Event failure', 'Null depot or tradegood'); }
+
+        $testvar = 'fish';
+        $currentStores = $depot->GetValueByString($testvar);
+
+        if ($currentStores >= $amt)
+        {
+            $depot->setValueByString($tgp->named, ($currentStores - $amt));
+            $profit = $amt * $tgp->tradevalue;
+
+            $purse = $issuer->getCoin();
+            $issuer->setCoin($purse + $profit);
+
+            $issuer->update();
+            $depot->update();
+            return $this->getResult('Success', 'sold ' .$amt. ' ' .$tgp->named. ' for ' .$profit. ' coin');
+        } else {
+            return $this->getResult('Illegal move', 'issued an invalid request to sell goods');
+        }
     }
 
     /*
