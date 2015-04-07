@@ -12,16 +12,16 @@ use ReflectionClass;
 
 class Depot extends GameEntity
 {
-    protected $wheat;
-    protected $olives;
-    protected $cattle;
-    protected $fish;
-    protected $copper;
-    protected $incense;
-    protected $gold;
-    protected $wood;
-    protected $linen;
-    protected $dyes;
+    public $wheat;
+    public $olives;
+    public $cattle;
+    public $fish;
+    public $copper;
+    public $incense;
+    public $gold;
+    public $wood;
+    public $linen;
+    public $dyes;
 
     /**
      * @return mixed
@@ -212,11 +212,11 @@ class Depot extends GameEntity
      * Use this if you need the text description, images or current tradevalue/foodvalue properties.
      *
      * @param $fieldname
-     * @return null|\stdClass
+     * @return TradegoodPlatonic
      */
     public function GetPlatonic($fieldname)
     {
-        $query = "SELECT id FROM tradegood_platonic WHERE named='" . strtolower($fieldname) . "';";
+        $query = "SELECT id FROM tradegoodplatonic WHERE named='" . strtolower($fieldname) . "';";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -261,4 +261,24 @@ class Depot extends GameEntity
         }
     }
 
+    /** @return Array */
+    public function Assess()
+    {
+        $reflection = New ReflectionClass($this);
+        $properties = $reflection->getProperties();
+        // Get all the Tradegoods from the database
+        $output = [];
+        foreach ($properties as $node) {
+            if (($node->getName() != 'id' && $node->getName() != 'db') && ($this->{$node->getName()} > 0))
+            {
+                $tgp = $this->getPlatonic($node->getName());
+                unset($tgp->db);
+                if ($tgp->getTgtype() == 'food') { array_push($output, $tgp); }
+                if ($tgp->getTgtype() == 'supplies') { array_push($output, $tgp); }
+                if ($tgp->getTgtype() == 'goods') { array_push($output, $tgp); }
+                if ($tgp->getTgtype() == 'gifts') { array_push($output, $tgp); }
+            }
+        }
+        return $output;
+    }
 }

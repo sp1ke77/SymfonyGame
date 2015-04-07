@@ -156,14 +156,25 @@ class Rules
 
             case 'sell goods':
 
-                // Check if the issuer implements IDepotHaver
+                if (!array_search("GameBundle\\Game\\Rules\\Interfaces\\IDepotHaver", class_implements($issuer)))
+                {
+                    return $this->getResult('Invalid request', 'Issuer must implement IDepotHaver');
+                }
 
-                // Check if enough crap exists in the issuer's depot, if the issuer is
-                // located in a city with sufficient coin and, if it all checks out, execute
-                // the trade.
+                if (!$args) {
+                    return $this->getResult('Invalid request', 'Sell Goods requires Args: string"');
+                } else {
+                    $xy = explode(',', $args);
+                    if (count($xy) != 2)
+                    {
+                        return $this->getResult('Invalid request', 'Sell Goods requires Args: string "{good},{amount}"');
+                    }
+                    return $this->buyGoods($issuer, $xy[0], $xy[1]);
+                }
 
-                // Args:
-                // a => Sell all nonfood
+                // Args {good},{amount}. Note that {good} must be lowercase and must match a field in game.depot.
+
+                break;
 
             case 'attack':
 
@@ -232,7 +243,7 @@ class Rules
 
     public function buyGoods(IDepotHaver $issuer, $args)
     {
-
+        return $this->getResult('Success', 'Request reached the end of the path');
     }
 
     /*

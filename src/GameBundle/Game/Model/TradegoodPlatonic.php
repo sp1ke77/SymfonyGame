@@ -10,12 +10,12 @@ namespace GameBundle\Game\Model;
 class TradegoodPlatonic extends GameEntity
 {
 
-    protected $named;
-    protected $imgfull;
-    protected $description;
-    protected $tradevalue;
-    protected $foodvalue;
-    protected $tgtype;
+    public $named;
+    public $imgfull;
+    public $description;
+    public $tradevalue;
+    public $foodvalue;
+    public $tgtype;
 
     /**
      * @return mixed
