@@ -1,20 +1,18 @@
 untitled ancient world strategy
 ====
 
-FILES WITH THE MOST ACTION
-* **GameBundle\Game\Services\NewgameService** - The database structuring routines at the bottom of the page are responsible for structuring all the procedural data in a new game. These begin by totally trashing the existing records, so handle carefully.
-* **GameBundle\Game\Rules\Rules** - A strategy-like approach, still pretty rough. Note that the Rules need only concern 	actions that the player might conceivably take -- i.e. that might be coming from a Controller -- some of these 	are moves that are common to the Clan and Army entities too so rules->submit($request) is designed to present a class-agnostic facade. (Moves that are irrelevant to the player are handled by Simulation, a pure facade with fewer limits on its internal logic. For reasons of Unix these must be presented as chains of Commands to be triggered by the server clock.)
-* **GameBundle\Controller\AdminController** - a page for testing the code
+STRUCTURAL NOTES
+- GameBundle\Game\Services\NewgameService contains the entire basic schema for the database - this will be refactored into Command when it is no longer needed on a daily basis, as it is now.
+- GameBundle\Game\Model contains all the classes that are populated from the database. Pay particular attention to GameEntity.
+- GameBundle\Game\Services contains as many db queries as could be kicked and shoved into the box
+- GameBundle\Game\Rules contains the set of functionality required by game-entities with specific rule-bound logic, including functions used by both player characters and computer-controlled entities
+- GameBundle\Game\Simulation contains the clockwork parts of the game that are driven by cron, the behavior scripts for the various computer-controlled game-entities, and encapsulates the hooks required to fire RandomEvents and enforce game-boundary conditions (EnforceParams)
+- GameBundle\Game\Resources\views\Game\mapview.html.twig contains more or less the entire UI used in gameplay
 
-
-
-NOTES ON THE CURRENT BUILD
-
-* The more I think about it, the more I think Rules will need to be broken into Player-facing and Simulation-facing strategies that call upon a common pool of mechanics (i.e. check->update logic) elsewhere. This should serve to keep the mechanical logic out of the Simulation's decision-trees, remove all the janky code required for class-agnosticism from rules->submit() and enable the Player-facing end to do finer-grain identity-checking on all requests.
-* It is still not clear whether UPDATE and SET queries should be in an insert()/update() method on game entity classes or whether database i/o should be kept on two strictly one-way paths. 
-* Clans, Armies and Characters will need to be updated with enums representing their current AI states.
-* Still need to write a strategy for Simulation/RandomEvent that will allow selection-by-criteria from an open-ended, external collection of events.
-* It will be necessary to move all the "broadcast"-type News logic into its own class and then make it available from the service container. It will need to be accessed from throughout the Rules and Simulation classes, and the complexity of its strategy is likely to grow in the future.
+NEEDED SOON
+- Character creation/selection
+- City interface
+- Diplomacy and trade interfaces
  
 DESIGN CAVE PAINTING
 
