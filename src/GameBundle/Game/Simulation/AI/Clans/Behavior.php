@@ -54,6 +54,7 @@ class Behavior
         switch ($clan->getActivity())
         {
             case 'wandering':
+
                 $action['Action'] = 'travel';
                 $action['Issuer'] = $clan;
                 $mz = $this->map->GetARandomMove($clan);
@@ -100,9 +101,13 @@ class Behavior
                 $depot = new Depot($clan->getDepot());
                 $depot->setDb($this->db);
                 $depot->load();
-                $depot->Produce(strtolower($tgp->getNamed()));
 
-                $result = 'Clan' .$clan->getId(). ' produced ' .$tgp->getNamed(). ' in ' .$clan->getX(). ', ' .$clan->getY();
+                if (rand(1,3)==3) {
+                    $depot->Produce(strtolower($tgp->getNamed()));
+                    $result = 'Clan' . $clan->getId() . ' produced ' . $tgp->getNamed() . ' in ' . $clan->getX() . ', ' . $clan->getY();
+                } else {
+                    $result = 'Clan' . $clan->getId() . ' labored without producing sufficient ' . $tgp->getNamed();
+                }
 
                 if ($depot->CheckOne(strtolower($tgp->getNamed())) >= 10)
                 {
@@ -116,25 +121,17 @@ class Behavior
 
                 // Find out if I'm in range of a city; if so teleport to the nearest
                 $city = $this->map->findNearestCity($clan->getX(), $clan->getY());
+
                 if (isset($city))
                 {
                     if (($city->getX() == $clan->getX()) && ($city->getY() == $clan->getY())) {
-                        $depot = new Depot($clan->getDepot());
-                        $depot->setDb($this->db);
-                        $depot->load();
 
-                        // If I have any nonfood goods, sell them
-                        $profit = $depot->sellAllNonfood();
-                        $result = 'Clan' .$clan->getId() . ' traded for ' .$profit. ' coin in the market of ' .$city->getNamed();
 
-                        $depot->buyAllFood($clan->getCoin());
-                        $depot->update();
 
-                        $clan->setCoin($clan->getCoin() + $profit);
-                        $clan->update();
 
-                        if ($clan->getFood() >= 35) { $this->changeActivity($clan, 'celebrating'); }
-                        if ($clan->getCoin() <= 5) { $this->changeActivity($clan, 'wandering'); }
+                        // WE ARE IN THE CORRECT CITY, TRADE LOGIC GOES HERE
+
+                        $result= 'Some other time';
 
                         return $result;
                     } else {
@@ -146,22 +143,17 @@ class Behavior
                     break;
                 }
 
-            case 'celebrating':
+            case 'holiday':
+
+                if ($clan->getFood() <= 60) { $this->changeActivity($clan, 'wandering'); }
 
                 $depot = new Depot($clan->getDepot());
                 $depot->setDb($this->db);
                 $depot->load();
 
-                // Gather all the perishables into the larder, so to speak
-                $clan->setFood(($depot->getWheat() + $depot->getCattle() + $depot->getFish() + $depot->getOlives()));
-                $depot->setWheat(0);
-                $depot->setCattle(0);
-                $depot->setOlives(0);
-                $depot->setFish(0);
-                $depot->update(0);
-
                 // If we can afford to, let's party
-                if ($clan->getFood() >= 35) {
+                if ($clan->getFood() >= 60)
+                {
                     $clan->setFood($clan->getFood() - 5);
                     $clan->setPopulation($clan->getPopulation() + 10);
                     $clan->update();
@@ -177,43 +169,6 @@ class Behavior
         }
     }
 
-    public function checkLarder($clanId)
-    {
-        $clan = new Clan($clanId);
-        $clan->setDb($this->db);
-        $clan->load();
-
-        $depot = New Depot($clan->getDepot());
-        $depot->load();
-
-        // This should be made more extensible, probably by using reflection some more
-        $clan->setFood($clan->getFood() + (($depot->getWheat() * 1) + ($depot->getOlives() * 1.2) +
-            ($depot->getFish() * 1.2) + ($depot->getCattle() * 2.8)));
-        $depot->setWheat(0);
-        $depot->setOlives(0);
-        $depot->setFish(0);
-        $depot->setCattle(0);
-        $depot->update();
-    }
-
-    public function consumeFood($amt, $clanId)
-    {
-        $clan = new Clan($clanId);
-        $clan->setDb($this->db);
-        $clan->load();
-
-        if ($clan->getFood() > $amt) {
-            $clan->setFood($clan->getFood() - $amt);
-            $clan->update();
-            return true;
-        } else {
-            // Generate some news about famine and bad shit
-            $clan->setPopulation($clan->getPopulation() - 2);
-            $clan->update();
-            return false;
-        }
-    }
-
     public function changeActivity(Clan &$clan, $activity)
     {
         $query = 'UPDATE clan SET activity="' .$activity. '" WHERE id=' .$clan->getId(). ';';
@@ -226,12 +181,5 @@ class Behavior
         $query = 'UPDATE clan SET producing="' .$producing. '" WHERE id=' .$clan->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
-    }
-
-    private function getClass($issuer)
-    {
-        $getclass = explode('\\', get_class($issuer));
-        $name = array_pop($getclass);
-        return $name;
     }
 }

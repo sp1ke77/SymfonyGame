@@ -232,19 +232,7 @@ class Rules
 
     public function buyGoods(IDepotHaver $issuer, $args)
     {
-            // Pull up the issuer's depot and find out how much credit we have
-            $depot = New Depot($issuer->getDepot());
-            $coin = $issuer->getCoin();
-            $tradegood = $depot->getPlatonic($args[0]);
-            $amt = (int)$args[1];
 
-            if ($coin > ($tradegood->tradevalue * $amt)) {
-                $depot->Buy((int)$args[0], $amt, $coin);
-                return $this->getResult('Success', get_class($issuer) . ' ' . $issuer->getId() .
-                                               ' bought ' . $amt . ' ' . $args[0] . '.');
-            } else {
-                return $this->getResult('Illegal move','Issuer had insufficient coin');
-            }
     }
 
     /*

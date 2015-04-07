@@ -216,44 +216,14 @@ class Depot extends GameEntity
      */
     public function GetPlatonic($fieldname)
     {
-        $query = "SELECT * FROM tradegood_platonic WHERE named='" . strtolower($fieldname) . "';";
-        $this->db->setDb($query);
+        $query = "SELECT id FROM tradegood_platonic WHERE named='" . strtolower($fieldname) . "';";
+        $this->db->setQuery($query);
         $this->db->query();
-        return $this->db->loadObject();
-    }
-
-    /*
-     *
-     *
-     *
-     */
-    public function Buy($good, $amt, $coin) {
-
-        $reflection = New ReflectionClass($this);
-        if ($coin > ($amt * $this->GetPlatonic($good)->tradevalue))
-        {
-            $reflection->{$good} += $amt;
-            $this->update();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function Sell($good, $amt)
-    {
-            $query = 'SELECT * FROM tradegoodplatonic WHERE named="' .$good. '";';
-            $this->db->setQuery($query);
-            $this->db->query();
-            $loadObj = $this->db->loadObject();
-
-            if (isset($loadObj)) {
-                if ($this->{$good} > $amt) {
-                    $this->{$good} -= $amt;
-                    $profit = $amt * $loadObj->tradevalue;
-                    return $profit;
-                }
-            }
+        $loadObj = $this->db->loadObject();
+        $tgp = new TradegoodPlatonic($loadObj->id);
+        $tgp->setDb($this->db);
+        $tgp->load();
+        return $tgp;
     }
 
     /** @param $good string */
@@ -275,7 +245,8 @@ class Depot extends GameEntity
 
     /**
      * @param $good string
-     * @return int */
+     * @return int
+     */
     public function CheckOne($good)
     {
         $reflection = New ReflectionClass($this);
@@ -290,21 +261,4 @@ class Depot extends GameEntity
         }
     }
 
-    public function sellAllNonfood() {
-        $total = 0;
-        $total += $this->Sell('wood', 5);
-        $total += $this->Sell('incense', 5);
-        $total += $this->Sell('gold', 5);
-        $total += $this->Sell('copper', 5);
-        $total += $this->Sell('dyes', 5);
-        $total += $this->Sell('linen', 5);
-        return $total;
-    }
-
-    public function buyAllFood()
-    {
-        $query = 'UPDATE depot SET wheat=' .($this->wheat + 10). ' WHERE id=' .$this->getId();
-        $this->db->setQuery($query);
-        $this->db->query();
-    }
 }
