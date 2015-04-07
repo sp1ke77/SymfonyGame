@@ -75,18 +75,7 @@ class AdminController extends Controller
         $depot->load();
 
         $output = "";
-        $possessions = $depot->Assess();
-        foreach ($possessions as $possession) {
-            if ($possession->getTgtype() == 'food') {
-                $amt = $depot->{strtolower($possession->getNamed())};
 
-                $request = $rules->createRequest($clan, 'sell goods', $possession->getId().','.$amt);
-
-                $result = $rules->submit($request);
-
-                $output .= 'Clan' .$clan->getId(). ' ' .$result['Description'];
-            }
-        }
         echo '<pre>';
         print_r($output);
         die();

@@ -49,16 +49,19 @@ class Behavior
         $clan->setDb($this->db);
         $clan->load();
 
+        $depot = new Depot($clan->getDepot());
+        $depot->setDb($this->db);
+        $depot->load();
+
         $action = [];
 
-        switch ($clan->getActivity())
-        {
+        switch ($clan->getActivity()) {
             case 'wandering':
 
                 $action['Action'] = 'travel';
                 $action['Issuer'] = $clan;
                 $mz = $this->map->GetARandomMove($clan);
-                $action['Args'] = $mz->getX(). ',' .$mz->getY();
+                $action['Args'] = $mz->getX() . ',' . $mz->getY();
                 $result = $this->rules->submit($action);
 
                 if ($result['Type'] == 'Success') {
@@ -67,8 +70,7 @@ class Behavior
                     $test[] = $result['Description'];
                 }
 
-                if (rand(1,3) == 3)
-                {
+                if (rand(1, 3) == 3) {
                     $result['Description'] .= ' and began exploring';
                     $this->changeActivity($clan, 'exploring');
                 }
@@ -87,7 +89,7 @@ class Behavior
                     $this->changeActivity($clan, 'working');
                 }
 
-                return 'Clan' .$clan->getId(). ' explored ' .$clan->getX(). ', ' .$clan->getY();
+                return 'Clan' . $clan->getId() . ' explored ' . $clan->getX() . ', ' . $clan->getY();
 
             case 'working':
 
@@ -98,19 +100,15 @@ class Behavior
                 $tgp = new TradegoodPlatonic($clan->getProducing());
                 $tgp->setDb($this->db);
                 $tgp->load();
-                $depot = new Depot($clan->getDepot());
-                $depot->setDb($this->db);
-                $depot->load();
 
-                if (rand(1,3)==3) {
+                if (rand(1, 3) == 3) {
                     $depot->Produce(strtolower($tgp->getNamed()));
                     $result = 'Clan' . $clan->getId() . ' produced ' . $tgp->getNamed() . ' in ' . $clan->getX() . ', ' . $clan->getY();
                 } else {
                     $result = 'Clan' . $clan->getId() . ' labored without producing sufficient ' . $tgp->getNamed();
                 }
 
-                if ($depot->CheckOne(strtolower($tgp->getNamed())) >= 10)
-                {
+                if ($depot->CheckOne(strtolower($tgp->getNamed())) >= 10) {
                     $this->changeProducing($clan, null);
                     $this->changeActivity($clan, 'trading');
                 }
@@ -122,17 +120,14 @@ class Behavior
                 // Find out if I'm in range of a city; if so teleport to the nearest
                 $city = $this->map->findNearestCity($clan->getX(), $clan->getY());
 
-                if (isset($city))
-                {
+                if (isset($city)) {
                     if (($city->getX() == $clan->getX()) && ($city->getY() == $clan->getY())) {
-
-
-
-
-                        // WE ARE IN THE CORRECT CITY, TRADE LOGIC GOES HERE
-
-                        $result= 'Some other time';
-
+                        $result = '';
+                        $result .= $this->ClanSellBehavior($clan, $depot);
+                        if ($clan->getCoin() > 65)
+                        {
+                            $result .= $this->ClanBuyBehavior($clan, $depot);
+                        }
                         return $result;
                     } else {
                         $this->map->teleportCity($clan, $city);
@@ -145,19 +140,20 @@ class Behavior
 
             case 'holiday':
 
-                if ($clan->getFood() <= 60) { $this->changeActivity($clan, 'wandering'); }
+                if ($clan->getFood() <= 60) {
+                    $this->changeActivity($clan, 'wandering');
+                }
 
                 $depot = new Depot($clan->getDepot());
                 $depot->setDb($this->db);
                 $depot->load();
 
                 // If we can afford to, let's party
-                if ($clan->getFood() >= 60)
-                {
+                if ($clan->getFood() >= 60) {
                     $clan->setFood($clan->getFood() - 5);
                     $clan->setPopulation($clan->getPopulation() + 10);
                     $clan->update();
-                    return 'Clan ' .$clan->getId(). ' celebrated a holy day';
+                    return 'Clan ' . $clan->getId() . ' celebrated a holy day';
                 }
 
                 break;
@@ -171,15 +167,39 @@ class Behavior
 
     public function changeActivity(Clan &$clan, $activity)
     {
-        $query = 'UPDATE clan SET activity="' .$activity. '" WHERE id=' .$clan->getId(). ';';
+        $query = 'UPDATE clan SET activity="' . $activity . '" WHERE id=' . $clan->getId() . ';';
         $this->db->setQuery($query);
         $this->db->query();
     }
 
     public function changeProducing(Clan &$clan, $producing)
     {
-        $query = 'UPDATE clan SET producing="' .$producing. '" WHERE id=' .$clan->getId(). ';';
+        $query = 'UPDATE clan SET producing="' . $producing . '" WHERE id=' . $clan->getId() . ';';
         $this->db->setQuery($query);
         $this->db->query();
+    }
+
+    public function ClanSellBehavior(Clan $clan, Depot $depot)
+    {
+        $output = '';
+        $possessions = $depot->Assess();
+        foreach ($possessions as $possession)
+        {
+            if ($possession->getTgtype() != 'food')
+            {
+                $amt = $depot->GetValueByString($possession->getNamed());
+                $request = $this->rules->createRequest($clan, 'sell goods', $possession->getId() . ',' . $amt);
+                $result = $this->rules->submit($request);
+                $output .= 'Clan' . $clan->getId() . ' ' . $result['Description'];
+            }
+        }
+        return $output;
+    }
+
+    public function ClanBuyBehavior(Clan $clan, Depot $depot)
+    {
+        $request = $this->rules->createRequest($clan, 'buy goods', '1,25');
+        $result = $this->rules->submit($request);
+        return $result['Description'];
     }
 }

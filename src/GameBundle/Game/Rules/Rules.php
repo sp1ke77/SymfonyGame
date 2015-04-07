@@ -242,11 +242,6 @@ class Rules
             }
     }
 
-    public function buyGoods(IDepotHaver $issuer, $good, $amt)
-    {
-        return $this->getResult('Success', 'Request reached the end of the path');
-    }
-
     public function sellGoods(IDepotHaver $issuer, $good, $amt)
     {
         $depot = new Depot($issuer->getDepot());
@@ -259,22 +254,54 @@ class Rules
 
         if ((empty($depot)) | (empty($tgp))) { return $this->getResult('Event failure', 'Null depot or tradegood'); }
 
-        $testvar = 'fish';
-        $currentStores = $depot->GetValueByString($testvar);
+        $currentStores = $depot->GetValueByString($tgp->named);
 
-        if ($currentStores >= $amt)
-        {
+        // If we have sufficient goods to sell
+        if ($currentStores >= $amt) {
+            // Lose the sold goods
             $depot->setValueByString($tgp->named, ($currentStores - $amt));
+            // Get the money
             $profit = $amt * $tgp->tradevalue;
-
+            // Add the money to the issuer's purse
             $purse = $issuer->getCoin();
             $issuer->setCoin($purse + $profit);
-
+            // Update everything and return the result
             $issuer->update();
             $depot->update();
             return $this->getResult('Success', 'sold ' .$amt. ' ' .$tgp->named. ' for ' .$profit. ' coin');
         } else {
             return $this->getResult('Illegal move', 'issued an invalid request to sell goods');
+        }
+    }
+
+    public function buyGoods(IDepotHaver $issuer, $good, $amt)
+    {
+        $depot = new Depot($issuer->getDepot());
+        $depot->setDb($this->db);
+        $depot->load();
+
+        $tgp = new TradegoodPlatonic($good);
+        $tgp->setDb($this->db);
+        $tgp->load();
+
+        if ((empty($depot)) | (empty($tgp))) { return $this->getResult('Event failure', 'Null depot or tradegood'); }
+
+        $purse = $issuer->getCoin();
+        $cost = ($amt * $tgp->tradevalue);
+
+            // If we have sufficient coin
+        if ($purse > $cost) {
+            // Lose the money
+            $issuer->setCoin($purse - $cost);
+            // Gain the bought goods
+            $currentStores = $depot->GetValueByString($tgp->named);
+            $depot->setValueByString($tgp->named, ($currentStores + $amt));
+            // Update everything and return the result
+            $issuer->update();
+            $depot->update();
+            return $this->getResult('Success', 'bought ' .$amt. ' ' .$tgp->named. ' for ' .$cost. ' coin');
+        } else {
+            return $this->getResult('Illegal move', 'attempted to purchase ' .$amt. ' ' .$tgp->named. ' but had insufficient coin');
         }
     }
 
