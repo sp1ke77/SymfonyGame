@@ -45,6 +45,7 @@ services:
       - [setMap, ["@service_map"]]
       - [setNews, ["@service_news"]]
       - [setRules, ["@service_rules"]]
+      - [setTribes, ["@service_tribe"]]
 
   service_action_round:
     class: GameBundle\Game\Simulation\ActionRound

@@ -106,7 +106,7 @@ class MapviewController extends Controller
             $db->setQuery($query);
             $db->query();
             $cz = $db->loadObject();
-            $query = "SELECT * FROM news WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+22)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+10)) ORDER BY dated ASC LIMIT 4;";
+            $query = "SELECT * FROM news WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+22)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+10)) ORDER BY dated DESC LIMIT 4;";
             $db->setQuery($query);
             $db->query();
             $news = $db->loadObjectList();

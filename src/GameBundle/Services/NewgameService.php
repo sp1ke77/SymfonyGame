@@ -71,7 +71,7 @@ class NewgameService
 
             $ev = New RandomEvents();
             $ev->setDb($this->db);
-            for ($i = 0; $i < 1440; $i++)
+            for ($i = 0; $i < 900; $i++)
             {
                 $ev->NewTradeTokenEvent();
             }

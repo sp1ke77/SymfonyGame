@@ -11,15 +11,26 @@ use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
 use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Model\Depot;
+use GameBundle\Services\MapService;
+use GameBundle\Services\NewsService;
+use GameBundle\Services\TribeService;
+use GameBundle\Game\Rules\Rules;
 
 class Behavior
 {
 
-    /** @var $db DBCommon */
+    /** @var DBCommon
+     * @var Rules
+     * @var NewsService
+     * @var MapService
+     * @var TribeService
+     */
+
     protected $db;
     protected $rules;
     protected $news;
     protected $map;
+    protected $tribes;
 
     /**
      * @param mixed $rules
@@ -37,6 +48,10 @@ class Behavior
         $this->news = $news;
     }
 
+    public function setTribes($tribes)
+    {
+        $this->tribes = $tribes;
+    }
     /**
      * @param mixed $map
      */
@@ -61,6 +76,11 @@ class Behavior
 
         $action = [];
 
+        // Consume food or starve
+        if (rand(1,10) == 20) {
+            $this->ConsumeFood($clan);
+        }
+
         // Some stuff that happens occasionally regardless of the current behavior ...
         // Clans periodically process their food-type trade tokens for personal consumption
         if (rand(1,10) == 10)
@@ -71,8 +91,8 @@ class Behavior
             $this->db->query();
         }
 
-        // Clans periodically consider and revise their current activity
-        // according to ptype, current exigencies, etc.
+        // Clans periodically reconsider and revise their current activity
+        // according current exigencies, leader ptype, etc.
         if (rand(1,10) == 10)
         {
             $activity = $this->Consider($clan);
@@ -101,6 +121,9 @@ class Behavior
                 return $result['Description'];
 
             case 'exploring':
+
+                // Check my local zone and see if there are any trade
+                // tokens to produce
 
                 $mz = $this->map->getMapzoneFromAbstract($clan->getX(), $clan->getY());
                 $producing = $this->map->exploreForTrade($mz);
@@ -140,7 +163,9 @@ class Behavior
 
             case 'trading':
 
-                // Find out if I'm in range of a city; if so teleport to the nearest
+                // If I'm in a city now, do buy and sell behavior. If I'm in teleport
+                // range of a city, teleport there. If I'm truly in the wild, revert
+                // behavior to wandering.
                 $city = $this->map->findNearestCity($clan->getX(), $clan->getY());
 
                 if (isset($city)) {
@@ -174,9 +199,18 @@ class Behavior
                     $this->db->setQuery($query);
                     $this->db->query();
 
-                    $query = 'UPDATE clan SET population=' .($clan->getPopulation() + 25). ' WHERE id=' .$clan->getId(). ';';
-                    $this->db->setQuery($query);
-                    $this->db->query();
+                    if (($clan->getPopulation() >= 200) && (rand(0,$clan->getPopulation()) > 500))
+                    {
+                        $query = 'UPDATE clan SET population=' . ($clan->getPopulation() - 150) . ' WHERE id=' . $clan->getId() . ';';
+                        $this->db->setQuery($query);
+                        $this->db->query();
+                        $this->tribes->createClan($clan->getTribeId());
+                        $this->news->createSomeNews('A family of clan'.$clan->Id(). ' went to seek new pastures', $clan->getY(), $clan->getY());
+                    } else {
+                        $query = 'UPDATE clan SET population=' . ($clan->getPopulation() + (25 + rand(1, 7))) . ' WHERE id=' . $clan->getId() . ';';
+                        $this->db->setQuery($query);
+                        $this->db->query();
+                    }
 
                     return 'Clan' . $clan->getId(). ' celebrated a holy day';
                 } else {
@@ -186,9 +220,7 @@ class Behavior
                 break;
 
             default:
-                // Nothing
-
-                break;
+                return 'Clan' .$clan->getId(). ' did inscrutable things on a hill';
         }
     }
 
@@ -221,7 +253,6 @@ class Behavior
         }
 
         return 'continued as it was';
-
     }
 
 
@@ -270,5 +301,30 @@ class Behavior
         $request = $this->rules->createRequest($clan, 'buy goods', '1,25');
         $result = $this->rules->submit($request);
         return $result['Description'];
+    }
+
+    public function consumeFood(Clan $clan)
+    {
+        $consumption = intval($clan->getPopulation() * 0.1);
+        $newamt = $clan->getFood() - $consumption;
+
+        if ($newamt <= 0)
+        {
+            if (rand(1,5) == 5) {
+                $query = 'UPDATE clan SET population=' . ($clan->getPopulation() - 6) . ' WHERE id=' . $clan->getId() . ';';
+                $this->db->setQuery($query);
+                $this->db->query();
+                $this->news->createSomeNews('Clan'.$clan->getId(). ' are starving');
+            } else {
+                $query = 'UPDATE clan SET population=' . ($clan->getPopulation() - 1) . ' WHERE id=' . $clan->getId() . ';';
+                $this->db->setQuery($query);
+                $this->db->query();
+            }
+        }
+
+        $query = 'UPDATE clan SET food=' .$newamt. ' WHERE id=' .$clan->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
+
     }
 }

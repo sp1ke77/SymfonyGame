@@ -168,8 +168,8 @@ $(document).ready(function() {
                             ctx.beginPath();
 
                             for (var n = 0; n < (data['clans'].length); n++) {
-                                var fx = Math.floor((Math.random() * 60) + -30);
-                                var fy = Math.floor((Math.random() * 20) + 70);
+                                var fx = Math.floor((Math.random() * 60) + -10);
+                                var fy = Math.floor((Math.random() * 20) + 50);
                                 ctx.drawImage(clan, (data['clans'][n].x * plains.width) + fx, (data['clans'][n].y * plains.height + fy));
                                 ctx.fillText(data['clans'][n].named, (data['clans'][n].x * plains.width) + fx + 8, (data['clans'][n].y * plains.height) + fy + 10);
                             }

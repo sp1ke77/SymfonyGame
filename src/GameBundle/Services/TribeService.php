@@ -25,7 +25,7 @@ class TribeService
     }
 
     /** @return Array|Clan */
-    function getAllClans() {
+    public function getAllClans() {
         $query = 'SELECT * FROM clan;';
         $this->db->setQuery($query);
         $this->db->query();
@@ -39,4 +39,23 @@ class TribeService
         }
         return $clans;
     }
+
+    public function createClan($tribeId)
+    {
+        $depotId = $this->createDepot();
+        $query = "SELECT named FROM tribe WHERE id=" . $tribeId . ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $tribeName = $this->db->loadResult();
+        $MapService = new MapService();
+        $MapService->setDb($this->db);
+        $mz = $MapService->getRandomPassableMapZone();
+        $x = $mz->getX();
+        $y = $mz->getY();
+        $query = "INSERT INTO clan(named, tribe, x, y, depot, population, fighters, morale, food, coin, activity) VALUES('"
+            .$tribeName. "', " .$tribeId. ", " .$x. ', ' .$y. ', ' .$depotId. ", 100, 60, 100, 35, 0, 'wandering');";
+        $this->db->setQuery($query);
+        $this->db->query();
+    }
+
 }
