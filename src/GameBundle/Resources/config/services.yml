@@ -1,28 +1,34 @@
 services:
-    db:
-        class: GameBundle\Game\DBCommon
-        arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
-    service_login:
-        class: GameBundle\Services\LoginService
-        calls:
-            - [setDb, ["@db"]]
-    service_map:
-        class: GameBundle\Services\MapService
-        calls:
-            - [setDb, ["@db"]]
-    service_tribe:
-        class: GameBundle\Services\TribeService
-        calls:
-            - [setDb, ["@db"]]
-    service_newgame:
-        class: GameBundle\Services\NewgameService
-        calls:
-            - [setDb, ["@db"]]
-    service_actions:
-        class: GameBundle\Game\Rules\Actions
-        calls:
-            - [setDb, ["@db"]]
-    behavior:
-        class: GameBundle\Game\Simulation\AI\Behavior
-        calls:
-            - [setDb, ["@db"]]
+  db:
+    class: GameBundle\Game\DBCommon
+    arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
+
+  service_login:
+    class: GameBundle\Services\LoginService
+    calls:
+      - [setDb, ["@db"]]
+
+  service_map:
+    class: GameBundle\Services\MapService
+    calls:
+      - [setDb, ["@db"]]
+
+  service_tribe:
+    class: GameBundle\Services\TribeService
+    calls:
+      - [setDb, ["@db"]]
+
+  service_newgame:
+    class: GameBundle\Services\NewgameService
+    calls:
+      - [setDb, ["@db"]]
+
+  service_actions:
+    class: GameBundle\Game\Rules\Actions
+    calls:
+      - [setDb, ["@db"]]
+
+  service_behavior:
+    class: GameBundle\Game\Simulation\AI\Behavior
+    calls:
+      - [setDb, ["@db"]]
