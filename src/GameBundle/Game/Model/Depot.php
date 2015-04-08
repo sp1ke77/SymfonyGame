@@ -247,7 +247,7 @@ class Depot extends GameEntity
      * @param $good string
      * @return int
      */
-    public function CheckOne($good)
+    public function check($good)
     {
         $reflection = New ReflectionClass($this);
         $properties = $reflection->getProperties();
@@ -262,7 +262,7 @@ class Depot extends GameEntity
     }
 
     /** @return Array */
-    public function Assess()
+    public function assess()
     {
         $reflection = New ReflectionClass($this);
         $properties = $reflection->getProperties();
@@ -283,43 +283,11 @@ class Depot extends GameEntity
     }
 
 
-    public function SetValueByString($string, $value){
-
-        $good = strtolower($string);
-
-        switch ($good) {
-            case 'wheat':
-                $this->wheat += $value;
-                break;
-            case 'olives':
-                $this->olives += $value;
-                break;
-            case 'fish':
-                $this->fish += $value;
-                break;
-            case 'cattle':
-                $this->cattle += $value;
-                break;
-            case 'wood':
-                $this->wood += $value;
-                break;
-            case 'copper':
-                $this->copper += $value;
-                break;
-            case 'linen':
-                $this->linen += $value;
-                break;
-            case 'incense':
-                $this->incense += $value;
-                break;
-            case 'dyes':
-                $this->dyes += $value;
-                break;
-            case 'gold':
-                $this->gold += $value;
-                break;
-        }
-        $this->update();
+    public function SetValueByString($string, $value)
+    {
+        $query = 'UPDATE depot SET ' .strtolower($string). '=' .intval($value). ' WHERE ' .$this->id. ';';
+        $this->db->setQuery($query);
+        $this->db->query();
     }
 
     public function GetValueByString($string){
@@ -348,5 +316,28 @@ class Depot extends GameEntity
             case 'gold':
                 return $this->gold;
         }
+    }
+
+    public function fillLarder() {
+        $reflection = New ReflectionClass($this);
+        $properties = $reflection->getProperties();
+        $foodYield = 0;
+        foreach ($properties as $node) {
+            if (($node->getName() != 'id') && ($node->getName() != 'db') && ($this->{$node->getName()} > 0))
+            {
+                $tgp = $this->getPlatonic($node->getName());
+                if ($tgp->getTgtype() == 'food') {
+                    $query = 'SELECT ' .strtolower($node->getName()). ' FROM depot WHERE id=' .$this->id. ';';
+                    $this->db->setQuery($query);
+                    $this->db->query();
+                    $loadObj = $this->db->loadObject();
+                    $query = 'UPDATE depot SET  ' .strtolower($node->getName()). '=0 WHERE id=' .$this->id. ';';
+                    $this->db->setQuery($query);
+                    $this->db->query();
+                    $foodYield += $loadObj->{$node->getName()} * $tgp->foodvalue;
+                }
+            }
+        }
+        return $foodYield;
     }
 }

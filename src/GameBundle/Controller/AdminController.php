@@ -12,14 +12,7 @@ use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Temporary
-use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
-use GameBundle\Game\Simulation\ActionRound;
-use GameBundle\Game\DBCommon;
-use GameBundle\Game\Simulation\AI\Clans\Behavior;
-use GameBundle\Game\Model\Depot;
-use GameBundle\Game\Model\Clan;
-use GameBundle\Game\Model\TradegoodPlatonic;
-use GameBundle\Game\Rules\Rules;
+
 
 class AdminController extends Controller
 {
@@ -56,29 +49,8 @@ class AdminController extends Controller
     public function testAction()
     {
         $db = $this->get('db');
-        // Swap this whatever service is to be tested
-
-
-        /*$actionround = new ActionRound();
-        $actionround->setDb($db);
-        $actionround->execute();*/
-
-        $behavior = new Behavior($db);
-        $rules = new Rules();
-        $rules->setDb($db);
-        $clan = new Clan(15);
-        $clan->setDb($db);
-        $clan->load();
-
-        $depot = new Depot($clan->getDepot());
-        $depot->setDb($db);
-        $depot->load();
-
-        $output = "";
-
-        echo '<pre>';
-        print_r($output);
-        die();
+        $action = $this->get('service_action_round');
+        $action->execute();
         return new RedirectResponse('/admin');
     }
 

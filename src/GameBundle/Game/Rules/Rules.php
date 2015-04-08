@@ -27,7 +27,6 @@ use GameBundle\Game\Model\Depot;
  */
 class Rules
 {
-
     /**
      * Properties
      * @var string $status
@@ -36,9 +35,9 @@ class Rules
 
     /**
      * Components
-     * @var $db DBCommon
-     * @var $checks \GameBundle\Game\Rules\Checks
-     * @var $actions Actions
+     * @var DBCommon $db
+     * @var Checks
+     * @var Actions
      */
     protected $db;
     protected $checks;
@@ -263,8 +262,7 @@ class Rules
             // Get the money
             $profit = $amt * $tgp->tradevalue;
             // Add the money to the issuer's purse
-            $purse = $issuer->getCoin();
-            $issuer->setCoin($purse + $profit);
+            $this->SetCoins($issuer, ($issuer->getCoin() + $profit));      /// <--------SUB OPTIMAL IMPLEMENTATION ALERT
             // Update everything and return the result
             $issuer->update();
             $depot->update();
@@ -288,11 +286,10 @@ class Rules
 
         $purse = $issuer->getCoin();
         $cost = ($amt * $tgp->tradevalue);
-
             // If we have sufficient coin
         if ($purse > $cost) {
             // Lose the money
-            $issuer->setCoin($purse - $cost);
+            $this->SetCoins($issuer, ($purse - $cost)); // <---- SUB OPTIMAL IMPLEMENTATION ALERT
             // Gain the bought goods
             $currentStores = $depot->GetValueByString($tgp->named);
             $depot->setValueByString($tgp->named, ($currentStores + $amt));
@@ -337,5 +334,12 @@ class Rules
         $getclass = explode('\\', get_class($issuer));
         $name = array_pop($getclass);
         return $name;
+    }
+
+    private function SetCoins($issuer, $amt)
+    {
+        $query = 'UPDATE ' .strtolower($this->getClass($issuer)). ' SET coin=' .intval($amt). ' WHERE id=' .$issuer->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
     }
 }

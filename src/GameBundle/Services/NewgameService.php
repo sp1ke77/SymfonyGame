@@ -501,7 +501,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE playercharacter;";
+        $query = "DROP TABLE player;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -624,7 +624,7 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.playercharacter (
+        $query = "CREATE TABLE game.player (
                           id INT NOT NULL AUTO_INCREMENT,
                           userid INT NULL,
                           x INT NULL,

@@ -3,6 +3,11 @@ services:
     class: GameBundle\Game\DBCommon
     arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
 
+  service_rules:
+    class: GameBundle\Game\Rules\Rules
+    calls:
+      - [setDb, ["@db"]]
+
   service_login:
     class: GameBundle\Services\LoginService
     calls:
@@ -18,6 +23,11 @@ services:
     calls:
       - [setDb, ["@db"]]
 
+  service_news:
+    class: GameBundle\Services\NewsService
+    calls:
+      - [setDb, ["db"]]
+
   service_newgame:
     class: GameBundle\Services\NewgameService
     calls:
@@ -29,10 +39,12 @@ services:
       - [setDb, ["@db"]]
 
   service_behavior:
-    class: GameBundle\Game\Simulation\AI\Behavior
+    class: GameBundle\Game\Simulation\AI\Clans\Behavior
     calls:
       - [setDb, ["@db"]]
-
+      - [setMap, ["@service_map"]]
+      - [setNews, ["@service_news"]]
+      - [setRules, ["@service_rules"]]
 
   service_action_round:
     class: GameBundle\Game\Simulation\ActionRound
@@ -40,3 +52,5 @@ services:
       - [setDb, ["@db"]]
       - [setBehavior, ["@service_behavior"]]
       - [setTribeService, ["@service_tribe"]]
+      - [setMap, ["@service_map"]]
+      - [setNews, ["@service_news"]]

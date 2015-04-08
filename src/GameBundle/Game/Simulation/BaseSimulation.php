@@ -24,11 +24,37 @@ class BaseSimulation
     protected $tribeservice;
 
     /**
+     * @var MapService
+     */
+    protected $map;
+
+    /**
+     * @var NewsService
+     */
+    protected $news;
+
+    /**
      * @param DBCommon $db
      */
     public function setDb($db)
     {
         $this->db = $db;
+    }
+
+    /**
+     * @param MapService $map
+     */
+    public function setMap($map)
+    {
+        $this->map = $map;
+    }
+
+    /**
+     * @param NewsService $news
+     */
+    public function setNews($news)
+    {
+        $this->news = $news;
     }
 
     /**
