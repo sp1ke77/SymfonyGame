@@ -32,3 +32,11 @@ services:
     class: GameBundle\Game\Simulation\AI\Behavior
     calls:
       - [setDb, ["@db"]]
+
+
+  service_action_round:
+    class: GameBundle\Game\Simulation\ActionRound
+    calls:
+      - [setDb, ["@db"]]
+      - [setBehavior, ["@service_behavior"]]
+      - [setTribeService, ["@service_tribe"]]

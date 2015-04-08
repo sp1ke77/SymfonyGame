@@ -1,40 +1,36 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Anon
- * Date: 4/2/2015
- * Time: 1:15 AM
- */
 
 namespace GameBundle\Game\Simulation;
-use GameBundle\Game\Simulation\AI\Clans\Behavior;
-use GameBundle\Services\TribeService;
-use GameBundle\Game\DBCommon;
-use GameBundle\Game\Model\Clan;
 
-class ActionRound {
+use GameBundle\Game\Exceptions\MissingPropertyException;
 
-    /** @var $db DBCommon */
-    protected $db;
-
-    /** @param $db DBCommon */
-    public function setDb($db) {
-        $this->db = $db;
-    }
-
+/**
+ * Class ActionRound
+ * @package GameBundle\Game\Simulation
+ */
+class ActionRound extends BaseSimulation
+{
+    /**
+     * @throws MissingPropertyException
+     * @return array
+     */
     public function execute()
     {
-        $behavior = new Behavior($this->db);
-        $tribeService = new TribeService();
-        $tribeService->setDb($this->db);
-
-        $clans = $tribeService->getAllClans();
-
-        $result=[];
-        foreach ($clans as $clan) {
-            $result[] = $behavior->TakeAction($clan->getId());
-
+        if(!isset($this->behavior)){
+            throw new MissingPropertyException('behavior is required');
         }
+
+        if(!isset($this->tribeservice)){
+            throw new MissingPropertyException('tribe service is required');
+        }
+
+        $clans = $this->tribeservice->getAllClans();
+
+        $result = [];
+        foreach ($clans as $clan) {
+            $result[] = $this->behavior->TakeAction($clan->getId());
+        }
+
         return $result;
     }
 }
