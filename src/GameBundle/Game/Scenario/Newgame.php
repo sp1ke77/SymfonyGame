@@ -10,7 +10,7 @@
  *
  */
 
-namespace GameBundle\Services;
+namespace GameBundle\Game\Scenario;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
@@ -24,7 +24,7 @@ use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
  * Class NewgameService
  * @package GameBundle\Services
  */
-class NewgameService
+class Newgame
 {
     /**
      * @var $db DBCommon
@@ -54,13 +54,9 @@ class NewgameService
      *  should be abstracted out to a json file.
      *
      *
-     * @param string $password
-     * @param string $password2
      */
-    public function createGame($password, $password2)
+    public function createGame()
     {
-        if ($password == "yesanotherone" && $password2 == "yesathirdone")
-        {
             $this->trashGameworldTables();
             $this->setupGameworldTables();
 
@@ -79,7 +75,6 @@ class NewgameService
             // $this->createTradeGoodTokens();
             $this->createSomeTribes();
             $this->createSomeClans();
-        }
     }
 
     /*
@@ -505,27 +500,15 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
+        $query = "DROP TABLE agent;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
         $query = "DROP TABLE clan;";
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE building;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "DROP TABLE unit;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "DROP TABLE depot;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "DROP TABLE diplomaticrelation;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "DROP TABLE diplomaticstatus;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -630,26 +613,34 @@ class NewgameService
                           x INT NULL,
                           y INT NULL,
                           named VARCHAR(45) NULL,
-                          swords INT DEFAULT 0,
-                          staves INT DEFAULT 0,
-                          cups INT DEFAULT 0,
-                          discs INT DEFAULT 0,
                           culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
+                          tribe int NULL,
+                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none'),
+                          hunting INT DEFAULT 0,
+                          shrewdness INT DEFAULT 0,
+                          music INT DEFAULT 0,
+                          intrigue INT DEFAULT 0,
+                          purity INT DEFAULT 0,
+                          wisdom INT DEFAULT 0,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
 
         $query = "CREATE TABLE game.agent (
                           id INT NOT NULL AUTO_INCREMENT,
-                          named VARCHAR(45) NULL,
+                          ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
                           x INT NULL,
                           y INT NULL,
-                          swords INT DEFAULT 0,
-                          staves INT DEFAULT 0,
-                          cups INT DEFAULT 0,
-                          discs INT DEFAULT 0,
-                          ptype ENUM('friendly', 'schemer', 'ruthless', 'cautious', 'bully', 'priest', 'workaholic') NULL,
+                          named VARCHAR(45) NULL,
                           culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
+                          tribe int NULL,
+                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none'),
+                          hunting INT DEFAULT 0,
+                          shrewdness INT DEFAULT 0,
+                          music INT DEFAULT 0,
+                          intrigue INT DEFAULT 0,
+                          purity INT DEFAULT 0,
+                          wisdom INT DEFAULT 0,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -673,28 +664,6 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.building (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          mapzone INT NULL,
-                          named VARCHAR(45) NULL,
-                          owner INT NULL,
-                          region INT NULL,
-                          topuser INT NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "CREATE TABLE game.army (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          mapzone INT NULL,
-                          ptype INT NULL,
-                          owner INT NULL,
-                          fighters INT NULL,
-                          stance ENUM ('attack', 'police', 'avoid'),
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "CREATE TABLE game.depot (
                           id INT NOT NULL AUTO_INCREMENT,
                           wheat INT DEFAULT 0,
@@ -711,29 +680,6 @@ class NewgameService
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.diplomaticrelation (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          ownerid INT NULL,
-                          ownertype ENUM('player', 'agent', 'tribe', 'nation'),
-                          targetid INT NULL,
-                          targettype ENUM('player', 'agent', 'tribe', 'nation'),
-                          modifier INT NULL,
-                          reasons VARCHAR(140) NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "CREATE TABLE game.diplomaticstatus (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          ownerid INT NULL,
-                          ownertype ENUM('nation', 'tribe'),
-                          targetid INT NULL,
-                          targettype ENUM('nation', 'tribe'),
-                          status ENUM('Peace','War','Alliance','Truce') NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "CREATE TABLE game.news (
                           id INT NOT NULL AUTO_INCREMENT,
                           text VARCHAR(144) NOT NULL,
@@ -743,7 +689,5 @@ class NewgameService
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
-
-
     }
 }
