@@ -157,6 +157,7 @@ class Behavior
                 if ($depot->check(strtolower($tgp->getNamed())) >= 10) {
                     $this->changeProducing($clan, null);
                     $this->changeActivity($clan, 'trading');
+                    $result = 'Clan' . $clan->getId() . ' completed work and is seeking to trade';
                 }
 
                 return $result;

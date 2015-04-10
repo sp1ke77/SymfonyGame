@@ -158,7 +158,7 @@ class MapService
     }
 
     public function findNearestCity($x, $y) {
-        $query = "SELECT id FROM city WHERE x>=" .($x - 10). " AND x<=" .($x + 10). " AND y>= " .($y - 10). " AND y<=" .($y + 10). " LIMIT 1;";
+        $query = "SELECT id FROM city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
