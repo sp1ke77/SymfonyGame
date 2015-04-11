@@ -22,6 +22,12 @@ services:
     class: GameBundle\Services\TribeService
     calls:
       - [setDb, ["@db"]]
+      - [setMap, ["@service_map"]]
+
+  service_trade:
+    class: GameBundle\Services\TradeService
+    calls:
+      - [setDb, ["@db"]]
 
   service_news:
     class: GameBundle\Services\NewsService

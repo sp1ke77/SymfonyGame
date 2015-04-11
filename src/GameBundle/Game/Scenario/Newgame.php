@@ -549,7 +549,7 @@ class Newgame
                           imglarge VARCHAR(45) NULL,
                           imgsmall VARCHAR(45) NULL,
                           description VARCHAR(160) NULL,
-                          depot INT NULL,
+                          coin INT NULL,
                           king INT NULL,
                           priest INT NULL,
                           x int NULL,
@@ -610,6 +610,7 @@ class Newgame
         $query = "CREATE TABLE game.player (
                           id INT NOT NULL AUTO_INCREMENT,
                           userid INT NULL,
+                          activity VARCHAR(45) NULL,
                           x INT NULL,
                           y INT NULL,
                           named VARCHAR(45) NULL,
@@ -629,6 +630,7 @@ class Newgame
         $query = "CREATE TABLE game.agent (
                           id INT NOT NULL AUTO_INCREMENT,
                           ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
+                          activity VARCHAR(45) NULL,
                           x INT NULL,
                           y INT NULL,
                           named VARCHAR(45) NULL,

@@ -7,24 +7,39 @@
  */
 
 namespace GameBundle\Services;
+
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
+use GameBundle\Services\MapService;
 
 class TribeService
 {
 
-    /** @var $db DBCommon */
+    /**
+     * Components
+     * @var DBCommon
+     * @var MapService
+     */
     protected $db;
+    protected $map;
 
     /**
-     * @param $db DBCommon
+     * @param DBCommon
      */
     public function setDb($db)
     {
         $this->db = $db;
     }
 
-    /** @return Array|Clan */
+    /**
+     * @param $mapService
+     */
+    public function setMap($mapService)
+    {
+        $this->map = $mapService;
+    }
+
+    /** @return Array */
     public function getAllClans() {
         $query = 'SELECT * FROM clan;';
         $this->db->setQuery($query);
@@ -47,11 +62,12 @@ class TribeService
         $this->db->setQuery($query);
         $this->db->query();
         $tribeName = $this->db->loadResult();
-        $MapService = new MapService();
-        $MapService->setDb($this->db);
-        $mz = $MapService->getRandomPassableMapZone();
+
+        // This will eventually point to some logic for placing clans by culture-group
+        $mz = $this->map->getRandomPassableMapZone();
         $x = $mz->getX();
         $y = $mz->getY();
+
         $query = "INSERT INTO clan(named, tribe, x, y, depot, population, fighters, morale, food, coin, activity) VALUES('"
             .$tribeName. "', " .$tribeId. ", " .$x. ', ' .$y. ', ' .$depotId. ", 100, 60, 100, 35, 0, 'wandering');";
         $this->db->setQuery($query);

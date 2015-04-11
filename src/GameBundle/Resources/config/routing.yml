@@ -32,7 +32,7 @@ map_view:
 
 get_map:
     path:   /map
-    defaults: { _controller: GameBundle:Mapview:getmap }
+    defaults: { _controller: GameBundle:Mapview:getMap }
 
 get_entities:
     path:   /entities

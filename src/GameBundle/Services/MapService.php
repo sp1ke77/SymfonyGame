@@ -10,8 +10,6 @@ namespace GameBundle\Services;
 
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Mapzone;
-use GameBundle\Game\Model\TradegoodToken;
-use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Model\City;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
@@ -64,70 +62,6 @@ class MapService
     }
 
     /**
-     * @param Mapzone $mz
-     * @return Array|TradegoodToken
-     */
-    public function searchZoneForTradegoodTokens(Mapzone $mz) {
-        $tokens = [];
-        $query = 'SELECT id FROM tradegoodtoken WHERE mapzone=' .$mz->getId(). ';';
-        $this->db->setQuery($query);
-        $this->db->query();
-        $loadObj = $this->db->loadObjectList();
-        foreach ($loadObj as $obj) {
-            $tgt = new TradegoodToken($obj->id);
-            $tgt->setDb($this->db);
-            $tgt->load();
-            $tokens[] = $tgt;
-        }
-        return $tokens;
-    }
-
-    /**
-     * Returns the id of the most valuable game.tradegoodplatonic in the mapzone
-     *
-     * @param Mapzone $mz
-     * @return int
-     */
-    public function exploreForTrade(Mapzone $mz)
-    {
-        $query = 'SELECT tg FROM tradegoodtoken WHERE mapzone=' .$mz->getId(). ' ORDER BY tradevalue ASC LIMIT 1;';
-        $this->db->setQuery($query);
-        $this->db->query();
-        $loadObj = $this->db->loadObject();
-        if (isset($loadObj)) {
-            return $loadObj->tg;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @return TradegoodPlatonic
-     */
-    public function getARandomTradegoodPlatonic()
-    {
-        $query = 'SELECT id from tradegoodplatonic ORDER BY Rand() LIMIT 1;';
-        $this->db->setQuery($query);
-        $this->db->query();
-        $loadObj = $this->db->loadObject();
-        $tradegood = new TradegoodPlatonic($loadObj->id);
-        $tradegood->setDb($this->db);
-        $tradegood->load();
-        return $tradegood;
-    }
-
-    /**
-     * @param Mapzone $mz
-     * @param TradegoodPlatonic $tg
-     */
-    public function insertANewTradegoodToken(Mapzone $mz, TradegoodPlatonic $tg)
-    {
-        $query = 'INSERT INTO tradegoodtoken(mapzone, tg, named, tradevalue, foodvalue) VALUES(' .$mz->getId(). ', ' .$tg->getId(). ', "' .$tg->getNamed(). '", ' .$tg->getTradevalue(). ', ' .$tg->getFoodvalue(). ');';
-        $this->db->setQuery($query);
-        $this->db->query();
-    }
-
-    /**
      * @param $x
      * @param $y
      * @return string
@@ -141,6 +75,7 @@ class MapService
     }
 
     /**
+     * Returns a hydrated mapzone object for abstract coords $x and $y
      * @param $x
      * @param $y
      * @return Mapzone
@@ -157,6 +92,14 @@ class MapService
         return $mapzone;
     }
 
+    /**
+     * Returns the first city found within the selected range
+     *
+     * @param int $x
+     * @param int $y
+     * @param int width
+     * @return City|null
+     */
     public function findNearestCity($x, $y) {
         $query = "SELECT id FROM city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
         $this->db->setQuery($query);
@@ -173,6 +116,12 @@ class MapService
         }
     }
 
+    /**
+     * Teleports the input IMappable to the input City
+     *
+     * @param IMappable $mappable
+     * @param City $city
+     */
     public function teleportCity(IMappable $mappable, City $city)
     {
         $query = 'UPDATE ' .$this->getClass($mappable). ' SET x=' .$city->getX(). ' WHERE id=' .$mappable->getId(). ';';
@@ -183,10 +132,45 @@ class MapService
         $this->db->query();
     }
 
+    /**
+     * @param $issuer
+     * @return string
+     */
     private function getClass($issuer)
     {
         $getclass = explode('\\', get_class($issuer));
         $name = array_pop($getclass);
         return strtolower($name);
+    }
+
+    /**
+     * @param string $tablename
+     * @param int $topleftid
+     * @param int $width
+     * @param int $height
+     * @param int $limit Optional
+     * @return Array
+     */
+    public function getMapObjectsByViewport($tablename, $topleftid, $width, $height, $limit = null) {
+        $query = "SELECT * FROM  mapzone WHERE id=" .$topleftid. ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $cz = $this->db->loadObject();
+
+        $query = "SELECT * FROM " .$tablename. " WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+" .$width. ")) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+" .$height. ")) ";
+        if (is_numeric($limit)) { $query .= " LIMIT " .$limit; }
+        $query .= ";";
+
+        $this->db->setQuery($query);
+        $this->db->query();
+        $objects = $this->db->loadObjectList();
+
+        // Sanitize the abstract coords for mass consumption
+        foreach ($objects as $row) {
+            $row->x = $row->x - $cz->x;
+            $row->y = $row->y - $cz->y;
+        }
+
+        return $objects;
     }
 }

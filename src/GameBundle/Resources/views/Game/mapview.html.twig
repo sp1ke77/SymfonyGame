@@ -103,16 +103,17 @@ $(document).ready(function() {
         type: "GET",
         dataType: "json",
         success: function (data) {
+            console.log(data);
             // Instantiate the gameboard area
             // Draw a field of mapzones defined by geotype on the bottom layer
             var c = document.getElementById("map");
             var ctx = c.getContext("2d");
             ctx.beginPath();
 
-            for (var i = 0; i < data['data'].length; i++) {
-                var x2 = data['data'][i].x * plains.width;
-                var y2 = data['data'][i].y * plains.height;
-                var gt = data['data'][i].geotype;
+            for (var i = 0; i < data['mapzones'].length; i++) {
+                var x2 = data['mapzones'][i].x * plains.width;
+                var y2 = data['mapzones'][i].y * plains.height;
+                var gt = data['mapzones'][i].geotype;
 
                 switch (gt) {
                     case 'plains':
@@ -140,7 +141,7 @@ $(document).ready(function() {
                         ctx.drawImage(shallowsea, x2, y2);
                         break;
                 }
-                ctx.fillText('id=' + data['data'][i].id, x2 + 15, y2 + 15);
+                ctx.fillText('id=' + data['mapzones'][i].id, x2 + 15, y2 + 15);
             }
 
             // If there are some cities, draw those on the bottom layer
@@ -265,9 +266,9 @@ $(document).bind('mouseup', function () {
                     }
 
                     if (!citySelected) {
-                        for (i = 0; i < data['data'].length; i++) {
-                            if ((data['data'][i].x == x) && (data['data'][i].y == y)) {
-                                name.innerText = data['data'][i].geotype;
+                        for (i = 0; i < data['mapzones'].length; i++) {
+                            if ((data['mapzones'][i].x == x) && (data['mapzones'][i].y == y)) {
+                                name.innerText = data['mapzones'][i].geotype;
                             }
                         }
                     }

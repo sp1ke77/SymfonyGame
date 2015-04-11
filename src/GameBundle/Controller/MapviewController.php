@@ -28,62 +28,30 @@ class MapviewController extends Controller
 
     public function getMapAction()
     {
-        $db = $this->get('db');
+        $map = $this->get('service_map');
         $session = $this->get('session');
         $topleft = $session->get('mvid');
         if (is_numeric($topleft)) {
-            $query = "SELECT * FROM mapzone WHERE id=" . $topleft . ";";
-            $db->setQuery($query);
-            $db->query();
-            $cz = $db->loadObject();
-            $query = "SELECT * FROM mapzone WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+11)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+5));";
-            $db->setQuery($query);
-            $db->query();
-            $mapzones = $db->loadObjectList();
-            foreach ($mapzones as $row) {
-                $row->x = $row->x - $cz->x;
-                $row->y = $row->y - $cz->y;
-            }
-            $query = "SELECT * FROM city WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+11)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+5));";
-            $db->setQuery($query);
-            $db->query();
-            $cities = $db->loadObjectList();
-            foreach ($cities as $row) {
-                $row->x = $row->x - $cz->x;
-                $row->y = $row->y - $cz->y;
-            }
+            $mapzones = $map->getMapObjectsByViewport('mapzone', $topleft, 11, 5);
+            $cities = $map->getMapObjectsByViewport('city', $topleft, 11, 5);
 
             $response = new Response();
             $response->setContent(json_encode(array(
-                'data' => $mapzones,
+                'mapzones' => $mapzones,
                 'cities' => $cities
             )));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        } else {
-            // Nope
         }
     }
 
     public function getEntitiesAction()
     {
-        $db = $this->get('db');
+        $map = $this->get('service_map');
         $session = $this->get('session');
         $topleft = $session->get('mvid');
         if (is_numeric($topleft)) {
-            $query = "SELECT * FROM mapzone WHERE id=" . $topleft . ";";
-            $db->setQuery($query);
-            $db->query();
-            $cz = $db->loadObject();
-            $query = "SELECT * FROM clan WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+11)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+5));";
-            $db->setQuery($query);
-            $db->query();
-            $clans = $db->loadObjectList();
-            foreach ($clans as $row) {
-                $row->x = $row->x - $cz->x;
-                $row->y = $row->y - $cz->y;
-
-            }
+            $clans = $map->getMapObjectsByViewport('clan', $topleft, 22, 10);
 
             $response = new Response();
             $response->setContent(json_encode(array(
@@ -91,29 +59,16 @@ class MapviewController extends Controller
             )));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        } else {
-            // Nope
         }
     }
 
     public function getNewsAction()
     {
-        $db = $this->get('db');
+        $map = $this->get('service_map');
         $session = $this->get('session');
         $topleft = $session->get('mvid');
         if (is_numeric($topleft)) {
-            $query = "SELECT * FROM mapzone WHERE id=" . $topleft . ";";
-            $db->setQuery($query);
-            $db->query();
-            $cz = $db->loadObject();
-            $query = "SELECT * FROM news WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+22)) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+10)) ORDER BY dated DESC LIMIT 4;";
-            $db->setQuery($query);
-            $db->query();
-            $news = $db->loadObjectList();
-            foreach ($news as $row) {
-                $row->x = $row->x - $cz->x;
-                $row->y = $row->y - $cz->y;
-            }
+            $news = $map->getMapObjectsByViewport('news', $topleft, 22, 10, 4);
 
             $response = new Response();
             $response->setContent(json_encode(array(
@@ -121,8 +76,6 @@ class MapviewController extends Controller
             )));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        } else {
-            // Nope
         }
     }
 
