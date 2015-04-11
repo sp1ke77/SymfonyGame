@@ -95,12 +95,12 @@ class Behavior
     }
 
     /**
-     * @param $clanId
+     * @param int $clanid
      * @return string
      */
-    public function TakeAction($clanId)
+    public function TakeAction($clanid)
     {
-        $clan = new Clan($clanId);
+        $clan = new Clan($clanid);
         $clan->setDb($this->db);
         $clan->load();
         $depot = new Depot($clan->getDepot());
@@ -232,13 +232,10 @@ class Behavior
                     } else {
                         $this->clans->setPopulation($clan->getPopulation(), ($clan->getPopulation() + (25 + rand(1, 7))));
                     }
-
                     return 'Clan' . $clan->getId() . ' celebrated a holy day';
                 } else {
                     return 'Clan' . $clan->getId() . ' reconsidered and ' . $this->Consider($clan);
                 }
-
-                break;
 
             default:
                 return 'Clan' . $clan->getId() . ' did inscrutable things on a hill';

@@ -13,11 +13,6 @@ services:
     calls:
       - [setDb, ["@db"]]
 
-  service_tribe:
-    class: GameBundle\Services\TribeService
-    calls:
-      - [setDb, ["@db"]]
-      - [setMap, ["@service_map"]]
 
   service_clan:
     class: GameBundle\Services\ClanService
@@ -32,26 +27,45 @@ services:
   service_news:
     class: GameBundle\Services\NewsService
     calls:
-      - [setDb, ["db"]]
+      - [setDb, ["@db"]]
 
-  newgame:
-    class: GameBundle\Services\Newgame
+  service_tribe:
+    class: GameBundle\Services\TribeService
     calls:
       - [setDb, ["@db"]]
       - [setMap, ["@service_map"]]
-      - [setTrade, ["@service_trade"]]
-      - [setTribes, ["@service_tribe"]]
-
-  service_actions:
-    class: GameBundle\Game\Rules\Actions
-    calls:
-      - [setDb, ["@db"]]
 
   service_rules:
     class: GameBundle\Game\Rules\Rules
     calls:
       - [setDb, ["@db"]]
       - [setMap, ["@service_map"]]
+
+  service_action_round:
+    class: GameBundle\Game\Simulation\ActionRound
+    calls:
+      - [setDb, ["@db"]]
+      - [setBehavior, ["@service_behavior"]]
+      - [setTribeService, ["@service_tribe"]]
+      - [setMap, ["@service_map"]]
+      - [setNews, ["@service_news"]]
+
+  service_random_events:
+    class: GameBundle\Game\Simulation\RandomEvents\RandomEvents
+    calls:
+      - [setDb, ["@db"]]
+      - [setTrade, ["@service_trade"]]
+      - [setMap, ["@service_map"]]
+      - [setNews, ["@service_news"]]
+
+  newgame:
+    class: GameBundle\Game\Scenario\Newgame
+    calls:
+      - [setDb, ["@db"]]
+      - [setMap, ["@service_map"]]
+      - [setTribes, ["@service_tribe"]]
+      - [setTrade, ["@service_trade"]]
+      - [setEvents, ["@service_random_events"]]
 
   service_behavior:
     class: GameBundle\Game\Simulation\AI\Clans\Behavior
@@ -63,12 +77,3 @@ services:
       - [setRules, ["@service_rules"]]
       - [setTribes, ["@service_tribe"]]
       - [setTrade, ["@service_trade"]]
-
-  service_action_round:
-    class: GameBundle\Game\Simulation\ActionRound
-    calls:
-      - [setDb, ["@db"]]
-      - [setBehavior, ["@service_behavior"]]
-      - [setTribeService, ["@service_tribe"]]
-      - [setMap, ["@service_map"]]
-      - [setNews, ["@service_news"]]

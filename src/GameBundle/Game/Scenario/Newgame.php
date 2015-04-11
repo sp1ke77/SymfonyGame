@@ -27,12 +27,16 @@ class Newgame
 {
     /**
      * Components
-     * @var $db DBCommon
+     * @var DBCommon
+     * @var TribeService
+     * @var TradeService
+     * @var RandomEvents
      */
     protected $db;
     protected $map;
-    protected $tribe;
+    protected $tribes;
     protected $trade;
+    protected $events;
 
     /**
      * Fields
@@ -46,7 +50,7 @@ class Newgame
     }
 
     /**
-     * @param mixed $map
+     * @param MapService $map
      */
     public function setMap($map)
     {
@@ -54,22 +58,30 @@ class Newgame
     }
 
     /**
-     * @param mixed $tribe
+     * @param TribeService $tribeService
      */
-    public function setTribe($tribe)
+    public function setTribes($tribeService)
     {
-        $this->tribe = $tribe;
+        $this->tribes = $tribeService;
     }
 
     /**
-     * @param mixed $trade
+     * @param TradeService $tradeService
      */
-    public function setTrade($trade)
+    public function setTrade($tradeService)
     {
-        $this->trade = $trade;
+        $this->trade = $tradeService;
     }
 
     /**
+     * @param RandomEvents
+     */
+    public function setEvents($randomEvents) {
+        $this->events = $randomEvents;
+    }
+
+    /**
+     *
      * @param DBCommon $db
      */
     public function setDb($db)
@@ -96,11 +108,9 @@ class Newgame
             $this->initializeCities();
             $this->initializeTradeGoods();
 
-            $ev = New RandomEvents();
-            $ev->setDb($this->db);
             for ($i = 0; $i < 900; $i++)
             {
-                $ev->NewTradeTokenEvent();
+                $this->events->NewTradeTokenEvent();
             }
 
             // $this->createTradeGoodTokens();
@@ -190,7 +200,7 @@ class Newgame
             'Qadesh' => array(
                 'Description' => '',
                 'x' => 57,
-                'y' => 40,
+                'y' => 14,
                 'Region' => 'Amurru',
                 'God' => ''),
             'Hamath' => array(
@@ -201,13 +211,13 @@ class Newgame
                 'God' => 'Astarte'),
             'Arvad' => array(
                 'Description' => '',
-                'x' => 42,
-                'y' => 15,
+                'x' => 45,
+                'y' => 24,
                 'Region' => 'Jazirat',
                 'God' => ''),
             'Gubal' => array(
                 'Description' => '',
-                'x' => 47,
+                'x' => 48,
                 'y' => 45,
                 'Region' => '',
                 'God' => 'Amun'),
@@ -225,20 +235,20 @@ class Newgame
                 'God' => ''),
             'Megiddo' => array(
                 'Description' => '',
-                'x' => 50,
+                'x' => 54,
                 'y' => 30,
                 'Region' => 'Megiddo',
                 'God' => ''),
             'Asqalun' => array(
                 'Description' => '',
                 'x' => 47,
-                'y' => 37,
+                'y' => 35,
                 'Region' => 'Asqanu',
                 'God' => 'El'),
             'Gezer' => array(
                 'Description' => '',
-                'x' => 55,
-                'y' => 45,
+                'x' => 50,
+                'y' => 35,
                 'Region' => 'Nahal Iron',
                 'God' => 'Amun'),
             'Phaito' => array(
@@ -267,8 +277,8 @@ class Newgame
             $this->db->setQuery($query);
             $this->db->query();
 
-            $cId = $this->createCity($k, $v['Description'], $v['x'], $v['y']);
-            $this->createRegion($v['Region'], $v['God'], $cId);
+            $city = $this->createCity($k, $v['Description'], $v['x'], $v['y']);
+            $this->createRegion($v['Region'], $v['God'], $city);
         }
     }
 
@@ -365,14 +375,13 @@ class Newgame
      *
      * @param string $name
      * @param string $desc
-     * @param x
-     * @param y
+     * @param int $x
+     * @param int $y
      * @return int
      */
     private function createCity($name, $desc, $x, $y)
     {
-        $depotId = $this->createDepot();
-        $query = "INSERT INTO city(named, description, x, y, depot) VALUES('" . $name . "', '" . $desc . "', " . $x . ", " . $y . ", " . $depotId . ");";
+        $query = "INSERT INTO city(named, description, x, y) VALUES('" . $name . "', '" . $desc . "', " . $x . ", " . $y . ");";
         $this->db->setQuery($query);
         $this->db->query();
         return $this->db->getLastInsertId();

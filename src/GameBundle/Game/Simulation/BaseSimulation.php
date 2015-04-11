@@ -10,7 +10,7 @@ class BaseSimulation
 {
 
 
-    /** @var $db DBCommon */
+    /** @var DBCommon */
     protected $db;
 
     /**

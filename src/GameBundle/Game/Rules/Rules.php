@@ -38,6 +38,9 @@ class Rules
      * @var MapService $map
      */
     protected $db;
+    /**
+     * @var
+     */
     protected $map;
 
     /**
@@ -116,21 +119,6 @@ class Rules
                     return $this->travel($issuer, $xy[0], $xy[1]);
                 }
 
-                break;
-
-            case 'holiday':
-
-                // Check if it's a Clan and if so, if it has enough food and if so, ->holiday()
-                // No other class can take this action
-                if ($this->getClass($issuer) != 'Clan')
-                {
-                    return $this->getResult('Invalid request', 'Only clans can holiday');
-                } else {
-                    return $this->holiday($issuer);
-                }
-
-                break;
-
             case 'buy goods':
 
                 // The interface for trading is IDepotHaver; Clans and Characters have it
@@ -155,10 +143,6 @@ class Rules
                     return $this->buyGoods($issuer, $xy[0], $xy[1]);
                 }
 
-                // Args {good},{amount}. Note that {good} must be lowercase and must match a field in game.depot.
-
-                break;
-
             case 'sell goods':
 
                 if (!array_search("GameBundle\\Game\\Rules\\Interfaces\\IDepotHaver", class_implements($issuer)))
@@ -176,10 +160,6 @@ class Rules
                     }
                     return $this->sellGoods($issuer, $xy[0], $xy[1]);
                 }
-
-                // Args {good},{amount}. Note that {good} must be lowercase and must match a field in game.depot.
-
-                break;
 
             case 'attack':
 
@@ -212,6 +192,12 @@ class Rules
      *
      */
 
+    /**
+     * @param IMappable $issuer
+     * @param $x2
+     * @param $y2
+     * @return array
+     */
     public function travel(IMappable $issuer, $x2, $y2)
     {
             // Get the issuer's current location
@@ -228,19 +214,12 @@ class Rules
             }
     }
 
-    public function holiday(Clan $issuer) {
-
-            if ($issuer->getFood() > 5)
-            {
-                $issuer->checkLarder();
-                if ($issuer->consumeFood($issuer, 5)) {}
-                    $issuer->setPopulation($issuer->getPopulation() + 5);
-                    return $this->getResult('Success', 'Clan ' . $issuer->getId() . ' celebrated a holy day');
-            } else {
-                return $this->getResult('Illegal move', 'Cannot holiday without at least 5 food');
-            }
-    }
-
+    /**
+     * @param IDepotHaver $issuer
+     * @param $good
+     * @param $amt
+     * @return array
+     */
     public function sellGoods(IDepotHaver $issuer, $good, $amt)
     {
         $depot = new Depot($issuer->getDepot());
@@ -257,21 +236,21 @@ class Rules
 
         // If we have sufficient goods to sell
         if ($currentStores >= $amt) {
-            // Lose the sold goods
             $depot->setValueByString($tgp->named, ($currentStores - $amt));
-            // Get the money
             $profit = $amt * $tgp->tradevalue;
-            // Add the money to the issuer's purse
-            $this->SetCoins($issuer, ($issuer->getCoin() + $profit));      /// <--------SUB OPTIMAL IMPLEMENTATION ALERT
-            // Update everything and return the result
-            $issuer->update();
-            $depot->update();
+            $this->SetCoins($issuer, ($issuer->getCoin() + $profit));
             return $this->getResult('Success', 'sold ' .$amt. ' ' .$tgp->named. ' for ' .$profit. ' coin');
         } else {
             return $this->getResult('Illegal move', 'issued an invalid request to sell goods');
         }
     }
 
+    /**
+     * @param IDepotHaver $issuer
+     * @param $good
+     * @param $amt
+     * @return array
+     */
     public function buyGoods(IDepotHaver $issuer, $good, $amt)
     {
         $depot = new Depot($issuer->getDepot());
@@ -287,15 +266,10 @@ class Rules
         $purse = $issuer->getCoin();
         $cost = ($amt * $tgp->tradevalue);
             // If we have sufficient coin
-        if ($purse > $cost) {
-            // Lose the money
-            $this->SetCoins($issuer, ($purse - $cost)); // <---- SUB OPTIMAL IMPLEMENTATION ALERT
-            // Gain the bought goods
+        if ($purse >= $cost) {
+            $this->SetCoins($issuer, ($purse - $cost));
             $currentStores = $depot->GetValueByString($tgp->named);
             $depot->setValueByString($tgp->named, ($currentStores + $amt));
-            // Update everything and return the result
-            $issuer->update();
-            $depot->update();
             return $this->getResult('Success', 'bought ' .$amt. ' ' .$tgp->named. ' for ' .$cost. ' coin');
         } else {
             return $this->getResult('Illegal move', 'attempted to purchase ' .$amt. ' ' .$tgp->named. ' but had insufficient coin');
@@ -329,6 +303,10 @@ class Rules
         return $result;
     }
 
+    /**
+     * @param $issuer
+     * @return mixed
+     */
     private function getClass($issuer)
     {
         $getclass = explode('\\', get_class($issuer));
@@ -336,6 +314,10 @@ class Rules
         return $name;
     }
 
+    /**
+     * @param $issuer
+     * @param $amt
+     */
     private function SetCoins($issuer, $amt)
     {
         $query = 'UPDATE ' .strtolower($this->getClass($issuer)). ' SET coin=' .intval($amt). ' WHERE id=' .$issuer->getId(). ';';

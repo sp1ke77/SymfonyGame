@@ -26,11 +26,10 @@ class NewgameCommand extends ContainerAwareCommand
 
         $logger->info('Creating the world ... ');
 
-        if ($input->getArgument('passphrase') == 'restarttheworld')
-        {
-            $newgame = $this->getContainer()->get('newgame');
-            $newgame->createGame();
-        }
+        $path = $this->getContainer()->get('kernel')->getRootDir();
+        $newgame = $this->getContainer()->get('newgame');
+        $newgame->setPath($path);
+        $newgame->createGame();
 
         $logger->info('Finished initializing new game! ');
     }
