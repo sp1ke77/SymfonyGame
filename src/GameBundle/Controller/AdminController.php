@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Temporary
-
+use GameBundle\Game\Model\Clan;
 
 class AdminController extends Controller
 {
@@ -24,10 +24,15 @@ class AdminController extends Controller
 
     public function testAction()
     {
-        $map = $this->get('service_map');
-        $mapzones = $map->getMapObjectsByViewport('city', 1725, 11, 5);
+        $db = $this->get('db');
+        $rules = $this->get('service_rules');
+        $clan = new Clan(15);
+        $clan->setDb($db);
+        $clan->load();
+        $request = $rules->createRequest($clan, 'holiday', '4,5');
+        $output = $rules->submit($request);
         echo '<pre>';
-        print_r($mapzones);
+        print_r($output);
         die();
         return new RedirectResponse('/admin');
     }

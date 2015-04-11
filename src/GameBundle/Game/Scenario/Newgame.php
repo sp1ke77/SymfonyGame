@@ -11,31 +11,62 @@
  */
 
 namespace GameBundle\Game\Scenario;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Tribe;
-use GameBundle\Game\Model\Tradegood_Platonic;
-use GameBundle\Game\Model\Tradegood_Token;
 use GameBundle\Services\MapService;
+use GameBundle\Services\TribeService;
+use GameBundle\Services\TradeService;
 use GameBundle\Game\Simulation\RandomEvents\RandomEvents;
 
 /**
- * Class NewgameService
+ * Class Newgame
  * @package GameBundle\Services
  */
 class Newgame
 {
     /**
+     * Components
      * @var $db DBCommon
      */
     protected $db;
+    protected $map;
+    protected $tribe;
+    protected $trade;
 
+    /**
+     * Fields
+     * @var int
+     */
     protected $path;
 
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @param mixed $map
+     */
+    public function setMap($map)
+    {
+        $this->map = $map;
+    }
+
+    /**
+     * @param mixed $tribe
+     */
+    public function setTribe($tribe)
+    {
+        $this->tribe = $tribe;
+    }
+
+    /**
+     * @param mixed $trade
+     */
+    public function setTrade($trade)
+    {
+        $this->trade = $trade;
     }
 
     /**

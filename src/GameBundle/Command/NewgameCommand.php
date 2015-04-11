@@ -9,10 +9,6 @@ use Psr\Log\LoggerInterface;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Scenario\Newgame;
 
-/**
- * Class ActionRoundCommand
- * @package GameBundle\Command\GameTimer
- */
 class NewgameCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -20,11 +16,7 @@ class NewgameCommand extends ContainerAwareCommand
         $this
             ->setName('Newgame:initialize')
             ->setDescription('Launch the master process for trashing the current gameworld and instantiating a new one.')
-            ->addArgument(
-                'passphrase',
-                InputArgument::OPTIONAL,
-                'What is the passphrase?'
-            );
+           ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,9 +28,7 @@ class NewgameCommand extends ContainerAwareCommand
 
         if ($input->getArgument('passphrase') == 'restarttheworld')
         {
-            $db = $this->getContainer()->get('db');
-            $newgame = new Newgame();
-            $newgame->setDb($db);
+            $newgame = $this->getContainer()->get('newgame');
             $newgame->createGame();
         }
 

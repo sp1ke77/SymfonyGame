@@ -6,6 +6,10 @@ use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\TradegoodToken;
 use GameBundle\Game\Model\TradegoodPlatonic;
 
+/**
+ * Class TradeService
+ * @package GameBundle\Services
+ */
 class TradeService
 {
     /**

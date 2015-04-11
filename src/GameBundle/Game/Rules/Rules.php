@@ -7,16 +7,15 @@
  */
 
 namespace GameBundle\Game\Rules;
+
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 use GameBundle\Game\Rules\Interfaces\IDepotHaver;
 use GameBundle\Game\Rules\Interfaces\ICombatant;
-use GameBundle\Game\Rules\Checks;
-use GameBundle\Game\Rules\Actions;
 use GameBundle\Game\Model\Clan;
 use GameBundle\Game\Model\Depot;
-
+use GameBundle\Services\MapService;
 
 /**
  * Class Rules
@@ -36,12 +35,26 @@ class Rules
     /**
      * Components
      * @var DBCommon $db
-     * @var Checks
-     * @var Actions
+     * @var MapService $map
      */
     protected $db;
-    protected $checks;
-    protected $actions;
+    protected $map;
+
+    /**
+     * @param DBCommon $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * @param MapService $mapService
+     */
+    public function setMap($mapService)
+    {
+        $this->map = $mapService;
+    }
 
     /**
      * Create a request packaged for submission
@@ -58,14 +71,6 @@ class Rules
         $request['Issuer'] = $issuer;
         $request['Args'] = $args;
         return $request;
-    }
-
-    /**
-     * @param DBCommon $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
     }
 
     /**
@@ -209,19 +214,14 @@ class Rules
 
     public function travel(IMappable $issuer, $x2, $y2)
     {
-            $checks = new Checks();
-            $checks->setDb($this->db);
-            $actions = new Actions();
-            $actions->setDb($this->db);
-
             // Get the issuer's current location
 
             $x1 = $issuer->getX();
             $y1 = $issuer->getY();
 
-            if ($checks->checkLegalMove($x1, $y1, $x2, $y2))
+            if ($this->map->checkLegalMove($x1, $y1, $x2, $y2))
             {
-                $result = $actions->mapTravel($issuer, $x2, $y2);
+                $result = $this->map->mapTravel($issuer, $x2, $y2);
                 return $this->getResult('Success', $result);
             } else {
                 return $this->getResult('Illegal move', $x2. ', ' .$y2. ' is too far or is not passable');

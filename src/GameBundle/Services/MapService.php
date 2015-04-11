@@ -13,6 +13,10 @@ use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\City;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
+/**
+ * Class MapService
+ * @package GameBundle\Services
+ */
 class MapService
 {
 
@@ -172,5 +176,49 @@ class MapService
         }
 
         return $objects;
+    }
+
+    /**
+     * @param IMappable $issuer
+     * @param $x2
+     * @param $y2
+     * @return string
+     */
+    public function mapTravel(IMappable $issuer, $x2, $y2)
+    {
+        $tablename = $this->getClass($issuer);
+        $query = 'UPDATE ' .strtolower($tablename). ' SET x=' .$x2. ' WHERE id=' .$issuer->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
+        $query = 'UPDATE ' .strtolower($tablename). ' SET y=' .$y2. ' WHERE id=' .$issuer->getId(). ';';
+        $this->db->setQuery($query);
+        $this->db->query();
+        $result = $tablename . $issuer->getId() . ' traveled to ' . $x2 . ', ' . $y2;
+        return $result;
+    }
+
+    /**
+     * Takes x1,y1 and x2,y2, returns if move is legal
+     * @param int $x1
+     * @param int $y1
+     * @param int $x2
+     * @param int $y2
+     * @param int $maxdist optional, default is one
+     * @return bool
+     */
+    public function checkLegalMove($x1, $y1, $x2, $y2, $maxdist = 1)
+    {
+        $maxdist += 1;
+        if (abs(($x1 - $x2) < $maxdist) & (abs($y1 - $y2)) < $maxdist)
+        {
+            $geotype = $this->getGeotypeByMapzone($x2, $y2);
+            if ($geotype == 'plains' | $geotype == 'forest' | $geotype == 'desert' |
+                $geotype == 'hills' | $geotype == 'mountain' | $geotype == 'swamp')
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

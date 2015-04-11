@@ -10,7 +10,7 @@ namespace GameBundle\Game\Rules;
 
 class Dice
 {
-    public function Odds($percent)
+    public static function Odds($percent)
     {
         if (rand(1,100) < $percent)
         {

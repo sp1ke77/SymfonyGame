@@ -3,11 +3,6 @@ services:
     class: GameBundle\Game\DBCommon
     arguments: ["%database_host%", "%database_user%", "%database_password%", "%database_name%", "%database_port%"]
 
-  service_rules:
-    class: GameBundle\Game\Rules\Rules
-    calls:
-      - [setDb, ["@db"]]
-
   service_login:
     class: GameBundle\Services\LoginService
     calls:
@@ -24,6 +19,11 @@ services:
       - [setDb, ["@db"]]
       - [setMap, ["@service_map"]]
 
+  service_clan:
+    class: GameBundle\Services\ClanService
+    calls:
+      - [setDb, ["@db"]]
+
   service_trade:
     class: GameBundle\Services\TradeService
     calls:
@@ -34,24 +34,35 @@ services:
     calls:
       - [setDb, ["db"]]
 
-  service_newgame:
-    class: GameBundle\Services\NewgameService
+  newgame:
+    class: GameBundle\Services\Newgame
     calls:
       - [setDb, ["@db"]]
+      - [setMap, ["@service_map"]]
+      - [setTrade, ["@service_trade"]]
+      - [setTribes, ["@service_tribe"]]
 
   service_actions:
     class: GameBundle\Game\Rules\Actions
     calls:
       - [setDb, ["@db"]]
 
+  service_rules:
+    class: GameBundle\Game\Rules\Rules
+    calls:
+      - [setDb, ["@db"]]
+      - [setMap, ["@service_map"]]
+
   service_behavior:
     class: GameBundle\Game\Simulation\AI\Clans\Behavior
     calls:
       - [setDb, ["@db"]]
+      - [setClans, ["@service_clan"]]
       - [setMap, ["@service_map"]]
       - [setNews, ["@service_news"]]
       - [setRules, ["@service_rules"]]
       - [setTribes, ["@service_tribe"]]
+      - [setTrade, ["@service_trade"]]
 
   service_action_round:
     class: GameBundle\Game\Simulation\ActionRound
