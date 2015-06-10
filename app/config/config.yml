@@ -32,15 +32,14 @@ twig:
 
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
+    debug:         %kernel.debug%
     use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
     filters:
+        yui_css:
+             jar: /usr/share/yui-compressor/yui-compressor.jar
+        yui_js:
+             jar: /usr/share/yui-compressor/yui-compressor.jar
         cssrewrite: ~
-    assets:
-        -
-
 
 # Doctrine Configuration
 doctrine:

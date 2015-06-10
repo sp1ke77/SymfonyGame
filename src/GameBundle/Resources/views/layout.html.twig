@@ -11,9 +11,13 @@
         <link href="{{ asset('/css/mapview.css') }}" rel="stylesheet" />
     {% endblock %}
 
+    {% block javascripts %}
+        <script src="{{ asset('js/bootstrap.js') }}" type="text/javascript"></script>
+    {% endblock %}
+
     <title>{% block title %}Adon Melech{% endblock %}</title>
 
-    {% endblock %}
+{% endblock %}
 </head>
 
 <body>
@@ -42,13 +46,16 @@
                     </div> <!-- /container -->
 
                     {% endblock %}
-                    {% block javascripts %}
 
-                        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-                        <script src="{{ asset('js/bootstrap.js') }}" type="text/javascript"></script>
-
-                    {% endblock %}
-
+                    {% javascripts
+                    'js/jquery.js'
+                    'js/bootstrap.js'
+                    'js/mapview.js'
+                    'js/ImageResource.js'
+                    'js/newsbox.js'
+                    output='js/compiled/app.js' %}
+                    <script src="{{ asset_url }}"></script>
+                    {% endjavascripts %}
 </body>
 
 </html>
