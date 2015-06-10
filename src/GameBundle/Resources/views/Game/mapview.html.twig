@@ -81,11 +81,18 @@ $(document).ready(function() {
             // Store whatever data we got in session so that it can be accessed later
             sessionStorage.setItem("data", JSON.stringify(data));
 
+            // Bind mouse event -- receive mouse click on canvas layer two
             $(document).bind('mouseup', function () {
                 // Add a click-handler to the image.
                 $('#stuff').bind('mouseup', function (ev) {
                     mapview.handleClick(event.which, ev);
                 });
+            });
+
+            // Bind page reload event -- clear some of the cached stuff when the player manually reloads
+            $('body').bind('beforeunload',function(){
+                sessionStorage.clear("stuff");
+                sessionStorage.clear("news");
             });
 
             (function worker() {
@@ -94,8 +101,8 @@ $(document).ready(function() {
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        // If there are any clans here AND if the state has changed, redraw layer 2
-                        if ((data['clans']) && (JSON.stringify(data['clans']) != JSON.stringify(sessionStorage.getItem("stuff"))))
+
+                        if ((data['clans']) && (JSON.stringify(data) != sessionStorage.getItem("stuff")))
                         {
                             var c = document.getElementById("stuff");
                             var ctx = c.getContext("2d");
@@ -119,7 +126,7 @@ $(document).ready(function() {
                     dataType: "json",
                     success: function(data) {
                         var ulElement = document.getElementById('ul-newsbox');
-                        newsbox.populate(ulElement);
+                        newsbox.populate(ulElement, data);
                         sessionStorage.setItem("news", JSON.stringify(data));
                     },
                     complete: function() {

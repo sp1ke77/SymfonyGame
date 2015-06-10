@@ -12432,7 +12432,7 @@ function MapView() {
 
     this.drawCities = function (ctx, data) {
         for (var n = 0; n < (data['cities'].length); n++) {
-            ctx.drawImage(city, (data['cities'][n].x * imgrsc.plains.width) + 28, (data['cities'][n].y * imgrsc.plains.height) + 10);
+            ctx.drawImage(imgrsc.city, (data['cities'][n].x * imgrsc.plains.width) + 28, (data['cities'][n].y * imgrsc.plains.height) + 10);
             ctx.fillText(data['cities'][n].named, (data['cities'][n].x * imgrsc.plains.width) + 33, (data['cities'][n].y * imgrsc.plains.height) + 20);
         }
     };
