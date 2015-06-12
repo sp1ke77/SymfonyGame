@@ -13,7 +13,6 @@ services:
     calls:
       - [setDb, ["@db"]]
 
-
   service_clan:
     class: GameBundle\Services\ClanService
     calls:

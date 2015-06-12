@@ -192,53 +192,53 @@ class Newgame
     {
         $cities = array(
             'Ugarit' => array(
-                'Description' => 'An ancient port of the Hurrians',
+                'Description' => '',
                 'x' => 51,
                 'y' => 23,
-                'Region' => '',
-                'God' => ''),
+                'Region' => 'Urartu',
+                'God' => 'Yam'),
             'Qadesh' => array(
                 'Description' => '',
                 'x' => 57,
                 'y' => 14,
                 'Region' => 'Amurru',
-                'God' => ''),
+                'God' => 'Qadeshtu'),
             'Hamath' => array(
                 'Description' => '',
                 'x' => 57,
                 'y' => 3,
                 'Region' => 'Nuhasse',
-                'God' => 'Astarte'),
+                'God' => 'Tesub'),
             'Arvad' => array(
                 'Description' => '',
                 'x' => 45,
                 'y' => 24,
                 'Region' => 'Jazirat',
-                'God' => ''),
-            'Gubal' => array(
+                'God' => 'Mirizir'),
+            'Gubla' => array(
                 'Description' => '',
                 'x' => 48,
                 'y' => 45,
-                'Region' => '',
+                'Region' => 'Gubla',
                 'God' => 'Amun'),
             'Tyre' => array(
                 'Description' => '',
                 'x' => 48,
                 'y' => 29,
-                'Region' => '',
+                'Region' => 'Tyre',
                 'God' => 'Melkart'),
             'Shechem' => array(
                 'Description' => '',
                 'x' => 55,
                 'y' => 35,
                 'Region' => 'Nahal Iron',
-                'God' => ''),
+                'God' => 'El'),
             'Megiddo' => array(
                 'Description' => '',
                 'x' => 54,
                 'y' => 30,
                 'Region' => 'Megiddo',
-                'God' => ''),
+                'God' => 'Shapash'),
             'Asqalun' => array(
                 'Description' => '',
                 'x' => 47,
@@ -256,13 +256,13 @@ class Newgame
                 'x' => 5,
                 'y' => 1,
                 'Region' => 'Keftiu',
-                'God' => 'Baal'),
+                'God' => 'Astarte'),
             'Tanit' => array(
                 'Description' => '',
                 'x' => 41,
                 'y' => 34,
                 'Region' => 'Goshen',
-                'God' => 'Amun'),
+                'God' => 'Ptah'),
             'Bubastis' => array(
                 'Description' => '',
                 'x' => 33,
@@ -563,7 +563,11 @@ class Newgame
      */
     private function setupGameworldTables()
     {
-        // Create all nencessary tables
+        //
+        // Mapzone, City and Region are all related structures. Regions all refer to a capital city and all of these
+        // things are regularly checked by map-logic calls from all the other objects. The interface IMappable used
+        // by the Rules module refers exclusively to the possession of X and Y columns.
+        //
         $query = "CREATE TABLE game.mapzone (
                           id INT NOT NULL AUTO_INCREMENT,
                           x INT(2) NOT NULL,
@@ -573,21 +577,9 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.kingdom (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          imglarge VARCHAR(45) NULL,
-                          imgsmall VARCHAR(45) NULL,
-                          imgface VARCHAR(45) NULL,
-                          dynasty VARCHAR(45) NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "CREATE TABLE game.city (
                           id INT NOT NULL AUTO_INCREMENT,
-                          named VARCHAR(45) NULL,
-                          imglarge VARCHAR(45) NULL,
-                          imgsmall VARCHAR(45) NULL,
+                          named CHAR(45) NULL,
                           description VARCHAR(160) NULL,
                           coin INT NULL,
                           king INT NULL,
@@ -601,15 +593,18 @@ class Newgame
         $query = "CREATE TABLE game.region (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
-                          imglarge VARCHAR(45) NULL,
-                          imgsmall VARCHAR(45) NULL,
                           god VARCHAR(45) NULL,
                           city INT NULL,
                           ruledby INT NULL,
+                          radius INT NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
 
+        // Platonic tradegoods are the bearers of data pertinent to whole categories of tradegood. These are the 'types'
+        // from which the tokens are struck. Tokens, of course, are individual instances of exploitable tradegoods
+        // on the map. Tradegoodtoken.TG points to the ID of the platonic tradegood from which this instance inherits.
+        // TradeValue and FoodValue can change in response to events for individual tokens.
         $query = "CREATE TABLE game.tradegoodplatonic (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
@@ -633,6 +628,14 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
+        // Tribes and Clans define parts of an interlocking system similar to the platonic/token relationship with
+        // tradegoods. A 'clan' is a specific group of 100-200 people traveling on the map; each clan points to a 'tribe'
+        // which accounts for its personality and allegiances. New 'clans' are usually struck off of existing clans,
+        // preserving the tribal identity.
+        //
+        // At a gameplay level, the tribes and clans are the restive natives over whom you have little control.
+        // They do the gruntwork of the urban merchants and make up a rough third of the prince's support.
+        //
         $query = "CREATE TABLE game.tribe (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
@@ -643,46 +646,6 @@ class Newgame
                           spirituality NUMERIC(3,2) DEFAULT 0,
                           sumptuousness NUMERIC(3,2) DEFAULT 0,
                           culture ENUM('Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu') NULL,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "CREATE TABLE game.player (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          userid INT NULL,
-                          activity VARCHAR(45) NULL,
-                          x INT NULL,
-                          y INT NULL,
-                          named VARCHAR(45) NULL,
-                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
-                          tribe int NULL,
-                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none'),
-                          hunting INT DEFAULT 0,
-                          shrewdness INT DEFAULT 0,
-                          music INT DEFAULT 0,
-                          intrigue INT DEFAULT 0,
-                          purity INT DEFAULT 0,
-                          wisdom INT DEFAULT 0,
-                          PRIMARY KEY (id));";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "CREATE TABLE game.agent (
-                          id INT NOT NULL AUTO_INCREMENT,
-                          ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
-                          activity VARCHAR(45) NULL,
-                          x INT NULL,
-                          y INT NULL,
-                          named VARCHAR(45) NULL,
-                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
-                          tribe int NULL,
-                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none'),
-                          hunting INT DEFAULT 0,
-                          shrewdness INT DEFAULT 0,
-                          music INT DEFAULT 0,
-                          intrigue INT DEFAULT 0,
-                          purity INT DEFAULT 0,
-                          wisdom INT DEFAULT 0,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -706,6 +669,60 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
+        // Characters are either players (in which case UserID will point to a user's primary key) or agents (in which
+        // case PType will not be null). Characters are necessarily tied to a city by an estate, upon which they can
+        // build a variety of addons (holdings points to the ID of a buildinglist table). Characters also have a persona
+        // containing all their "character-sheet" details.
+        //
+        // Most of the gameplay surrounds the doings of characters, who are understood to be the merchant classes living
+        // in the urban centers. Players, additionally, also begin with allegiance to a kingdom and are assumed to be
+        // foreign envoys by origin.
+        //
+        $query = "CREATE TABLE game.character (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          isPlayer BOOL DEFAULT FALSE,
+                          ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
+                          userid INT NULL,
+                          activity VARCHAR(45) NULL,
+                          x INT NULL,
+                          y INT NULL,
+                          named VARCHAR(45) NULL,
+                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
+                          city INT NULL,
+                          holdings INT NULL,
+                          persona INT NULL,
+                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none') NULL,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "CREATE TABLE game.buildinglist (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          marketstall INT DEFAULT 0,
+                          depot INT DEFAULT 0,
+                          quay INT DEFAULT 0,
+                          caravansary INT DEFAULT 0,
+                          garden INT DEFAULT 0,
+                          beerhouse INT DEFAULT O,
+                          barque INT DEFAULT 0,
+                          shrine INT DEFAULT O,
+                          palace INT DEFAULT O,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "CREATE TABLE game.persona(
+                          id INT NOT NULL AUTO_INCREMENT,
+                          fame INT DEFAULT 0,
+                          honor INT DEFAULT 0,
+                          controversy INT DEFAULT 0,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        // Depots contain the slots for a single store of tradegoods. A wide variety of game entities need
+        // to have depots to refer to. (Note that for characters a depot is optional and will be stored as a foreign
+        // key inside of a building list.)
         $query = "CREATE TABLE game.depot (
                           id INT NOT NULL AUTO_INCREMENT,
                           wheat INT DEFAULT 0,
@@ -722,12 +739,16 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
+        // The news table receives text output from a variety of Simulation sources; one imagines that it will
+        // need to be cleared out occasionally. News flagged 'important' will take longer to clear and will show
+        // up on the "grand timeline" view.
         $query = "CREATE TABLE game.news (
                           id INT NOT NULL AUTO_INCREMENT,
                           text VARCHAR(144) NOT NULL,
                           x INT NULL,
                           y INT NULL,
                           dated TIMESTAMP,
+                          important BOOLEAN DEFAULT FALSE,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
