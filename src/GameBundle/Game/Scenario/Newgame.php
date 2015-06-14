@@ -563,11 +563,22 @@ class Newgame
      */
     private function setupGameworldTables()
     {
-        //
+        // Here is the user info gathered during the account creation process.
+        // A characterid value of 0 means the player has no character and will
+        // produce a prompt to go create one on login.
+        $query = "CREATE TABLE game.user (
+                          id INT NOT NULL AUTO_INCREMENT,
+                          username VARCHAR(18),
+                          password VARCHAR(28),
+                          email VARCHAR(45),
+                          characterid INT DEFAULT 0,
+                          PRIMARY KEY (id));";
+        $this->db->setQuery($query);
+        $this->db->query();
+
         // Mapzone, City and Region are all related structures. Regions all refer to a capital city and all of these
         // things are regularly checked by map-logic calls from all the other objects. The interface IMappable used
         // by the Rules module refers exclusively to the possession of X and Y columns.
-        //
         $query = "CREATE TABLE game.mapzone (
                           id INT NOT NULL AUTO_INCREMENT,
                           x INT(2) NOT NULL,
@@ -635,7 +646,6 @@ class Newgame
         //
         // At a gameplay level, the tribes and clans are the restive natives over whom you have little control.
         // They do the gruntwork of the urban merchants and make up a rough third of the prince's support.
-        //
         $query = "CREATE TABLE game.tribe (
                           id INT NOT NULL AUTO_INCREMENT,
                           named VARCHAR(45) NULL,
@@ -677,7 +687,6 @@ class Newgame
         // Most of the gameplay surrounds the doings of characters, who are understood to be the merchant classes living
         // in the urban centers. Players, additionally, also begin with allegiance to a kingdom and are assumed to be
         // foreign envoys by origin.
-        //
         $query = "CREATE TABLE game.character (
                           id INT NOT NULL AUTO_INCREMENT,
                           isPlayer BOOL DEFAULT FALSE,

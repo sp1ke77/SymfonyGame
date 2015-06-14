@@ -53,7 +53,8 @@ $(document).ready(function() {
                 mapview.drawCities(ctx, data);
             }
             // Store whatever data we got in session so that it can be accessed later
-            sessionStorage.setItem("data", JSON.stringify(data));
+            sessionStorage.setItem("mapzones", JSON.stringify(data['mapzones']));
+            sessionStorage.setItem("cities", JSON.stringify(data['cities']));
 
             // Bind mouse event -- receive mouse click on canvas layer two
             $(document).bind('mouseup', function () {
@@ -65,7 +66,9 @@ $(document).ready(function() {
 
             // Bind page reload event -- clear some of the cached stuff when the player manually reloads
             $('body').bind('beforeunload',function(){
-                sessionStorage.clear("stuff");
+                sessionStorage.clear("mapzones");
+                sessionStorage.clear("cities");
+                sessionStorage.clear("clans");
                 sessionStorage.clear("news");
             });
 
@@ -76,7 +79,7 @@ $(document).ready(function() {
                     dataType: "json",
                     success: function(data) {
 
-                        if ((data['clans']) && (JSON.stringify(data) != sessionStorage.getItem("stuff")))
+                        if ((data['clans']) && (JSON.stringify(data['clans']) != sessionStorage.getItem("clans")))
                         {
                             var c = document.getElementById("stuff");
                             var ctx = c.getContext("2d");
@@ -84,7 +87,7 @@ $(document).ready(function() {
                             ctx.beginPath();
                             mapview.drawClans(ctx, data);
                         }
-                        sessionStorage.setItem("stuff", JSON.stringify(data));
+                        sessionStorage.setItem("clans", JSON.stringify(data['clans']));
                     },
                     complete: function() {
                         // Schedule the next request when the current one's complete

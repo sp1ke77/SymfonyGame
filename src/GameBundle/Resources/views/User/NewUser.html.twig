@@ -8,18 +8,15 @@
         <div class="row">
             <div class="col-md-6 pull-left" >
                 <div class="panel panel-default" style="padding: 80px; min-height: 800px">
-                    <form name="submit_registration" action="/submit_registration" method="post">
+                    <form name="newuser" id="newuserform">
                         <ul style="list-style-type: none">
-                            <small><li>username  <input type="text" name="username" ></li>
-                            <li>email <input type="text" name="email"></li>
+                            <small><li>username  <input type="text" name="username" id="username" ></li>
+                            <li>email <input type="text" name="email" id="email"></li>
                             <br>
-                            <li>password <input type="password" name="password1">
-                            <li>retype password <input type="password" name="password2"></li>
+                            <li>password <input type="password" name="password" id="password1">
+                            <li>retype password <input type="password" id="password2"></li>
                             <br>
-                            <li>your name <input type="text" name="displayname" maxlength="46"></li>
-                            <li>date of birth <input type="date" name="dateofbirth"></li>
-                            <br>
-                            <li><input type="submit"></li></small>
+                            <li><input type="submit" id="submit_registration"></li></small>
                         </ul>
                     </form>
                 </div>
@@ -27,7 +24,7 @@
             <div class="col-md-6 pull-right">
                 <div class="panel panel-default "style="padding: 80px; min-height: 800px">
                     <p>If you do not have an account, please register one.</p>
-                    <p>Username must be unique.</p>
+                    <p id="responsetext" style="color:red;">Email must be unique.</p>
                 </div>
             </div>
 
@@ -35,4 +32,35 @@
 
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+$(document).ready(function() {
+    $("#submit_registration").bind('click', function() {
+        event.preventDefault();
+        var password1 = $('#password1').val();
+        var password2 = $('#password2').val();
+        if (password1 != password2) {
+            $('#responsetext').text("Passwords do not match");
+        } else {
+            //var form = $("#newuserform").serialize();
+            //console.log(form);
+            $.ajax({
+                url: "/submit_registration",
+                method: "post",
+                contentType: "application/json",
+                data: $("#newuserform").serialize(),
+                success: function(result) {
+                    console.log('result: ' + result);
+                    $('#responsetext').text("Registration successful! Redirecting ...")
+                }
+            });
+        }
+    });
+
+});
+</script>
 {% endblock %}

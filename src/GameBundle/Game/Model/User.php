@@ -9,41 +9,46 @@
 namespace GameBundle\Game\Model;
 
 use \Exception as Exception;
+use GameBundle\Game\DBCommon;
 
 /**
  * Class User
  * @package GameBundle\Game
  */
-class User
+class User extends GameEntity
 {
     /**
      * @var DBCommon $db
      */
     protected $db;
 
-    /**
-     * @var int $userid
-     */
-    protected $userid;
-
     protected $username;
 
-    /**
-     * @var string $int
-     */
-    protected $name;
     /**
      * @var string $email
      */
     protected $email;
     /**
-     * @var
-     */
-    protected $dateofbirth;
-    /**
      * @var string $password
      */
     protected $password;
+
+    /**
+     * @return mixed
+     */
+    public function getCharacterid()
+    {
+        return $this->characterid;
+    }
+
+    /**
+     * @param mixed $characterid
+     */
+    public function setCharacterid($characterid)
+    {
+        $this->characterid = $characterid;
+    }
+    protected $characterid;
 
     /**
      * @param int $userid
@@ -55,7 +60,7 @@ class User
             return;
         }
 
-        $this->userid = $userid;
+        $this->id = $userid;
     }
 
     /**
@@ -66,45 +71,6 @@ class User
         $this->db = $db;
     }
 
-    /**
-     * @return int
-     * @throws Exception
-     */
-    public function load()
-    {
-        if (!isset($this->db))
-        {
-            throw new Exception('App is trying to query but User.php db variable is not set.');
-        }
-        $query = 'select * from game.user where userid = "' . $this->userid . '";';
-        $this->db->setQuery($query);
-        $userObj = $this->db->loadObject();
-
-        $this->username = $userObj->username;
-        $this->name = $userObj->displayname;
-        $this->email = $userObj->email;
-    }
-
-    /**
-     * @return int
-     * @throws Exception
-     */
-    public function insert()
-    {
-        if (!isset($this->db))
-        {
-            throw new Exception('App is trying to query but User.php db container is not set.');
-        }
-
-        // UPCOMING -- checks for username uniqueness before inserting
-
-        $query = 'INSERT INTO game.user (username, displayname, password, email, date_of_birth)
-                      VALUES("' . $this->username . '", "' . $this->name . '", "' . $this->password . '", "'
-                                    . $this->email . '",  "' . $this->dateofbirth . '");';
-        $this->db->setQuery($query);
-        $this->db->query();
-        $this->userid = $this->db->getLastInsertId();
-    }
     /**
      * @return mixed
      */
@@ -124,22 +90,6 @@ class User
     /**
      * @return string
      */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
     public function getEmail()
     {
         return $this->email;
@@ -151,22 +101,6 @@ class User
     public function setEmail($email)
     {
         $this->email = $email;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDateofbirth()
-    {
-        return $this->dateofbirth;
-    }
-
-    /**
-     * @param mixed $dateofbirth
-     */
-    public function setDateofbirth($dateofbirth)
-    {
-        $this->dateofbirth = $dateofbirth;
     }
 
     /**

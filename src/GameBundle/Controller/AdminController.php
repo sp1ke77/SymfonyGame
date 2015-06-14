@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Temporary
-use GameBundle\Game\Model\Clan;
+use GameBundle\Game\Model\User;
 
 class AdminController extends Controller
 {
@@ -24,16 +24,9 @@ class AdminController extends Controller
 
     public function testAction()
     {
-        $db = $this->get('db');
-        $rules = $this->get('service_rules');
-        $clan = new Clan(15);
-        $clan->setDb($db);
-        $clan->load();
-        $request = $rules->createRequest($clan, 'holiday', '4,5');
-        $output = $rules->submit($request);
-        echo '<pre>';
-        print_r($output);
-        die();
+        $loginService = $this->get('service_login');
+        $loginService->createNewUser('doom', 'doom', 'doom');
+
         return new RedirectResponse('/admin');
     }
 
