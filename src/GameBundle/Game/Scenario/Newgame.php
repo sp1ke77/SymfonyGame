@@ -512,10 +512,6 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE kingdom;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "DROP TABLE city;";
         $this->db->setQuery($query);
         $this->db->query();
@@ -532,15 +528,19 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE tribe;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
-        $query = "DROP TABLE player;";
-        $this->db->setQuery($query);
-        $this->db->query();
-
         $query = "DROP TABLE agent;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "DROP TABLE buildinglist;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "DROP TABLE persona;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        $query = "DROP TABLE useraccount;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -566,7 +566,7 @@ class Newgame
         // Here is the user info gathered during the account creation process.
         // A characterid value of 0 means the player has no character and will
         // produce a prompt to go create one on login.
-        $query = "CREATE TABLE game.user (
+        $query = "CREATE TABLE game.useraccount (
                           id INT NOT NULL AUTO_INCREMENT,
                           username VARCHAR(18),
                           password VARCHAR(28),
@@ -655,7 +655,7 @@ class Newgame
                           insularity NUMERIC(3,2) DEFAULT 0,
                           spirituality NUMERIC(3,2) DEFAULT 0,
                           sumptuousness NUMERIC(3,2) DEFAULT 0,
-                          culture ENUM('Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu') NULL,
+                          culture ENUM('Kananu','Hurru','Luwwiyu','Tejenu','Keftiu','Amurru','Shasu') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -687,7 +687,7 @@ class Newgame
         // Most of the gameplay surrounds the doings of characters, who are understood to be the merchant classes living
         // in the urban centers. Players, additionally, also begin with allegiance to a kingdom and are assumed to be
         // foreign envoys by origin.
-        $query = "CREATE TABLE game.character (
+        $query = "CREATE TABLE game.agent (
                           id INT NOT NULL AUTO_INCREMENT,
                           isPlayer BOOL DEFAULT FALSE,
                           ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
@@ -696,11 +696,11 @@ class Newgame
                           x INT NULL,
                           y INT NULL,
                           named VARCHAR(45) NULL,
-                          culture ENUM('Egyptian','Canaanite','Hurrian','Luwian','Tejenu','Keftiu','Amurru','Shasu','Sangaru','Hittite') NULL,
+                          culture ENUM('Kananu','Hurru','Luwwiyu','Tejenu','Keftiu','Amurru','Shasu') NULL,
                           city INT NULL,
                           holdings INT NULL,
                           persona INT NULL,
-                          allegiance ENUM('Egypt', 'Babylon', 'Hattusa', 'none') NULL,
+                          allegiance ENUM('Egypt', 'Babylon', 'Hatti', 'none') NULL,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();
@@ -712,10 +712,10 @@ class Newgame
                           quay INT DEFAULT 0,
                           caravansary INT DEFAULT 0,
                           garden INT DEFAULT 0,
-                          beerhouse INT DEFAULT O,
+                          beerhouse INT DEFAULT 0,
                           barque INT DEFAULT 0,
-                          shrine INT DEFAULT O,
-                          palace INT DEFAULT O,
+                          shrine INT DEFAULT 0,
+                          palace INT DEFAULT 0,
                           PRIMARY KEY (id));";
         $this->db->setQuery($query);
         $this->db->query();

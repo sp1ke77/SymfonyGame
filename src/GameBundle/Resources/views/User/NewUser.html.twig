@@ -1,6 +1,6 @@
 {% extends 'GameBundle::layout.html.twig' %}
 
-{% block title %}Adon Melech - Registration{% endblock %}
+{% block title %}Myrhh Trader - Registration{% endblock %}
 
 {% block content %}
 
@@ -55,7 +55,8 @@ $(document).ready(function() {
                 data: $("#newuserform").serialize(),
                 success: function(result) {
                     console.log('result: ' + result);
-                    $('#responsetext').text("Registration successful! Redirecting ...")
+                    $('#responsetext').attr('style', 'color:green').text("Registration successful! Redirecting ...");
+                    window.location.replace('/character');
                 }
             });
         }

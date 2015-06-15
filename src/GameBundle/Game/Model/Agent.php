@@ -5,7 +5,7 @@ namespace GameBundle\Game\Model;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
-class Character extends GameEntity implements IMappable
+class Agent extends GameEntity implements IMappable
 {
     protected $isPlayer;
     protected $ptype;

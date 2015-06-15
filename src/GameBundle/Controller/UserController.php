@@ -5,13 +5,11 @@ namespace GameBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GameBundle\Game\DBCommon;
-use GameBundle\Game\Model\User;
-use GameBundle\Game\Model\Character;
-use \Exception as Exception;
+use GameBundle\Game\Model\Agent;
+use GameBundle\Game\Model\UserAccount;
+use GameBundle\Game\Model\Factories\AgentFactory;
 
 /**
  * Class UserController
@@ -19,7 +17,6 @@ use \Exception as Exception;
  */
 class UserController extends Controller
 {
-
     /**
      * @return RedirectResponse
      */
@@ -81,8 +78,7 @@ class UserController extends Controller
         {
             // Eventually we will log each time this happens and ban IPs that regularly
             // submit requests with the wrong number of parameters
-            return new JsonResponse('{"Result":"Something went way wrong, friend."}');
-            // Redirect to Oops You Fuck Up page
+            return new RedirectResponse('/error');
         }
 
         $username = explode('=', $contents[0])[1];
@@ -95,41 +91,61 @@ class UserController extends Controller
         if ($results["logged in"] == true) {
             $session->set('logged_in', true);
             $session->set('user_id', $results["user id"]);
-            $session->set('username', $results["username"]);
             return new JsonResponse(json_encode('{"Result":"Successfully logged in as ' . $username . '"}'));
             // Check for a character and redirect to either character creation or mapview
         } else {
-            return new JsonResponse(json_encode('{"Result":"Create account failed"}'));
-            // Redirect to Oops You Fuck Up page
+            return new RedirectResponse('/error');
         }
     }
 
     function characterOverviewAction()
     {
+        /** @var DBCommon $db */
+        $db = $this->get('db');
         $session = $this->get('session');
         $loginService = $this->get('service_login');
+        $agentService = $this->get('service_agent');
 
         $userid = $session->get('user_id');
-        $characterid = $loginService->checkForCharacter($userid);
+        $agentid = $loginService->checkForCharacter($userid);
 
-        if (!empty($characterid)) {
-            $session->set('character_id', $characterid);
-            $character = new Character($characterid);
-            $character->load();
+        if (!empty($agentid)) {
+            $session->set('aid', $agentid);
+            $mvid = $agentService->getMapviewID($agentid);
+            $session->set('mvid', $mvid);
 
-            return $this->render(
-                'GameBundle:User:character_overview.html.twig',
-                array('foundCharacter' => true,
-                    'name' => $character->getNamed())
-            );
+            // Find and set the session->mvid property -- the topleft tile to display
+
+            return $this->render('GameBundle:Game:mapview_overview.html.twig');
         } else {
-            return $this->render(
-                'GameBundle:User:character_overview.html.twig',
-                array('foundCharacter' => false)
-            );
+            return $this->render('GameBundle:User:CharacterCreation.html.twig');
         }
 
         // If the player is logged in, output the character details or, in the case of no character
         // extant for the user currently logged in, a link to the character creation process
+    }
+
+    function createCharacterAction()
+    {
+        /** @var DBCommon $db */
+        $db = $this->get('db');
+        $session = $this->get('session');
+
+        $named = $_POST['name'];
+        $culture = $_POST['culture'];
+        $city = $_POST['city'];
+        $allegiance = $_POST['liege'];
+
+        $userid = $session->get('user_id');
+        $user = new UserAccount($userid);
+        $user->setDb($db);
+        $user->load();
+
+        $AgentFactory = new AgentFactory();
+        $AgentFactory->setDb($db);
+        $id = $AgentFactory->factory($user->getId(), $named, $culture, $city, $allegiance);
+        $session->set('aid', $id);
+        return new RedirectResponse('/character');
+
     }
 }

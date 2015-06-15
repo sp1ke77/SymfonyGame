@@ -8,6 +8,11 @@ services:
     calls:
       - [setDb, ["@db"]]
 
+  service_agent:
+    class: GameBundle\Services\AgentService
+    calls:
+      - [setDb, ["@db"]]
+
   service_map:
     class: GameBundle\Services\MapService
     calls:

@@ -1,0 +1,94 @@
+{% extends 'GameBundle::layout.html.twig' %}
+
+{% block title %}Adon Melech - Character Overview{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h3>create a new character</h3>
+            <div class="row">
+            <form name="newchar" id="newchar" action="/create_character" method="post">
+                <div class="col-md-6">
+                    <ul>
+                    <li>name your character <input type="text" name="name" id="character_name"></li>
+                    <li>
+                        <label>select a culture
+                        <select name="culture" style="color:black" id="culture">
+                            <option value="Kanani">Kanani</option>
+                            <option value="Hurri">Hurri</option>
+                            <option value="Luwwiya">Luwwiya</option>
+                            <option value="Tejeni">Tejeni</option>
+                            <option value="Kefti">Kefti</option>
+                            <option value="Amurri">Amurri</option>
+                            <option value="Shasi">Shasi</option>
+                        </select>
+                        </label>
+                    </li>
+                    <li>
+                        <label>select a city
+                            <select name="city" style="color:black" id="city">
+                                <option value="Ugarit">Ugarit</option>
+                                <option value="Tyre">Tyre</option>
+                                <option value="Gubla">Gubla</option>
+                                <option value="Qedesh">Qedesh</option>
+                                <option value="Asqalun">Asqalun</option>
+                                <option value="Megiddo">Megiddo</option>
+                                <option value="Shechem">Shechem</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li>personality traits [coming]</li>
+                    <li>
+                        <label>choose a protector to pay tribute
+                            <select name="liege" style="color:black" id="liege">
+                                <option value="Egypt">Egypt</option>
+                                <option value="Babylon">Babylon</option>
+                                <option value="Hatti">Hatti</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li><input type="submit" value="Join game" id="submit"></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <p id="infopanel"></p>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+        var descriptionHelper = new DescriptionHelper();
+
+        $("#character_name").bind('click', function() {
+            $("#infopanel").html("Name your character whatever you like. Ancient names could be quite arbitrary.");
+        });
+
+        $("#culture").bind('click', function() {
+            var selected = $(this).val();
+            $("#infopanel").html(descriptionHelper.getCultureDescription(selected));
+        });
+
+        $("#city").bind('click', function() {
+            var selected = $(this).val();
+            $("#infopanel").html(descriptionHelper.getCityDescription(selected));
+        });
+
+        $("#liege").bind('click', function() {
+            var selected = $(this).val();
+            $("#infopanel").html(descriptionHelper.getLiegeDescription(selected));
+        });
+
+    });
+
+</script>
+
+{% endblock %}

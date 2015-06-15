@@ -15,12 +15,8 @@ use GameBundle\Game\DBCommon;
  * Class User
  * @package GameBundle\Game
  */
-class User extends GameEntity
+class UserAccount extends GameEntity
 {
-    /**
-     * @var DBCommon $db
-     */
-    protected $db;
 
     protected $username;
 
@@ -62,15 +58,6 @@ class User extends GameEntity
 
         $this->id = $userid;
     }
-
-    /**
-     * @param DBCommon $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return mixed
      */

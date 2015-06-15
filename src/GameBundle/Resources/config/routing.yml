@@ -2,6 +2,10 @@ game_homepage:
     path:     /
     defaults: { _controller: GameBundle:Default:index }
 
+error_page:
+    path:     /error
+    defaults: { _controller: GameBundle:Messages:error }
+
 login:
     path:     /login
     defaults: { _controller: GameBundle:User:login }
@@ -21,6 +25,10 @@ submit_registration:
 character_overview:
     path:     /character
     defaults: { _controller: GameBundle:User:characterOverview }
+
+create_character:
+    path:     /create_character
+    defaults: { _controller: GameBundle:User:createCharacter }
 
 admin_console:
     path:     /admin

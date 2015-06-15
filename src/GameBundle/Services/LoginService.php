@@ -30,7 +30,7 @@ class LoginService
     function doLoginRequest($username, $password)
     {
         // Check if this is in the DB or not.
-        $query = 'select * from game.user where username = "' . $username . '" and password = "' . $password . '"';
+        $query = 'select * from game.useraccount where username = "' . $username . '" and password = "' . $password . '"';
         $this->db->setQuery($query);
         $loginObj = $this->db->loadObject();
 
@@ -39,25 +39,21 @@ class LoginService
             $results["logged in"] = true;
             $results["username"] = $loginObj->username;
             $results["user id"] = $loginObj->id;
-
-            return $results;
         } else {
             $results["logged in"] = false;
         }
-
+        return $results;
     }
 
     function checkForCharacter($userid) {
 
         // Check if this is in the DB or not.
-        $query = 'select * from game.user where id = "' . $userid . '";';
+        $query = 'select * from game.useraccount where id = "' . $userid . '";';
         $this->db->setQuery($query);
         $userObj = $this->db->loadObject();
 
         if (!empty($userObj)) {
-            $results["character id"] = $userObj->characterid;
-            $results["logged in"] = true;
-            return $results;
+            return $userObj->characterid;
         } else {
             return null;
         }
@@ -65,7 +61,7 @@ class LoginService
 
     function createNewUser($username, $password, $email)
     {
-        $query = 'INSERT INTO game.user(username, password, email) VALUES("' . $username . '", "' .$password. '", "' .$email. '");';
+        $query = 'INSERT INTO game.useraccount(username, password, email) VALUES("' . $username . '", "' .$password. '", "' .$email. '");';
         $this->db->setQuery($query);
         $obj = $this->db->query();
         return $obj;            // Boolean
