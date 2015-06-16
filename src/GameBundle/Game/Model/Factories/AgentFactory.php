@@ -36,6 +36,11 @@ class AgentFactory
      */
     public function factory($userid = null, $named, $culture, $city, $allegiance)
     {
+        // The exposed front of this class is simply a strategy
+        // Invoked with no userid, we assume an NPC agent is being created by the
+        // simulation and randomize any fields.
+        // If a userid is given, we assume a player character.
+
         $id = null;
         if (is_null($userid))
         {
@@ -57,33 +62,43 @@ class AgentFactory
      */
     private function newPlayerAgent($userid, $named, $culture, $city, $allegiance) {
 
+        // Create an undefined object to be assembled and pass it the DB
         $agent = new Agent(null);
+        $agent->setDb($this->db);
+
+        // Plunk, plonk, plonk
         $agent->setUserid($userid);
         $agent->setNamed($named);
         $agent->setCulture($culture);
 
+        // Get the player's chosen city out of the DB
         $query = 'SELECT * FROM game.city WHERE named="' .$city. '";';
         $this->db->setQuery($query);
         $this->db->query();
         $dbObject = $this->db->loadObject();
 
+        // Plunk, plonk, city data
         $agent->setX($dbObject->x);
         $agent->setY($dbObject->y);
         $agent->setCity($dbObject->id);
         $agent->setActivity('idle');
 
+        // Create a new buildinglist and point the value of $this->holdings to its primary key
         $query = 'INSERT INTO game.buildinglist(estate) VALUES(1);';
         $this->db->setQuery($query);
         $this->db->query();
         $agent->setHoldings($this->db->getLastInsertId());
 
+        // Ditto for a blank persona
         $query = 'INSERT INTO game.persona(fame, honor, controversy) VALUES(0,0,0);';
         $this->db->setQuery($query);
         $this->db->query();
         $agent->setPersona($this->db->getLastInsertId());
 
+        // Plunk
         $agent->setAllegiance($allegiance);
 
+        // Insert the new Agent into SQL and return the primary key
         $agent->update();
         return $this->db->getLastInsertId();
     }

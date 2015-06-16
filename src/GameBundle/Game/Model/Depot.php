@@ -183,21 +183,6 @@ class Depot extends GameEntity
         $this->dyes = $dyes;
     }
 
-    /**
-     * @return DBCommon
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param DBCommon $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
 
     /*
      *

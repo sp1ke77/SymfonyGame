@@ -8,26 +8,22 @@
 
 namespace GameBundle\Game\Model;
 
-use \Exception as Exception;
-use GameBundle\Game\DBCommon;
-
 /**
  * Class User
  * @package GameBundle\Game
  */
 class UserAccount extends GameEntity
 {
-
-    protected $username;
-
     /**
+     * @var string $username
      * @var string $email
-     */
-    protected $email;
-    /**
      * @var string $password
+     * @var int $characterid
      */
+    protected $username;
+    protected $email;
     protected $password;
+    protected $characterid;
 
     /**
      * @return mixed
@@ -44,7 +40,6 @@ class UserAccount extends GameEntity
     {
         $this->characterid = $characterid;
     }
-    protected $characterid;
 
     /**
      * @param int $userid
@@ -55,9 +50,9 @@ class UserAccount extends GameEntity
         {
             return;
         }
-
         $this->id = $userid;
     }
+
     /**
      * @return mixed
      */
@@ -105,6 +100,4 @@ class UserAccount extends GameEntity
     {
         $this->password = $password;
     }
-
-
 }

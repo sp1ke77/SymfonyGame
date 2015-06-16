@@ -36,15 +36,18 @@ class DefaultController extends Controller
         $logged_in = $session->get('logged_in');
         $username = $session->get('username');
 
-        if (!$logged_in) { $username = "stranger"; }
+        $aid = null;
+        if (!$logged_in) {
+            $username = "stranger";
+        } else {
+            // Get the Agent id of the logged_in user
+            $aid = $session->get('aid');
+        }
 
-        $aid = $session->get('aid');
-        /** @var AgentService $agentService */
-
-        if (!empty($aid))
+        // If said Agent id is numeric, assume a character exists
+        if (is_numeric($aid))
         {
             $agentService = $this->get('service_agent');
-            $agentService->setDb($db);
             $mvid = $agentService->getMapviewID($aid);
             $session->set('mvid', $mvid);
             $route = '/mapview/' . $mvid;

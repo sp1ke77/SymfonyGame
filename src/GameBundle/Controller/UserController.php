@@ -34,7 +34,7 @@ class UserController extends Controller
 
         $results = $loginService->doLoginRequest($userName, $password);
 
-        if (!isset($results)) {
+        if (empty($results['user id'])) {
             return new RedirectResponse('/registration');
         } else {
             $session->set('logged_in', true);
@@ -113,10 +113,8 @@ class UserController extends Controller
             $session->set('aid', $agentid);
             $mvid = $agentService->getMapviewID($agentid);
             $session->set('mvid', $mvid);
-
-            // Find and set the session->mvid property -- the topleft tile to display
-
-            return $this->render('GameBundle:Game:mapview_overview.html.twig');
+            $route = '/mapview/' .$mvid;
+            return new RedirectResponse($route);
         } else {
             return $this->render('GameBundle:User:CharacterCreation.html.twig');
         }
@@ -146,6 +144,5 @@ class UserController extends Controller
         $id = $AgentFactory->factory($user->getId(), $named, $culture, $city, $allegiance);
         $session->set('aid', $id);
         return new RedirectResponse('/character');
-
     }
 }

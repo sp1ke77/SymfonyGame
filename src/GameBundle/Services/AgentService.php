@@ -19,7 +19,7 @@ class AgentService {
         $topleft['x'] = $character->getX() - 5;
         $topleft['y'] = $character->getY() - 3;
 
-        $query = "SELECT id FROM mapzone WHERE x=" .$topleft['x']. " AND y=" .$topleft['y']. ";";
+        $query = "SELECT id FROM game.mapzone WHERE x=" .$topleft['x']. " AND y=" .$topleft['y']. ";";
         $this->db->setQuery($query);
         $this->db->query();
         $mvid = $this->db->loadResult();

@@ -32,6 +32,11 @@ abstract class GameEntity
         $this->db = $db;
     }
 
+    public function getDb($db)
+    {
+        return $this->db;
+    }
+
     /**
      * @return int
      */
@@ -78,17 +83,19 @@ abstract class GameEntity
 
     public function update()
     {
-        $table = get_called_class();
+        $called_class = get_called_class();
+        $class_name = explode('\\', get_class($this));
+        $table = strtolower(array_pop($class_name));
 
         /** @var array $values [k=>v]::[k=the property name, v=the property value] */
         $values = array();
 
-        $reflectionClass = new ReflectionClass($table);
+        $reflectionClass = new ReflectionClass($called_class);
         $properties = $reflectionClass->getProperties();
 
         foreach($properties as $node){
             $propertyName = $node->getName();
-            if($propertyName != 'id' && $propertyName != 'db')
+            if($propertyName != 'db')
             {
                 $values[$propertyName] = $this->{$propertyName};
             }
@@ -113,7 +120,7 @@ abstract class GameEntity
             $data = array_values($values);
 
             //insert query
-            $query = 'INSERT INTO '.$table .' ('.$fields.') VALUES("'.implode('", "',$data).'")';
+            $query = 'INSERT INTO game.'.$table .' ('.$fields.') VALUES("'.implode('", "',$data).'")';
         }
 
         $this->db->setQuery($query);

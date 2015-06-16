@@ -197,21 +197,4 @@ class BuildingList extends GameEntity implements IDepotHaver
     {
         $this->coin = $coin;
     }
-
-    /**
-     * @return DBCommon
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param DBCommon $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
 }

@@ -149,20 +149,4 @@ class City extends GameEntity
         $this->y = $y;
     }
 
-    /**
-     * @return DBCommon
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param DBCommon $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
 }
