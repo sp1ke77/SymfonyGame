@@ -30,28 +30,23 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        /** @var DBCommon $db */
-        $db =  $this->get('db');
         $session = $this->get('session');
         $logged_in = $session->get('logged_in');
         $username = $session->get('username');
 
-        $aid = null;
+        $userid = null;
+
         if (!$logged_in) {
             $username = "stranger";
         } else {
             // Get the Agent id of the logged_in user
-            $aid = $session->get('aid');
+            $userid = $session->get('user_id');
         }
 
         // If said Agent id is numeric, assume a character exists
-        if (is_numeric($aid))
+        if (is_numeric($userid))
         {
-            $agentService = $this->get('service_agent');
-            $mvid = $agentService->getMapviewID($aid);
-            $session->set('mvid', $mvid);
-            $route = '/mapview/' . $mvid;
-            return new RedirectResponse($route);
+            return new RedirectResponse('/joingame');
         }
 
         return $this->render('GameBundle:Default:index.html.twig', array(

@@ -22,9 +22,9 @@ submit_registration:
     path:     /submit_registration
     defaults: { _controller: GameBundle:User:submitRegistration }
 
-character_overview:
-    path:     /character
-    defaults: { _controller: GameBundle:User:characterOverview }
+join_game:
+    path:     /joingame
+    defaults: { _controller: GameBundle:User:joinGame }
 
 create_character:
     path:     /create_character

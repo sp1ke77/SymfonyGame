@@ -115,7 +115,7 @@ class Behavior
         }
 
         // Some stuff that happens occasionally regardless of the current behavior ...
-        // Clans periodically process their food-type trade tokens for personal consumption
+        // Clans periodically process their food-type tokens for personal consumption
         if (rand(1, 10) == 10) {
             $yield = $clan->getFood() + $depot->fillLarder();
             $this->clans->setFood($clan->getId(), $yield);

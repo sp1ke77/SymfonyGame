@@ -45,18 +45,13 @@ class LoginService
         return $results;
     }
 
-    function checkForCharacter($userid) {
+    function getCharacterByUserID($userid) {
 
         // Check if this is in the DB or not.
-        $query = 'select * from game.useraccount where id = "' . $userid . '";';
+        $query = 'select characterid from game.useraccount where id=' . $userid . ';';
         $this->db->setQuery($query);
-        $userObj = $this->db->loadObject();
-
-        if (!empty($userObj)) {
-            return $userObj->characterid;
-        } else {
-            return null;
-        }
+        $result = $this->db->loadResult();
+        return $result;
     }
 
     function createNewUser($username, $password, $email)

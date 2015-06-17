@@ -15,7 +15,24 @@ class City extends GameEntity
     protected $named;
     protected $imgsmall;
     protected $description;
+    protected $tradeincome;
     protected $depot;
+
+    /**
+     * @return mixed
+     */
+    public function getTradeincome()
+    {
+        return $this->tradeincome;
+    }
+
+    /**
+     * @param mixed $tradeincome
+     */
+    public function setTradeincome($tradeincome)
+    {
+        $this->tradeincome = $tradeincome;
+    }
     protected $king;
     protected $priest;
     protected $x;

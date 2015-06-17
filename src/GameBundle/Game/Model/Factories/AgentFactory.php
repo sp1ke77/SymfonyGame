@@ -84,13 +84,13 @@ class AgentFactory
         $agent->setActivity('idle');
 
         // Create a new buildinglist and point the value of $this->holdings to its primary key
-        $query = 'INSERT INTO game.buildinglist(estate) VALUES(1);';
+        $query = 'INSERT INTO game.estate(id) VALUES(null);';
         $this->db->setQuery($query);
         $this->db->query();
         $agent->setHoldings($this->db->getLastInsertId());
 
         // Ditto for a blank persona
-        $query = 'INSERT INTO game.persona(fame, honor, controversy) VALUES(0,0,0);';
+        $query = 'INSERT INTO game.persona(id) VALUES(null);';
         $this->db->setQuery($query);
         $this->db->query();
         $agent->setPersona($this->db->getLastInsertId());

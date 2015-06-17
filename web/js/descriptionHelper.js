@@ -4,39 +4,45 @@ function DescriptionHelper() {
         switch (culture)
         {
             case "Kanani":
-                return "The Kananu live in the fertile coasts and valleys of the southlands. They are a hardworking " +
-                        "and well-fed bunch, most dwelling in cities and on the grounds of prosperous rural estates. " +
-                        "Kananu are proudest of their temples, and swear upon a bewildering array of names coming from " +
-                        "all the lands of the world.";
+                return "The Kananu live in the fertile coasts and valleys of the southlands. " +
+                        "An urbane lot above all, so much so that they never call themselves 'Kananu', preferring Tyrit, " +
+                        "Megidit, Asqalunit and so forth and expecting foreigners to know or care what these words mean. " +
+                        "The people of these mighty cities are proud, querelsome and vain. All of their favorite gods are cattle.";
             case "Hurri":
-                return "The Hurru come from the eastern deserts in the hinterlands of Babylonia. Among them are the " +
+                return "The Hurru come from the northern deserts in the hinterlands of Babylonia. Among them are the " +
                         "former palace guards of Haran, countless exiled nobles of Mitanni and a mass of the displaced. " +
-                        "Dusty, uncouth and speaking in an incomprehensible accent, Hurru are reputed as tamers and " +
-                        "thieves of horses.";
+                        "Dusty, uncouth and speaking in an incomprehensible accent, Hurru are first among horse-tamers and " +
+                        "sneak thieves and last to understand references to popular poems.";
             case "Luwwiya":
                 return "The Luwwiyu are the folk of the Tin Lands to the distant north, a refined and shrewd lot whose " +
-                        "immigration has been out of opportunism rather than desperation. Famous for their knowledge of " +
-                        "both the stars and distant lands, gleaned from their far-flung trading expeditions, Luwwiyans " +
-                        "have also acquired a reputation as not a little bit subtle and untrustworthy.";
+                        "immigration has been out of opportunism rather than desperation. Armed with knowledge of " +
+                        "the stars and of distant lands gleaned from their far-flung trading expeditions, Luwwiyu " +
+                        "have also acquired a reputation for being somewhat subtle and untrustworthy.";
             case "Tejeni":
-                return "The Tejenu are recent arrivals from beyond the Great Green in the west. Few have heard of them " +
-                        "even a thousand steps inland; most people who have met a Tejeni were robbed. Giant brutes " +
-                        "without any regard for the law or cleanliness, Tejenu like loud-talking, reciting " +
-                        "crude poetry and carrying weapons in public.";
+                return "Tejenu are recent arrivals from beyond the western seas. Few have heard of them " +
+                        "a thousand leagues inland. Most people who have encountered a Tejeni were robbed, swindled or " +
+                        "given treasure stolen from a baal's house in exchange for olives and wine. They like loud " +
+                        "fights, crude poetry and carrying weapons in public and are, for some reason, almost all men.";
             case "Kefti":
-                return "The Keftiu are the dwellers of the Isles in the Great Green. They are said to be the most " +
-                        "learned people in the world, more erudite even than the Egyptians. Among the works of their palaces " +
-                        "are many mysterious things, likenesses whose blue and green hues dazzle the eye and amulets " +
-                        "sealed with the blood of human sacrifice.";
+                return "The Keftiu live on isles in the great green ocean and are the most " +
+                        "erudite people in the world. Never double-cross a Kefti, so goes the Egyptian fable, or " +
+                        "your brother might eat poisoned oysters and die an agonizing " +
+                        "death. They are said to be able to locate gold by singing and to steal and " +
+                        "sacrifice other peoples' children in caves. ";
             case "Amurri":
-                return "The Amurru are the military princes of the mountainous north. Like the Hurru, they come from " +
-                        "Babylonia. Tenacious desert fighters by tradition -- and a vaunted tradition it is -- Amurrit " +
-                        "tribes are feared on the field even by the bronze-bedecked armies of the great kings. Many who " +
-                        "dismissed their tribal alliance was broken by it.";
+                return "The Amurru are the military princes of the mountains. Like the Hurru, they come from " +
+                        "the wastes at the footsteps of Babylon. Amurrit tribes observe scrupulous honor codes " +
+                        "and as such have many enemies " +
+                        "who spread calumnies about them far and wide such as that they are hard-nosed, violent-tempered " +
+                        "and imperious, given to putting hapless travelers on trial according to obscure offenses known " +
+                        "only to their elders, and that moreover they won't marry their children to foreigners and nobody knows " +
+                        "what happens on their secret holiday; how boring.";
             case "Shasi":
-                return "The Shasu are the nomads of the Qedem, the remote deserts of the south and of Goshen in Egypt. " +
-                        "Deeply secretive and insular, Shasu are rarely seen outside their tribal camps in the wild and " +
-                        "waste. Their priests are said to be terrifying magicians, capable of summoning forth gods from smoke.";
+                return "The Shasu are the nomads of the Sinai, the remote deserts of the south and of Goshen in Egypt. " +
+                        "Deeply secretive and insular, Shasu are rarely seen outside their pastoral camps. Their priests " +
+                        "are rumored to be terrifying magicians who consort with djinni and breed magical vipers for " +
+                        "use in regicides, but most of the people spreading these rumors have never encountered a shas " +
+                        "outside the context of buying smoked meat at a market.";
         }
     };
 

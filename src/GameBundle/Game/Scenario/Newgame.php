@@ -334,7 +334,7 @@ class Newgame
                 "Timnah", "Magdiel", "Elah", "Zepho", "Kenaz", "Mizzah", "Nathath")
         );
 
-        for ($i = 1; $i < 72; $i++)
+        for ($i = 1; $i < 95; $i++)
         {
             // Pick a culture group
             $cg = array_rand($tribes);
@@ -548,6 +548,10 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
+        $query = "DROP TABLE tribe;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
         $query = "DROP TABLE depot;";
         $this->db->setQuery($query);
         $this->db->query();
@@ -592,7 +596,7 @@ class Newgame
                           id INT NOT NULL AUTO_INCREMENT,
                           named CHAR(45) NULL,
                           description VARCHAR(160) NULL,
-                          coin INT NULL,
+                          tradeincome INT DEFAULT 0,
                           king INT NULL,
                           priest INT NULL,
                           x int NULL,
@@ -681,7 +685,7 @@ class Newgame
 
         // Characters are either players (in which case UserID will point to a user's primary key) or agents (in which
         // case PType will not be null). Characters are necessarily tied to a city by an estate, upon which they can
-        // build a variety of addons (holdings points to the ID of a buildinglist table). Characters also have a persona
+        // build a variety of addons (holdings points to the ID of an estate table). Characters also have a persona
         // containing all their "character-sheet" details.
         //
         // Most of the gameplay surrounds the doings of characters, who are understood to be the merchant classes living
@@ -705,10 +709,10 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "CREATE TABLE game.buildinglist (
+        $query = "CREATE TABLE game.estate (
                           id INT NOT NULL AUTO_INCREMENT,
-                          marketstall INT DEFAULT 0,
                           depot INT DEFAULT 0,
+                          field INT DEFAULT 0,
                           quay INT DEFAULT 0,
                           caravansary INT DEFAULT 0,
                           garden INT DEFAULT 0,

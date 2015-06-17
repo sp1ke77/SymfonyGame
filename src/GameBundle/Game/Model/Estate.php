@@ -5,38 +5,25 @@ namespace GameBundle\Game\Model;
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Rules\Interfaces\IDepotHaver;
 
-class BuildingList extends GameEntity implements IDepotHaver
+class Estate extends GameEntity implements IDepotHaver
 {
-    // Table columns
-    protected $marketstall;
-    protected $depot;
-    protected $quay;
-    protected $caravansary;
-    protected $garden;
-    protected $beerhouse;
-    protected $barque;
-    protected $clanhome;
-    protected $shrine;
-    protected $palace;
+    // This is a bank of booleans, basically, represented in the DB as integers.
+    // A value of 1 means that the building is present.
+
+    protected $depot;           // Buy and sell tradegoods
+    protected $field;           // Create food goods
+    protected $quay;            // Trade range increased, chance of trade opportunity
+    protected $caravansary;     // Same as "Caravansary", bonuses stack
+    protected $garden;          // Improved diplomacy with clans
+    protected $beerhouse;       // Recruit mercanaries
+    protected $barque;          // Improved prestige gain
+    protected $clanhome;        // Field a clan unit
+    protected $shrine;          // Can buy temporary protection against honor loss
+    protected $palace;          // Field an army unit
 
     // Necessary for implementing trade interface
-    protected $coin;
-
-    /**
-     * @return mixed
-     */
-    public function getMarketstall()
-    {
-        return $this->marketstall;
-    }
-
-    /**
-     * @param mixed $marketstall
-     */
-    public function setMarketstall($marketstall)
-    {
-        $this->marketstall = $marketstall;
-    }
+    protected $coin;            // Current bartering power
+    protected $rents;           // Income from city activity
 
     /**
      * @return mixed

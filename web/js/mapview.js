@@ -41,7 +41,7 @@ function MapView() {
                     ctx.drawImage(imgrsc.shallowsea, x2, y2);
                     break;
             }
-            ctx.fillText('id=' + data['mapzones'][i].id, x2 + 15, y2 + 15);
+            //ctx.fillText('id=' + data['mapzones'][i].id, x2 + 15, y2 + 15);
         }
     };
 

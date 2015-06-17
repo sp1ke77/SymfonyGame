@@ -27,11 +27,16 @@
                 <div class="container">
                     <div class="header">
                         <ul class="nav nav-pills pull-right" role="tablist">
-                            <li role="presentation" {# if currentPath == '/mapview/*' %}<!--class="active"-->{# endif #}><a href="/">Login</a></li>
-                            <li role="presentation" {# if currentPath == '/mapview/*' %}<!--class="active"-->{# endif #}><a href="/">Map</a></li>
-                            <li role="presentation" {# if currentPath == '/mapview/*' %}<!--class="active"-->{# endif #}><a href="/">Estate</a></li>
-                            <li role="presentation" {# if currentPath == '/mapview/*' %}<!--class="active"-->{# endif #}><a href="/">Trade</a></li>
-                            <li role="presentation" {# if currentPath == '/mapview/*' %}<!--class="active"-->{# endif #}><a href="/">Diplomacy</a></li>
+                        {%  if currentPath != '/' %}
+                            <li role="presentation"><a href="/">Map</a></li>
+                            <li role="presentation"><a href="/">Estate</a></li>
+                            <li role="presentation"><a href="/">Trade</a></li>
+                            <li role="presentation"><a href="/">Diplomacy</a></li>
+                        {% endif %}
+                        {%  if currentPath == '/' %}
+                            <li role="presentation"><a href="/login">Login</a></li>
+                            <li role="presentation"><a href="/registration">Sign Up</a></li>
+                        {% endif %}
                         </ul>
                         <h3 class="text-muted">Myrrh Trader</h3>
                     </div>

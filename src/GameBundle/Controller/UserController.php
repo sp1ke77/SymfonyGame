@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use GameBundle\Utils\FrontEndUtils;
 use GameBundle\Game\DBCommon;
-use GameBundle\Game\Model\Agent;
 use GameBundle\Game\Model\UserAccount;
 use GameBundle\Game\Model\Factories\AgentFactory;
+use GameBundle\Services\LoginService;
+use GameBundle\Services\AgentService;
 
 /**
  * Class UserController
@@ -22,33 +24,19 @@ class UserController extends Controller
      */
     function loginAction()
     {
-        /** @var DBCommon $db */
-        $loginService = $this->get('service_login');
-        $session = $this->get('session');
-
-        $userName = $_POST['username'];
+        $username = $_POST['username'];
         $password = $_POST['password'];
-
-        $db = $this->get('db');
-        $loginService->setDb($db);
-
-        $results = $loginService->doLoginRequest($userName, $password);
-
-        if (empty($results['user id'])) {
-            return new RedirectResponse('/registration');
-        } else {
-            $session->set('logged_in', true);
-            $session->set('user_id', $results["user id"]);
-            $session->set('username', $results["username"]);
-            return new RedirectResponse('/');
-        }
+        $this->login($username, $password);
+        return new RedirectResponse('/joingame');
     }
 
+    /**
+     * @return RedirectResponse
+     */
     function logoutAction()
     {
         $session = $this->get('session');
         $session->clear();
-
         return new RedirectResponse('/');
     }
 
@@ -65,84 +53,130 @@ class UserController extends Controller
      */
     function submitRegistrationAction()
     {
-        $session = $this->get('session');
-        $loginService = $this->get("service_login");
-        $request = $this->get('request');
-        $content = $request->getContent();
-
-        // All this nonsense is gonna go into LoginService as a function called
-        // submitRegFormByQString(), in order to accomodate future expansion to the
-        // input security and sanitation system
-        $contents = explode('&', $content);
-        if (count($contents) != 3)
-        {
-            // Eventually we will log each time this happens and ban IPs that regularly
-            // submit requests with the wrong number of parameters
-            return new RedirectResponse('/error');
-        }
-
-        $username = explode('=', $contents[0])[1];
-        $email = explode('=', $contents[1])[1];
-        $password = explode('=', $contents[2])[1];
-
-        $loginService->createNewUser($username, $password, $email);
-        $results = $loginService->doLoginRequest($username, $password);
-
-        if ($results["logged in"] == true) {
-            $session->set('logged_in', true);
-            $session->set('user_id', $results["user id"]);
-            return new JsonResponse(json_encode('{"Result":"Successfully logged in as ' . $username . '"}'));
-            // Check for a character and redirect to either character creation or mapview
-        } else {
-            return new RedirectResponse('/error');
-        }
-    }
-
-    function characterOverviewAction()
-    {
-        /** @var DBCommon $db */
-        $db = $this->get('db');
-        $session = $this->get('session');
         $loginService = $this->get('service_login');
-        $agentService = $this->get('service_agent');
+        $frontEndUtils = new FrontEndUtils();
 
-        $userid = $session->get('user_id');
-        $agentid = $loginService->checkForCharacter($userid);
+        // Better be exactly three arguments to that post
+        $body = $frontEndUtils->parseQueryString($this->get('request')->getContent(), 3);
 
-        if (!empty($agentid)) {
-            $session->set('aid', $agentid);
-            $mvid = $agentService->getMapviewID($agentid);
-            $session->set('mvid', $mvid);
-            $route = '/mapview/' .$mvid;
-            return new RedirectResponse($route);
+        if (empty($body))
+        {
+            // Malformed post; wrong number of parameters
+            return new RedirectResponse('/error');
         } else {
-            return $this->render('GameBundle:User:CharacterCreation.html.twig');
+            if ((!isset($body['username'])) || (!isset($body['password'])) || (!isset($body['email']))) {
+                // Nope, malformed post; go away
+                return new RedirectResponse('/error');
+            }
+            $loginService->createNewUser($body['username'], $body['password'], $body['email']);
+            $this->login($body['username'], $body['password']);
+            return new RedirectResponse('/joingame');
         }
-
-        // If the player is logged in, output the character details or, in the case of no character
-        // extant for the user currently logged in, a link to the character creation process
     }
 
     function createCharacterAction()
     {
-        /** @var DBCommon $db */
+        /**
+         * @var DBCommon $db
+         * @var LoginService $loginService
+         */
         $db = $this->get('db');
+        $loginService = $this->get('service_login');
         $session = $this->get('session');
 
+        // This is our post form; eventually we will move to an Ajax query
         $named = $_POST['name'];
         $culture = $_POST['culture'];
         $city = $_POST['city'];
         $allegiance = $_POST['liege'];
 
-        $userid = $session->get('user_id');
-        $user = new UserAccount($userid);
-        $user->setDb($db);
-        $user->load();
+        if ($session->get('user_id') == null) {
+            // No user fool
+            return new RedirectResponse('/');
+        } else {
+            if ($loginService->getCharacterByUserID($session->get('user_id'))) {
+                // You already have a character doofus
+                return new RedirectResponse('/');
+            } else {
+                // Get our User Account out
+                $userid = $session->get('user_id');
+                $user = new UserAccount($userid);
+                $user->setDb($db);
+                $user->load();
 
-        $AgentFactory = new AgentFactory();
-        $AgentFactory->setDb($db);
-        $id = $AgentFactory->factory($user->getId(), $named, $culture, $city, $allegiance);
-        $session->set('aid', $id);
-        return new RedirectResponse('/character');
+                // Create a player character right quick
+                $AgentFactory = new AgentFactory();
+                $AgentFactory->setDb($db);
+                $id = $AgentFactory->factory($user->getId(), $named, $culture, $city, $allegiance);
+                $user->setCharacterid($id);
+                $user->update();
+
+                // Plunk that newly-created agent ID into the session
+                $session->set('aid', $id);
+                return new ReDirectResponse('/joingame');
+            }
+        }
+    }
+
+    function joinGameAction()
+    {
+        /**
+         * @var LoginService $loginService
+         * @var AgentService $agentService
+         */
+        $session = $this->get('session');
+        $loginService = $this->get('service_login');
+        $userid = $session->get('user_id');
+        $agentid = $loginService->getCharacterByUserID($userid);
+        if (!empty($agentid)) {
+            $session->set('aid', $agentid);
+            return new RedirectResponse($this->getMapviewRoute($agentid));
+        } else {
+            return $this->render('GameBundle:User:CharacterCreation.html.twig');
+        }
+    }
+
+    /*
+     *
+     *
+     *                              PRIVATE FUNCTIONS
+     *
+     *
+     */
+
+    /**
+     * @param $username
+     * @param $password
+     * @return JsonResponse|RedirectResponse
+     */
+    private function login($username, $password)
+    {
+        /**
+         * @var LoginService $loginService
+         */
+        $loginService = $this->get('service_login');
+        $session = $this->get('session');
+        $loginResults = $loginService->doLoginRequest($username, $password);
+        if (empty($loginResults['user id'])) {
+            return new RedirectResponse('/error');
+        } else {
+            $session->set('logged_in', true);
+            $session->set('user_id', $loginResults["user id"]);
+            $session->set('username', $loginResults["username"]);
+            return new JsonResponse('{ "Result":"Success","Message:"Logged in as "' .$loginResults['username']. ' }');
+        }
+    }
+
+    /**
+     * @param $agentid
+     * @return RedirectResponse
+     */
+    private function getMapviewRoute($agentid)
+    {
+        $session = $this->get('session');
+        $agentService = $this->get('service_agent');
+        $mvid = $agentService->getMapviewID($agentid);
+        $session->set('mvid', $mvid);
+        return '/mapview/' .$mvid;
     }
 }
