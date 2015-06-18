@@ -201,7 +201,7 @@ class Depot extends GameEntity
      */
     public function GetPlatonic($fieldname)
     {
-        $query = "SELECT id FROM tradegoodplatonic WHERE named='" . strtolower($fieldname) . "';";
+        $query = "SELECT id FROM game.tradegoodplatonic WHERE named='" . strtolower($fieldname) . "';";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -218,14 +218,12 @@ class Depot extends GameEntity
 
         foreach ($properties as $node) {
             $propertyName = $node->getName();
-            if ($propertyName == $good) {
-                $query = 'UPDATE depot SET ' .$propertyName. '=' .($this->{$propertyName} + 1). ' WHERE id=' .$this->getId() . ';';
-                $this->db->setQuery($query);
-                $this->db->query();
+            if ($propertyName == strtolower($good)) {
+                  $query = 'UPDATE game.depot SET ' .$propertyName. '=' .($this->{$propertyName} + 1). ' WHERE id=' .$this->getId() . ';';
+                  $this->db->setQuery($query);
+                  $this->db->query();
             }
         }
-
-        $this->update();
     }
 
     /**
@@ -270,7 +268,7 @@ class Depot extends GameEntity
 
     public function SetValueByString($string, $value)
     {
-        $query = 'UPDATE depot SET ' .strtolower($string). '=' .intval($value). ' WHERE ' .$this->id. ';';
+        $query = 'UPDATE game.depot SET ' .strtolower($string). '=' .intval($value). ' WHERE ' .$this->id. ';';
         $this->db->setQuery($query);
         $this->db->query();
     }
@@ -308,7 +306,7 @@ class Depot extends GameEntity
         $properties = $reflection->getProperties();
         $foodYield = 0;
         foreach ($properties as $node) {
-            if (($node->getName() != 'id') && ($node->getName() != 'db') && ($this->{$node->getName()} > 0))
+            if (($node->getName() != 'id') && ($node->getName() != 'db') && ($node->getName() != 'status') && ($this->{$node->getName()} > 0))
             {
                 $tgp = $this->getPlatonic($node->getName());
                 if ($tgp->getTgtype() == 'food') {
@@ -316,7 +314,7 @@ class Depot extends GameEntity
                     $this->db->setQuery($query);
                     $this->db->query();
                     $loadObj = $this->db->loadObject();
-                    $query = 'UPDATE depot SET  ' .strtolower($node->getName()). '=0 WHERE id=' .$this->id. ';';
+                    $query = 'UPDATE game.depot SET  ' .strtolower($node->getName()). '=0 WHERE id=' .$this->id. ';';
                     $this->db->setQuery($query);
                     $this->db->query();
                     $foodYield += $loadObj->{$node->getName()} * $tgp->foodvalue;

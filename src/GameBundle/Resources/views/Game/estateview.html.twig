@@ -1,0 +1,41 @@
+{% extends 'GameBundle::layout.html.twig' %}
+
+{% block title %}Adon Melech - Map view{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron" style="min-height:80%">
+            <div class="panel panel-default" >
+                    <i>income</i>
+                    <p>skim from market {{ mySkim }}</p>
+                    <i>costs</i>
+                    <p>buildings {{ myBuildingCosts }}</p>
+                    <i>sum</i> <p id="sumtotal">{{ myTotal }}</p>
+            </div>
+            <div class="panel panel-default">
+                {% if myBuildings %}
+                    <label>buildings
+                        <select name="buildings">
+                        {% for building in myBuildings %}
+                            <option value="{{ building.name }}">{{ building.name }}</option>
+                        {% endfor %}
+                        </select>
+                    </label>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+
+        });
+
+    </script>
+
+{% endblock %}

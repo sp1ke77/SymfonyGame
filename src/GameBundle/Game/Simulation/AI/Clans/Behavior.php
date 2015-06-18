@@ -10,6 +10,7 @@ namespace GameBundle\Game\Simulation\AI\Clans;
 
 use GameBundle\Game\DBCommon;
 use GameBundle\Game\Model\Clan;
+use GameBundle\Game\Model\City;
 use GameBundle\Game\Model\TradegoodPlatonic;
 use GameBundle\Game\Model\Depot;
 use GameBundle\Services\ClanService;
@@ -26,20 +27,19 @@ use GameBundle\Game\Rules\Rules;
 class Behavior
 {
 
-    /** @var DBCommon $db
-     * @var Rules $rules
-     * @var NewsService $news
-     * @var MapService $map
-     * @var TribeService $tribes
-     * @var TradeService $trade
-     * @var ClanService $clans
-     */
+    /** @var DBCommon $db **/
     protected $db;
-    protected $rules;
-    protected $news;
+    /** @var MapService */
     protected $map;
+    /** @var Rules $rules **/
+    protected $rules;
+    /** @var NewsService $news**/
+    protected $news;
+    /** @var TribeService $tribes**/
     protected $tribes;
+    /** @var TradeService $trade**/
     protected $trade;
+    /** @var ClanService $clans **/
     protected $clans;
 
     /**
@@ -110,20 +110,20 @@ class Behavior
         $action = [];
 
         // Consume food or starve
-        if (rand(1, 10) == 20) {
+        if (rand(1, 20) == 20) {
             $this->ConsumeFood($clan);
         }
 
-        // Some stuff that happens occasionally regardless of the current behavior ...
         // Clans periodically process their food-type tokens for personal consumption
         if (rand(1, 10) == 10) {
             $yield = $clan->getFood() + $depot->fillLarder();
-            $this->clans->setFood($clan->getId(), $yield);
+            $clan->setFood($yield);
+            $clan->update();
         }
 
         // Clans periodically reconsider and revise their current activity
-        // according current exigencies, leader ptype, etc.
-        if (rand(1, 10) == 10) {
+        // according exigencies, leader ptype, etc.
+        if (rand(1, 20) == 20) {
             $activity = $this->Consider($clan);
             return 'Clan' . $clan->getId() . ' reconsidered and ' . $activity;
         }
@@ -143,7 +143,8 @@ class Behavior
                 if ($result['Type'] == 'Success') {
                     if (rand(1, 3) == 3) {
                         $result['Description'] .= ' and began exploring';
-                        $this->clans->changeActivity($clan, 'exploring');
+                        $clan->setActivity('exploring');
+                        $clan->update();
                     }
                 }
 
@@ -158,11 +159,12 @@ class Behavior
                 $producing = $this->trade->exploreForTrade($mz);
 
                 if (is_null($producing)) {
-                    $this->clans->changeActivity($clan, 'wandering');
+                    $clan->setActivity('wandering');
                 } else {
-                    $this->clans->changeProducing($clan, $producing);
-                    $this->clans->changeActivity($clan, 'working');
+                    $clan->setProducing($producing);
+                    $clan->setActivity('working');
                 }
+                $clan->update();
 
                 return 'Clan' . $clan->getId() . ' explored ' . $clan->getX() . ', ' . $clan->getY();
 
@@ -176,7 +178,7 @@ class Behavior
                 $tgp->setDb($this->db);
                 $tgp->load();
 
-                if (rand(1, 3) == 3) {
+                if (rand(1, 5) < 5) {
                     $depot->Produce(strtolower($tgp->getNamed()));
                     $result = 'Clan' . $clan->getId() . ' produced ' . $tgp->getNamed() . ' in ' . $clan->getX() . ', ' . $clan->getY();
                 } else {
@@ -184,8 +186,9 @@ class Behavior
                 }
 
                 if ($depot->check(strtolower($tgp->getNamed())) >= 10) {
-                    $this->clans->changeProducing($clan, null);
-                    $this->clans->changeActivity($clan, 'trading');
+                    $clan->setProducing(null);
+                    $clan->setActivity('trading');
+                    $clan->update();
                     $result = 'Clan' . $clan->getId() . ' completed work and is seeking to trade';
                 }
 
@@ -201,9 +204,9 @@ class Behavior
                 if (isset($city)) {
                     if (($city->getX() == $clan->getX()) && ($city->getY() == $clan->getY())) {
                         $result = '';
-                        $result .= $this->clanSellBehavior($clan, $depot);
+                        $result .= $this->clanSellBehavior($clan, $depot, $city);
                         if ($clan->getCoin() > 65) {
-                            $result .= $this->clanBuyBehavior($clan);
+                            $result .= $this->clanBuyBehavior($clan, $city);
                         }
                         return $result;
                     } else {
@@ -211,27 +214,26 @@ class Behavior
                         return 'Clan' . $clan->getId() . ' traveled to ' . $city->getNamed();
                     }
                 } else {
-                    $this->clans->changeActivity($clan, 'wandering');
+                    $clan->setActivity('wandering');
+                    $clan->update();
                     return 'Clan ' . $clan->getId() . ' wanted to trade but was not near a market.';
                 }
 
             case 'holiday':
 
-                $depot = new Depot($clan->getDepot());
-                $depot->setDb($this->db);
-                $depot->load();
-
                 // If we can afford to, let's party
                 if ($clan->getFood() >= 150) {
-                    $this->clans->setFood($clan->getId(), ($clan->getFood() - 100));
+                    $clan->setFood($clan->getId(), ($clan->getFood() - 100));
 
                     if (($clan->getPopulation() >= 200) && (rand(0, $clan->getPopulation()) > 500)) {
-                        $this->clans->setPopulation($clan->getPopulation(), ($clan->getPopulation() - 150));
+                        $clan->setPopulation($clan->getPopulation() - 150);
                         $this->tribes->createClan($clan->getTribeId());
                         $this->news->createSomeNews('A family of clan' . $clan->Id() . ' went to seek new pastures', $clan->getY(), $clan->getY());
                     } else {
-                        $this->clans->setPopulation($clan->getPopulation(), ($clan->getPopulation() + (25 + rand(1, 7))));
+                        $clan->setPopulation($clan->getPopulation(), ($clan->getPopulation() + (25 + rand(1, 7))));
                     }
+                    $clan->update();
+
                     return 'Clan' . $clan->getId() . ' celebrated a holy day';
                 } else {
                     return 'Clan' . $clan->getId() . ' reconsidered and ' . $this->Consider($clan);
@@ -260,17 +262,20 @@ class Behavior
     {
         // First, let's cover well-fed exuberance and famine-driven panic
         if ($clan->getFood() >= 150) {
-            $this->clans->changeActivity($clan, 'holiday');
+            $clan->setActivity('holiday');
+            $clan->update();
             return 'began celebrating';
         }
 
         if ($clan->getFood() <= 100) {
-            $this->clans->changeActivity($clan, 'wandering');
+            $clan->setActivity('wandering');
+            $clan->update();
             return 'began wandering';
         }
 
         if ($clan->getFood() <= 25) {
-            $this->clans->changeActivity($clan, 'exploring');
+            $clan->setActivity('exploring');
+            $clan->update();
             return 'began exploring';
         }
 
@@ -291,16 +296,17 @@ class Behavior
     /**
      * @param Clan $clan
      * @param Depot $depot
+     * @param City $city
      * @return string
      */
-    public function clanSellBehavior(Clan $clan, Depot $depot)
+    public function clanSellBehavior(Clan $clan, Depot $depot, City $city)
     {
         $output = '';
         $possessions = $depot->Assess();
         foreach ($possessions as $possession) {
             if ($possession->getTgtype() != 'food') {
                 $amt = $depot->GetValueByString($possession->getNamed());
-                $request = $this->rules->createRequest($clan, 'sell goods', $possession->getId() . ',' . $amt);
+                $request = $this->rules->createRequest($clan, 'sell goods', $city->getId() . ',' . $possession->getId() . ',' . $amt);
                 $result = $this->rules->submit($request);
                 $output .= 'Clan' . $clan->getId() . ' ' . $result['Description'];
             }
@@ -310,11 +316,12 @@ class Behavior
 
     /**
      * @param Clan $clan
+     * @param City $city
      * @return mixed
      */
-    public function clanBuyBehavior(Clan $clan)
+    public function clanBuyBehavior(Clan $clan, City $city)
     {
-        $request = $this->rules->createRequest($clan, 'buy goods', '1,25');
+        $request = $this->rules->createRequest($clan, 'buy goods', $city->getId() . ',1,25');
         $result = $this->rules->submit($request);
         return $result['Description'];
     }
@@ -326,16 +333,18 @@ class Behavior
     {
         $consumption = intval($clan->getPopulation() * 0.1);
         $newamt = $clan->getFood() - $consumption;
-
         if ($newamt <= 0) {
-            if (rand(1, 5) == 5) {
-                $this->clans->setPopulation($clan->getId(), ($clan->getPopulation() - 6));
-                $this->news->createSomeNews('Clan' . $clan->getId() . ' are starving');
+            if (rand(1, 3) == 3) {
+                $clan->setPopulation($clan->getId(), ($clan->getPopulation() - 5));
+                $clan->setFood(0);
+                $this->news->createSomeNews('Clan' . $clan->getId() . ' are starving', $clan->getX(), $clan->getY());
             } else {
-                $this->clans->setPopulation($clan->getId(), ($clan->getPopulation() - 1));
+                $clan->setPopulation($clan->getPopulation() - 1);
+                $clan->setFood(0);
             }
+        } else {
+            $clan->setFood($newamt);
         }
-
-        $this->clans->setFood($clan->getId(), $newamt);
+        $clan->update();
     }
 }

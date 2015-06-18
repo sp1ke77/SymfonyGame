@@ -22,10 +22,6 @@ submit_registration:
     path:     /submit_registration
     defaults: { _controller: GameBundle:User:submitRegistration }
 
-join_game:
-    path:     /joingame
-    defaults: { _controller: GameBundle:User:joinGame }
-
 create_character:
     path:     /create_character
     defaults: { _controller: GameBundle:User:createCharacter }
@@ -37,6 +33,10 @@ admin_console:
 admin_test:
     path:     /test
     defaults: { _controller: GameBundle:Admin:test }
+
+join_game:
+    path:     /joingame
+    defaults: { _controller: GameBundle:User:joinGame }
 
 map_view:
     path:     /mapview/{slug}
@@ -53,3 +53,8 @@ get_entities:
 get_news:
     path:   /news
     defaults: { _controller: GameBundle:Mapview:getNews }
+
+estate_view:
+    path:     /estate
+    defaults: { _controller: GameBundle:Estateview:index }
+

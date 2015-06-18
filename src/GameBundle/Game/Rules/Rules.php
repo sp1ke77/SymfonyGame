@@ -14,6 +14,7 @@ use GameBundle\Game\Rules\Interfaces\IMappable;
 use GameBundle\Game\Rules\Interfaces\IDepotHaver;
 use GameBundle\Game\Rules\Interfaces\ICombatant;
 use GameBundle\Game\Model\Clan;
+use GameBundle\Game\Model\City;
 use GameBundle\Game\Model\Depot;
 use GameBundle\Services\MapService;
 
@@ -39,7 +40,7 @@ class Rules
      */
     protected $db;
     /**
-     * @var
+     * @var MapService $map
      */
     protected $map;
 
@@ -135,12 +136,12 @@ class Rules
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Buy Goods requires Args: string"');
                 } else {
-                    $xy = explode(',', $args);
-                    if (count($xy) != 2)
+                    $xyz = explode(',', $args);
+                    if (count($xyz) != 3)
                     {
-                        return $this->getResult('Invalid request', 'Buy Goods requires Args: string "{good},{amount}"');
+                        return $this->getResult('Invalid request', 'Buy Goods requires Args: string "{city id},{good},{amount}"');
                     }
-                    return $this->buyGoods($issuer, $xy[0], $xy[1]);
+                    return $this->buyGoods($issuer, $xyz[0], $xyz[1], $xyz[2]);
                 }
 
             case 'sell goods':
@@ -153,12 +154,12 @@ class Rules
                 if (!$args) {
                     return $this->getResult('Invalid request', 'Sell Goods requires Args: string"');
                 } else {
-                    $xy = explode(',', $args);
-                    if (count($xy) != 2)
+                    $xyz = explode(',', $args);
+                    if (count($xyz) != 3)
                     {
-                        return $this->getResult('Invalid request', 'Sell Goods requires Args: string "{good},{amount}"');
+                        return $this->getResult('Invalid request', 'Sell Goods requires Args: string "{city id},{good},{amount}"');
                     }
-                    return $this->sellGoods($issuer, $xy[0], $xy[1]);
+                    return $this->sellGoods($issuer, $xyz[0], $xyz[1], $xyz[2]);
                 }
 
             case 'attack':
@@ -216,11 +217,12 @@ class Rules
 
     /**
      * @param IDepotHaver $issuer
+     * @param City $city
      * @param $good
      * @param $amt
      * @return array
      */
-    public function sellGoods(IDepotHaver $issuer, $good, $amt)
+    public function sellGoods(IDepotHaver $issuer, $city, $good, $amt)
     {
         $depot = new Depot($issuer->getDepot());
         $depot->setDb($this->db);
@@ -229,6 +231,10 @@ class Rules
         $tgp = new TradegoodPlatonic($good);
         $tgp->setDb($this->db);
         $tgp->load();
+
+        $city = new City($city);
+        $city->setDb($this->db);
+        $city->load();
 
         if ((empty($depot)) | (empty($tgp))) { return $this->getResult('Event failure', 'Null depot or tradegood'); }
 
@@ -238,7 +244,9 @@ class Rules
         if ($currentStores >= $amt) {
             $depot->setValueByString($tgp->named, ($currentStores - $amt));
             $profit = $amt * $tgp->tradevalue;
+
             $this->SetCoins($issuer, ($issuer->getCoin() + $profit));
+            $city->taxTrade($profit);
             return $this->getResult('Success', 'sold ' .$amt. ' ' .$tgp->named. ' for ' .$profit. ' coin');
         } else {
             return $this->getResult('Illegal move', 'issued an invalid request to sell goods');
@@ -247,11 +255,12 @@ class Rules
 
     /**
      * @param IDepotHaver $issuer
+     * @param City $city
      * @param $good
      * @param $amt
      * @return array
      */
-    public function buyGoods(IDepotHaver $issuer, $good, $amt)
+    public function buyGoods(IDepotHaver $issuer, $city, $good, $amt)
     {
         $depot = new Depot($issuer->getDepot());
         $depot->setDb($this->db);
@@ -261,13 +270,20 @@ class Rules
         $tgp->setDb($this->db);
         $tgp->load();
 
+        $city = new City($city);
+        $city->setDb($this->db);
+        $city->load();
+
         if ((empty($depot)) | (empty($tgp))) { return $this->getResult('Event failure', 'Null depot or tradegood'); }
 
+        // Calculate costs, taxes, etc.
         $purse = $issuer->getCoin();
         $cost = ($amt * $tgp->tradevalue);
-            // If we have sufficient coin
+
+        // If we have sufficient coin
         if ($purse >= $cost) {
             $this->SetCoins($issuer, ($purse - $cost));
+            $city->taxTrade($cost);
             $currentStores = $depot->GetValueByString($tgp->named);
             $depot->setValueByString($tgp->named, ($currentStores + $amt));
             return $this->getResult('Success', 'bought ' .$amt. ' ' .$tgp->named. ' for ' .$cost. ' coin');

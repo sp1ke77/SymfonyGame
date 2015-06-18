@@ -23,4 +23,5 @@ interface IDepotHaver
      * @param int
      */
     public function setCoin($coin);
+
 }

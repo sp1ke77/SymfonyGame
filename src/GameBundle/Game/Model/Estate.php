@@ -23,7 +23,6 @@ class Estate extends GameEntity implements IDepotHaver
 
     // Necessary for implementing trade interface
     protected $coin;            // Current bartering power
-    protected $rents;           // Income from city activity
 
     /**
      * @return mixed

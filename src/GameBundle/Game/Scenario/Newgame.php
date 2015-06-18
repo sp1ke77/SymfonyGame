@@ -532,7 +532,7 @@ class Newgame
         $this->db->setQuery($query);
         $this->db->query();
 
-        $query = "DROP TABLE buildinglist;";
+        $query = "DROP TABLE estate;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -596,7 +596,7 @@ class Newgame
                           id INT NOT NULL AUTO_INCREMENT,
                           named CHAR(45) NULL,
                           description VARCHAR(160) NULL,
-                          tradeincome INT DEFAULT 0,
+                          tradeincome DECIMAL(3,2) DEFAULT 0,
                           king INT NULL,
                           priest INT NULL,
                           x int NULL,
@@ -701,6 +701,7 @@ class Newgame
                           y INT NULL,
                           named VARCHAR(45) NULL,
                           culture ENUM('Kananu','Hurru','Luwwiyu','Tejenu','Keftiu','Amurru','Shasu') NULL,
+                          coin INT NULL,
                           city INT NULL,
                           holdings INT NULL,
                           persona INT NULL,

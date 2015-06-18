@@ -51,27 +51,30 @@ function DescriptionHelper() {
         {
             case "Ugarit":
                 return "Ugarit is one of the oldest cities in the world. Standing at the crossroads of the " +
-                        "mountainous Tin Lands and the passes to the eastern deserts, Ugarit has long " +
-                        "commanded the attention of traders from afar.";
+                        "mountainous Tin Lands and the passes to the eastern deserts, in time it has amassed " +
+                        "a small forest of victory stelae by long forgotten warlords.";
             case "Tyre":
-                return "Tyre is a fortress of the Kanani built on the shores of the sea, just south of the " +
-                        "sacred mountains. Called the 'Purple City' and the 'Oyster City'. Tyrians worship " +
-                        "Melkart the giver of fertile soil.";
+                return "Tyre on the shores of the sea sits behind a massive rampart, the such largest edifice on " +
+                        "the Mediterranean coast. Called the 'Purple City' and the 'Oyster City'. Tyrits swear oaths " +
+                        "on Melkart but generally prefer to worship things closer to hand, like money.";
             case "Gubla":
-                return "Gubla is a port founded long ago by the Egyptians. Its protected place between " +
-                        "the coast and the sacred mountains has long shielded it from traveling invaders.";
+                return "Gubla is a port founded long ago by the Egyptians. Protected by mountains on one side and " +
+                        "sea on the other, Gublids are sheltered from the wild and wanton and have the smug attitude " +
+                        "that safety engenders.";
             case "Qedesh":
-                return "Qedesh is a city in the northeastern reaches beside the sacred springs of Qedeshtu, " +
-                        "the lady of love. Conquered two hundred years ago by the Amurru and not relinquished " +
-                        "thereafter.";
+                return "Qedesh is a sleepy town about which every passing warlord develops passionate religious " +
+                        "beliefs. Not coinidentally, it is surrounded by the bones of the thousands of battles over " +
+                        "who gets to camp there.";
             case "Asqalun":
                 return "Asqalun is a low-coastal town in which the worst of the worst congregate: thieves, " +
-                        "ill-fated travelers, widows of slain chieftains and hungry men with nothing to lose. " +
-                        "Raiding Tejenu consider it their home away from home.";
+                        "ill-fated travelers, slain chieftains' vengeful widows and the demon-possessed. " +
+                        "Of late it's become so bad that it has even begun to attract seafaring Tejenu .";
             case "Megiddo":
-                return "[Coming soon]";
+                return "Megiddo is a proud city, and because it takes its pride seriously, it is the major instigator " +
+                        "of alliance wars in the Jordan valley. ";
             case "Shechem":
-                return "[Coming soon]";
+                return "Shechem sits at the entrance to the Nahal Iron, the dry-river road. Its market is the major " +
+                        "market for mercanaries in the south, probably due to its status as a repeat target of alliances.";
         }
     };
 

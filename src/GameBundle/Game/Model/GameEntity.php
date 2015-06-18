@@ -14,15 +14,20 @@ abstract class GameEntity
 
     /**
      * Keys
-     * @var $id int
+     * @var int $id
      */
     protected $id;
 
     /**
      * Components
-     * @var $db DBCommon
+     * @var DBCommon $db
      */
     protected $db;
+
+    /**
+     * @var string $status
+     */
+    protected $status;
 
     /**
      * @param $db
@@ -68,15 +73,17 @@ abstract class GameEntity
         $reflectionClass = new ReflectionClass($called_class);
         $properties = $reflectionClass->getProperties();
 
+        $query = "SELECT * FROM " . $table . " WHERE id=" . (int)$this->getId() . ";";
+        $this->db->setQuery($query);
+        $this->db->query();
+        $obj = $this->db->loadObject();
+
         foreach($properties as $node)
         {
-            if($node->getName() != 'db' && $node->getName() != 'id')
+            $property = strtolower($node->getName());
+            if($property != 'db' && $property != 'id' && $property != 'status')
             {
-                $query = "SELECT * FROM " . $table . " WHERE id=" . (int)$this->getId() . ";";
-                $this->db->setQuery($query);
-                $this->db->query();
-                $obj = $this->db->loadObject();
-                $this->{$node->getName()} = $obj->{$node->getName()};
+                $this->{$property} = $obj->{$property};
             }
         }
     }
@@ -84,20 +91,20 @@ abstract class GameEntity
     public function update()
     {
         $called_class = get_called_class();
+        $reflectionClass = new ReflectionClass($called_class);
+        $properties = $reflectionClass->getProperties();
+
         $class_name = explode('\\', get_class($this));
         $table = strtolower(array_pop($class_name));
 
         /** @var array $values [k=>v]::[k=the property name, v=the property value] */
         $values = array();
 
-        $reflectionClass = new ReflectionClass($called_class);
-        $properties = $reflectionClass->getProperties();
-
         foreach($properties as $node){
-            $propertyName = $node->getName();
-            if($propertyName != 'db')
+            $property = strtolower($node->getName());
+            if($property != 'db' && $property != 'status')
             {
-                $values[$propertyName] = $this->{$propertyName};
+                $values[$property] = $this->{$property};
             }
         }
 
@@ -125,13 +132,5 @@ abstract class GameEntity
 
         $this->db->setQuery($query);
         $this->db->query();
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 }

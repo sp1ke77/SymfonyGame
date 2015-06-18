@@ -13,10 +13,6 @@ use GameBundle\Game\Model\Mapzone;
 use GameBundle\Game\Model\City;
 use GameBundle\Game\Rules\Interfaces\IMappable;
 
-/**
- * Class MapService
- * @package GameBundle\Services
- */
 class MapService
 {
 
@@ -34,7 +30,7 @@ class MapService
      */
     public function getRandomPassableMapZone()
     {
-        $query = "SELECT id FROM mapzone WHERE geotype!='deepsea' AND geotype !='shallowsea' ORDER BY Rand() LIMIT 1;";
+        $query = "SELECT id FROM game.mapzone WHERE geotype!='deepsea' AND geotype !='shallowsea' ORDER BY Rand() LIMIT 1;";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -53,7 +49,7 @@ class MapService
      */
     public function GetARandomMove(IMappable $user, $distance = 1)
     {
-        $query = 'SELECT id FROM mapzone WHERE x>=' .($user->getX() - $distance). ' AND y>=' .($user->getY() - $distance).' AND x<=' .($user->getX() + $distance). ' AND y<=' .($user->getY() + $distance). ' ORDER BY Rand() LIMIT 1;';
+        $query = 'SELECT id FROM game.mapzone WHERE x>=' .($user->getX() - $distance). ' AND y>=' .($user->getY() - $distance).' AND x<=' .($user->getX() + $distance). ' AND y<=' .($user->getY() + $distance). ' ORDER BY Rand() LIMIT 1;';
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -86,7 +82,7 @@ class MapService
      */
     public function getMapzoneFromAbstract($x, $y)
     {
-        $query = "SELECT * FROM mapzone WHERE x=" .$x. " AND y=" .$y. ";";
+        $query = "SELECT * FROM game.mapzone WHERE x=" .$x. " AND y=" .$y. ";";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -105,7 +101,7 @@ class MapService
      * @return City|null
      */
     public function findNearestCity($x, $y) {
-        $query = "SELECT id FROM city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
+        $query = "SELECT id FROM game.city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObject();
@@ -156,12 +152,12 @@ class MapService
      * @return Array
      */
     public function getMapObjectsByViewport($tablename, $topleftid, $width, $height, $limit = null) {
-        $query = "SELECT * FROM  mapzone WHERE id=" .$topleftid. ";";
+        $query = "SELECT * FROM  game.mapzone WHERE id=" .$topleftid. ";";
         $this->db->setQuery($query);
         $this->db->query();
         $cz = $this->db->loadObject();
 
-        $query = "SELECT * FROM " .$tablename. " WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+" .$width. ")) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+" .$height. ")) ";
+        $query = "SELECT * FROM game." .$tablename. " WHERE (x>=" . $cz->x . " AND x<=(" . $cz->x . "+" .$width. ")) AND (y>=" . $cz->y . " AND y<=(" . $cz->y . "+" .$height. ")) ";
         if (is_numeric($limit)) { $query .= " LIMIT " .$limit; }
         $query .= ";";
 
@@ -187,10 +183,10 @@ class MapService
     public function mapTravel(IMappable $issuer, $x2, $y2)
     {
         $tablename = $this->getClass($issuer);
-        $query = 'UPDATE ' .strtolower($tablename). ' SET x=' .$x2. ' WHERE id=' .$issuer->getId(). ';';
+        $query = 'UPDATE game.' .strtolower($tablename). ' SET x=' .$x2. ' WHERE id=' .$issuer->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
-        $query = 'UPDATE ' .strtolower($tablename). ' SET y=' .$y2. ' WHERE id=' .$issuer->getId(). ';';
+        $query = 'UPDATE game.' .strtolower($tablename). ' SET y=' .$y2. ' WHERE id=' .$issuer->getId(). ';';
         $this->db->setQuery($query);
         $this->db->query();
         $result = $tablename . $issuer->getId() . ' traveled to ' . $x2 . ', ' . $y2;

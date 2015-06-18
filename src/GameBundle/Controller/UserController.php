@@ -158,12 +158,12 @@ class UserController extends Controller
         $session = $this->get('session');
         $loginResults = $loginService->doLoginRequest($username, $password);
         if (empty($loginResults['user id'])) {
-            return new RedirectResponse('/error');
+            return false;
         } else {
             $session->set('logged_in', true);
             $session->set('user_id', $loginResults["user id"]);
             $session->set('username', $loginResults["username"]);
-            return new JsonResponse('{ "Result":"Success","Message:"Logged in as "' .$loginResults['username']. ' }');
+            return true;
         }
     }
 

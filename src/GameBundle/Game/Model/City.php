@@ -13,10 +13,11 @@ use GameBundle\Game\DBCommon;
 class City extends GameEntity
 {
     protected $named;
-    protected $imgsmall;
     protected $description;
     protected $tradeincome;
-    protected $depot;
+    protected $king;
+    protected $priest;
+    protected $x, $y;
 
     /**
      * @return mixed
@@ -33,10 +34,6 @@ class City extends GameEntity
     {
         $this->tradeincome = $tradeincome;
     }
-    protected $king;
-    protected $priest;
-    protected $x;
-    protected $y;
 
     /**
      * @return mixed
@@ -164,6 +161,12 @@ class City extends GameEntity
     public function setY($y)
     {
         $this->y = $y;
+    }
+
+    public function taxTrade($amt)
+    {
+        $this->tradeincome += ($amt * 0.01);
+        $this->update();
     }
 
 }

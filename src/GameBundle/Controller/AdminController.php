@@ -24,10 +24,8 @@ class AdminController extends Controller
 
     public function testAction()
     {
-        $session = $this->get('session');
-        $mvid = $session->get('mvid');
-        var_dump($mvid);
-        die();
+        $action = $this->get('service_action_round');
+        $action->execute();
 
         return new RedirectResponse('/admin');
     }

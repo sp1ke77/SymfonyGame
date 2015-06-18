@@ -3,6 +3,7 @@
 namespace GameBundle\Game\Simulation;
 
 use GameBundle\Game\Exceptions\MissingPropertyException;
+use GameBundle\Game\Model\Clan;
 
 /**
  * Class ActionRound
@@ -14,6 +15,7 @@ class ActionRound extends BaseSimulation
      * @throws MissingPropertyException
      * @return array
      */
+
     public function execute()
     {
         if(!isset($this->behavior)){
