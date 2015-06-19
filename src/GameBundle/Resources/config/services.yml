@@ -81,3 +81,14 @@ services:
       - [setRules, ["@service_rules"]]
       - [setTribes, ["@service_tribe"]]
       - [setTrade, ["@service_trade"]]
+
+  service_events_random:
+    class: GameBundle\Game\Simulation\RandomEvents\RandomEvents
+    calls:
+      - [setDb, ["@db"]]
+      - [setClans, ["@service_clan"]]
+      - [setMap, ["@service_map"]]
+      - [setNews, ["@service_news"]]
+      - [setRules, ["@service_rules"]]
+      - [setTribes, ["@service_tribe"]]
+      - [setTrade, ["@service_trade"]]

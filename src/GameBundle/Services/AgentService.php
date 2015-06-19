@@ -42,4 +42,29 @@ class AgentService {
     {
         $this->db = $db;
     }
+
+
+    public function getAllAgentIDs()
+    {
+        $query = 'SELECT id FROM game.agent;';
+        $this->db->setQuery($query);
+        $this->db->query();
+        return $this->db->loadObjectList();
+    }
+
+    public function getAllEstateIDs()
+    {
+        $query = 'SELECT id FROM game.estate;';
+        $this->db->setQuery($query);
+        $this->db->query();
+        return $this->db->loadObjectList();
+    }
+
+    public function getAgentsByCity($cityID)
+    {
+        $query = 'SELECT id FROM game.agent WHERE city=' .$cityID;
+        $this->db->setQuery($query);
+        $this->db->query();
+        return $this->db->loadObjectList();
+    }
 }

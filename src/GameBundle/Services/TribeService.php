@@ -40,8 +40,8 @@ class TribeService
     }
 
     /** @return Array */
-    public function getAllClans() {
-        $query = 'SELECT * FROM clan;';
+    public function getAllClanIDs() {
+        $query = 'SELECT id FROM clan;';
         $this->db->setQuery($query);
         $this->db->query();
         $loadObj = $this->db->loadObjectList();

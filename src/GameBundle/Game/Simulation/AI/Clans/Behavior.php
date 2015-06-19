@@ -110,9 +110,7 @@ class Behavior
         $action = [];
 
         // Consume food or starve
-        if (rand(1, 20) == 20) {
-            $this->ConsumeFood($clan);
-        }
+        $this->ConsumeFood($clan);
 
         // Clans periodically process their food-type tokens for personal consumption
         if (rand(1, 10) == 10) {
@@ -335,11 +333,10 @@ class Behavior
         $newamt = $clan->getFood() - $consumption;
         if ($newamt <= 0) {
             if (rand(1, 3) == 3) {
-                $clan->setPopulation($clan->getId(), ($clan->getPopulation() - 5));
+                $clan->setPopulation($clan->getPopulation() - 1);
                 $clan->setFood(0);
                 $this->news->createSomeNews('Clan' . $clan->getId() . ' are starving', $clan->getX(), $clan->getY());
             } else {
-                $clan->setPopulation($clan->getPopulation() - 1);
                 $clan->setFood(0);
             }
         } else {

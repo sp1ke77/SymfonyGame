@@ -7,7 +7,10 @@ use GameBundle\Game\Rules\Interfaces\IMappable;
 
 class Agent extends GameEntity implements IMappable
 {
-    protected $isPlayer;
+    /**
+     * @var
+     */
+    protected $isplayer;
     protected $ptype;
     protected $userid;
     protected $activity;
@@ -15,6 +18,8 @@ class Agent extends GameEntity implements IMappable
     protected $named;
     protected $culture;
     protected $city;
+    protected $tradeincome;
+    protected $coin;
     protected $holdings;
     protected $persona;
     protected $allegiance;
@@ -22,17 +27,33 @@ class Agent extends GameEntity implements IMappable
     /**
      * @return mixed
      */
-    public function getIsPlayer()
+    public function getTradeincome()
     {
-        return $this->isPlayer;
+        return $this->tradeincome;
     }
 
     /**
-     * @param mixed $isPlayer
+     * @param mixed $tradeincome
      */
-    public function setIsPlayer($isPlayer)
+    public function setTradeincome($tradeincome)
     {
-        $this->isPlayer = $isPlayer;
+        $this->tradeincome = $tradeincome;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCoin()
+    {
+        return $this->coin;
+    }
+
+    /**
+     * @param mixed $coin
+     */
+    public function setCoin($coin)
+    {
+        $this->coin = $coin;
     }
 
     /**
@@ -209,6 +230,22 @@ class Agent extends GameEntity implements IMappable
     public function setAllegiance($allegiance)
     {
         $this->allegiance = $allegiance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsplayer()
+    {
+        return $this->isplayer;
+    }
+
+    /**
+     * @param mixed $isplayer
+     */
+    public function setIsplayer($isplayer)
+    {
+        $this->isplayer = $isplayer;
     }
 
 }

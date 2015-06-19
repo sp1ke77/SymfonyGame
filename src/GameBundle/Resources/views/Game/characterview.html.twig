@@ -1,0 +1,32 @@
+{% extends 'GameBundle::layout.html.twig' %}
+
+{% block title %}Ancient Trader{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron" style="min-height:80%">
+            <div class="panel panel-default" >
+                <h5>{{ myCharacter.named }} of the {{ myCharacter.culture }} people, citizen of {{ myCity.named }}</h5><br>
+            </div>
+            <div class="panel panel-default">
+                <small style="text-decoration:underline">reputation</small><br>
+                <i>fame</i> <b style="color:greenyellow">{{ myReputation.fame }}</b><br>
+                <i>honor</i> <b style="color:gold">{{ myReputation.honor }}</b><br>
+                <i>controversy</i> <b style="color:red">{{ myReputation.controversy }}</b><br>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+
+        });
+
+    </script>
+
+{% endblock %}

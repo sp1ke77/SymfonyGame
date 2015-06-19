@@ -58,3 +58,6 @@ estate_view:
     path:     /estate
     defaults: { _controller: GameBundle:Estateview:index }
 
+character_view:
+    path:     /charview
+    defaults: { _controller: GameBundle:Characterview:index }

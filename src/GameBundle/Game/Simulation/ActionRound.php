@@ -26,7 +26,7 @@ class ActionRound extends BaseSimulation
             throw new MissingPropertyException('tribe service is required');
         }
 
-        $clans = $this->tribeservice->getAllClans();
+        $clans = $this->tribeservice->getAllClanIDs();
 
         $result = [];
         foreach ($clans as $clan) {

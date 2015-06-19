@@ -52,14 +52,6 @@ class City extends GameEntity
     }
 
     /**
-     * @return mixed
-     */
-    public function getImgsmall()
-    {
-        return $this->imgsmall;
-    }
-
-    /**
      * @param mixed $imgsmall
      */
     public function setImgsmall($imgsmall)
@@ -81,14 +73,6 @@ class City extends GameEntity
     public function setDescription($description)
     {
         $this->description = $description;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDepot()
-    {
-        return $this->depot;
     }
 
     /**
@@ -168,5 +152,4 @@ class City extends GameEntity
         $this->tradeincome += ($amt * 0.01);
         $this->update();
     }
-
 }

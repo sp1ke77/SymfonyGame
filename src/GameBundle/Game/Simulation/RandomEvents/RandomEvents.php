@@ -15,15 +15,13 @@ use GameBundle\Services\TradeService;
 
 class RandomEvents
 {
-
-    /** @var DBCommon $db
-     * @var TradeService $trade
-     * @var MapService $map
-     * @var NewsService $news
-     */
+    /** @var DBCommon $db **/
     protected $db;
+    /** @var TradeService $trade **/
     protected $trade;
+    /** @var MapService $map **/
     protected $map;
+    /** @var NewsService $news **/
     protected $news;
 
     public function setDb($db)
@@ -32,7 +30,7 @@ class RandomEvents
     }
 
     /**
-     * @param mixed $trade
+     * @param TradeService $trade
      */
     public function setTrade($trade)
     {
@@ -40,7 +38,7 @@ class RandomEvents
     }
 
     /**
-     * @param mixed $map
+     * @param MapService $map
      */
     public function setMap($map)
     {
@@ -48,7 +46,7 @@ class RandomEvents
     }
 
     /**
-     * @param mixed $news
+     * @param NewsService $news
      */
     public function setNews($news)
     {

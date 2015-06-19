@@ -108,7 +108,7 @@ class Newgame
             $this->initializeCities();
             $this->initializeTradeGoods();
 
-            for ($i = 0; $i < 900; $i++)
+            for ($i = 0; $i < 325; $i++)
             {
                 $this->events->NewTradeTokenEvent();
             }
@@ -144,7 +144,12 @@ class Newgame
             }
         }
         // Create the Mediterranean sea
-        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<=47 AND y>20 AND y<34;";
+        $query = "UPDATE mapzone SET geotype='deepsea' WHERE x<=42 AND y>13 AND y<42;";
+        $this->db->setQuery($query);
+        $this->db->query();
+
+        // Create the bay north of Lebanon
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x>= 41 AND x<=45 AND y>12 AND y<22;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -159,16 +164,16 @@ class Newgame
         $this->db->query();
 
         // Create the Nile river
-        $query = "UPDATE mapzone SET geotype='swamp' WHERE x>28 x<42 AND y>40 AND geotype='hills' OR x>28 x<40 AND y>40 AND geotype='mountains';";
+        $query = "UPDATE mapzone SET geotype='swamp' WHERE x>28 AND x<42 AND y>40 AND geotype='hills' OR x>28 AND x<40 AND y>40 AND geotype='mountains';";
         $this->db->setQuery($query);
         $this->db->query();
-        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=30 AND y>40;";
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=28 AND y>40;";
         $this->db->setQuery($query);
         $this->db->query();
-        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=33 AND y>40;";
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=25 AND y>40;";
         $this->db->setQuery($query);
         $this->db->query();
-        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=40 AND y>40;";
+        $query = "UPDATE mapzone SET geotype='shallowsea' WHERE x=21 AND y>40;";
         $this->db->setQuery($query);
         $this->db->query();
 
@@ -193,13 +198,13 @@ class Newgame
         $cities = array(
             'Ugarit' => array(
                 'Description' => '',
-                'x' => 51,
-                'y' => 23,
+                'x' => 41,
+                'y' => 13,
                 'Region' => 'Urartu',
                 'God' => 'Yam'),
             'Qadesh' => array(
                 'Description' => '',
-                'x' => 57,
+                'x' => 53,
                 'y' => 14,
                 'Region' => 'Amurru',
                 'God' => 'Qadeshtu'),
@@ -212,18 +217,18 @@ class Newgame
             'Arvad' => array(
                 'Description' => '',
                 'x' => 45,
-                'y' => 24,
+                'y' => 18,
                 'Region' => 'Jazirat',
                 'God' => 'Mirizir'),
             'Gubla' => array(
                 'Description' => '',
-                'x' => 48,
-                'y' => 45,
+                'x' => 44,
+                'y' => 23,
                 'Region' => 'Gubla',
                 'God' => 'Amun'),
             'Tyre' => array(
                 'Description' => '',
-                'x' => 48,
+                'x' => 42,
                 'y' => 29,
                 'Region' => 'Tyre',
                 'God' => 'Melkart'),
@@ -241,14 +246,14 @@ class Newgame
                 'God' => 'Shapash'),
             'Asqalun' => array(
                 'Description' => '',
-                'x' => 47,
-                'y' => 35,
+                'x' => 43,
+                'y' => 42,
                 'Region' => 'Asqanu',
                 'God' => 'El'),
             'Gezer' => array(
                 'Description' => '',
                 'x' => 50,
-                'y' => 35,
+                'y' => 32,
                 'Region' => 'Nahal Iron',
                 'God' => 'Amun'),
             'Phaito' => array(
@@ -259,14 +264,14 @@ class Newgame
                 'God' => 'Astarte'),
             'Tanit' => array(
                 'Description' => '',
-                'x' => 41,
-                'y' => 34,
+                'x' => 37,
+                'y' => 44,
                 'Region' => 'Goshen',
                 'God' => 'Ptah'),
             'Bubastis' => array(
                 'Description' => '',
-                'x' => 33,
-                'y' => 47,
+                'x' => 30,
+                'y' => 51,
                 'Region' => 'Egypt',
                 'God' => 'Bast'),
             );
@@ -359,6 +364,7 @@ class Newgame
         {
             $tid = $tribe->getId();
             $this->createClan($tid);
+            if (rand(1,10)==10) { $this->CreateClan($tid); }
         }
     }
 
@@ -693,7 +699,7 @@ class Newgame
         // foreign envoys by origin.
         $query = "CREATE TABLE game.agent (
                           id INT NOT NULL AUTO_INCREMENT,
-                          isPlayer BOOL DEFAULT FALSE,
+                          isplayer BOOL DEFAULT FALSE,
                           ptype ENUM('friendly', 'schemer', 'ambitious', 'cautious', 'bully', 'priest', 'weirdo', 'workaholic') NULL,
                           userid INT NULL,
                           activity VARCHAR(45) NULL,
@@ -701,7 +707,8 @@ class Newgame
                           y INT NULL,
                           named VARCHAR(45) NULL,
                           culture ENUM('Kananu','Hurru','Luwwiyu','Tejenu','Keftiu','Amurru','Shasu') NULL,
-                          coin INT NULL,
+                          tradeincome DECIMAL(3,2) DEFAULT 0,
+                          coin INT DEFAULT 0,
                           city INT NULL,
                           holdings INT NULL,
                           persona INT NULL,

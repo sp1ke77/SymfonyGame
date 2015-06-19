@@ -67,6 +67,7 @@ class AgentFactory
         $agent->setDb($this->db);
 
         // Plunk, plonk, plonk
+        $agent->setIsplayer(true);
         $agent->setUserid($userid);
         $agent->setNamed($named);
         $agent->setCulture($culture);

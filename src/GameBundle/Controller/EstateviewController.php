@@ -8,25 +8,43 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use GameBundle\Utils\FrontEndUtils;
 use GameBundle\Game\DBCommon;
-use GameBundle\Services\AgentService;
+use GameBundle\Game\Model\Agent;
+use GameBundle\Game\Model\City;
 
 class EstateviewController extends Controller
 {
 
     function indexAction()
     {
-        $mySkim = round(0.122223, 2);
-        $myTotalIncome = $mySkim;
+        $db = $this->get('db');
+        $session = $this->get('session');
+        $aid = $session->get('aid');
+        $player = new Agent($aid);
+        $player->setDb($db);
+        $player->load();
+        $cid = $player->getCity();
+        $city = new City($cid);
+        $city->setDb($db);
+        $city->load();
 
-        $myBuildingCosts = 2.2;
+        $myName = $player->getNamed();
+        $myCoin = $player->getCoin();
+        $myCity = $city->getNamed();
+        $myTradeIncome = $city->getTradeincome(); // City's property reflects tomorrow's income from markets
+        $myTotalIncome = $myTradeIncome;
+
+        $myBuildingCosts = 0;
         $myTotalCosts = $myBuildingCosts;
 
-        $myTotal = $myTotalIncome - $myTotalCosts;
+        $myTotal = $myCoin + $myTotalIncome - $myTotalCosts;
 
         $myBuildings = [];
 
         return $this->render('GameBundle:Game:estateview.html.twig', array(
-            'mySkim' => $mySkim,
+            'myName' => $myName,
+            'myCoin' => $myCoin,
+            'myCity' => $myCity,
+            'myTradeIncome' => $myTradeIncome,
             'myBuildingCosts' => $myBuildingCosts,
             'myTotal' => $myTotal,
             'myBuildings' => $myBuildings

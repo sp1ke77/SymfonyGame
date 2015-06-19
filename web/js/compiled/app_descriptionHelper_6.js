@@ -3,33 +3,33 @@ function DescriptionHelper() {
     this.getCultureDescription = function(culture) {
         switch (culture)
         {
-            case "Kanani":
+            case "Kananu":
                 return "The Kananu live in the fertile coasts and valleys of the southlands. " +
                         "An urbane lot above all, so much so that they never call themselves 'Kananu', preferring Tyrit, " +
                         "Megidit, Asqalunit and so forth and expecting foreigners to know or care what these words mean. " +
                         "The people of these mighty cities are proud, querelsome and vain. All of their favorite gods are cattle.";
-            case "Hurri":
+            case "Hurru":
                 return "The Hurru come from the northern deserts in the hinterlands of Babylonia. Among them are the " +
                         "former palace guards of Haran, countless exiled nobles of Mitanni and a mass of the displaced. " +
                         "Dusty, uncouth and speaking in an incomprehensible accent, Hurru are first among horse-tamers and " +
                         "sneak thieves and last to understand references to popular poems.";
-            case "Luwwiya":
+            case "Luwwiyu":
                 return "The Luwwiyu are the folk of the Tin Lands to the distant north, a refined and shrewd lot whose " +
                         "immigration has been out of opportunism rather than desperation. Armed with knowledge of " +
                         "the stars and of distant lands gleaned from their far-flung trading expeditions, Luwwiyu " +
                         "have also acquired a reputation for being somewhat subtle and untrustworthy.";
-            case "Tejeni":
+            case "Tejenu":
                 return "Tejenu are recent arrivals from beyond the western seas. Few have heard of them " +
                         "a thousand leagues inland. Most people who have encountered a Tejeni were robbed, swindled or " +
                         "given treasure stolen from a baal's house in exchange for olives and wine. They like loud " +
                         "fights, crude poetry and carrying weapons in public and are, for some reason, almost all men.";
-            case "Kefti":
+            case "Keftiu":
                 return "The Keftiu live on isles in the great green ocean and are the most " +
                         "erudite people in the world. Never double-cross a Kefti, so goes the Egyptian fable, or " +
                         "your brother might eat poisoned oysters and die an agonizing " +
                         "death. They are said to be able to locate gold by singing and to steal and " +
                         "sacrifice other peoples' children in caves. ";
-            case "Amurri":
+            case "Amurru":
                 return "The Amurru are the military princes of the mountains. Like the Hurru, they come from " +
                         "the wastes at the footsteps of Babylon. Amurrit tribes observe scrupulous honor codes " +
                         "and as such have many enemies " +
@@ -37,7 +37,7 @@ function DescriptionHelper() {
                         "and imperious, given to putting hapless travelers on trial according to obscure offenses known " +
                         "only to their elders, and that moreover they won't marry their children to foreigners and nobody knows " +
                         "what happens on their secret holiday; how boring.";
-            case "Shasi":
+            case "Shasu":
                 return "The Shasu are the nomads of the Sinai, the remote deserts of the south and of Goshen in Egypt. " +
                         "Deeply secretive and insular, Shasu are rarely seen outside their pastoral camps. Their priests " +
                         "are rumored to be terrifying magicians who consort with djinni and breed magical vipers for " +
@@ -62,19 +62,29 @@ function DescriptionHelper() {
                         "sea on the other, Gublids are sheltered from the wild and wanton and have the smug attitude " +
                         "that safety engenders.";
             case "Qedesh":
-                return "Qedesh is a sleepy town about which every passing warlord develops passionate religious " +
-                        "beliefs. Not coinidentally, it is surrounded by the bones of the thousands of battles over " +
-                        "who gets to camp there.";
+                return "Qedesh is a sleepy town to which every passing warlord inevitably develops a passionate religious " +
+                        "attachment. Not coinidentally, it is surrounded by the bones of countless battles for " +
+                        "the riches amassed in its temples.";
             case "Asqalun":
                 return "Asqalun is a low-coastal town in which the worst of the worst congregate: thieves, " +
                         "ill-fated travelers, slain chieftains' vengeful widows and the demon-possessed. " +
                         "Of late it's become so bad that it has even begun to attract seafaring Tejenu .";
             case "Megiddo":
                 return "Megiddo is a proud city, and because it takes its pride seriously, it is the major instigator " +
-                        "of alliance wars in the Jordan valley. ";
+                        "of alliance wars in the Jordan valley.";
             case "Shechem":
                 return "Shechem sits at the entrance to the Nahal Iron, the dry-river road. Its market is the major " +
-                        "market for mercanaries in the south, probably due to its status as a repeat target of alliances.";
+                        "market for mercanaries in the south, probably due to its status as a regular target of alliances.";
+            case "Bubastis":
+                return "Bubastis is the northern waypoint for the major trade routes into Egypt. It's an excellent place " +
+                        "to be jumped by off-duty soldiers, swindled by a drunken Tejeni or strong-armed into " +
+                        "the service of a local noble.";
+            case "Hamath":
+                return "Hamath is the high-altitude redoubt of the legendary princes of Nuhasse. Atop a hill in piney woods, " +
+                        "the village verges on nonexistent but the palace complex more than makes up in size and scale.";
+            case "Arvad":
+                return "Arvad is the island home of Mirizir, a goddess brought by eastern conquerors in the distant past " +
+                        "and then forgotten about by all but the peculiar island-dwellers.";
         }
     };
 

@@ -1,17 +1,24 @@
 {% extends 'GameBundle::layout.html.twig' %}
 
-{% block title %}Adon Melech - Map view{% endblock %}
+{% block title %}Ancient Trader - {{ myName }}'s estate{% endblock %}
 
 {% block content %}
 
     <div class="container">
         <div class="jumbotron" style="min-height:80%">
+            <h3>{{ myName }}'s estate in {{ myCity }}</h3>
             <div class="panel panel-default" >
-                    <i>income</i>
-                    <p>skim from market {{ mySkim }}</p>
-                    <i>costs</i>
-                    <p>buildings {{ myBuildingCosts }}</p>
-                    <i>sum</i> <p id="sumtotal">{{ myTotal }}</p>
+                    <small style="text-decoration:underline">wealth</small><br>
+                    <i>creditworthy to the tune of</i><b style="color:greenyellow"> {{ myCoin }} </b><i>bushels of wheat</i><br>
+                    <br>
+                    <small style="text-decoration:underline">income thusfar today</small><br>
+                    <i>skim from nearby markets </i><b style="color:greenyellow">{{ myTradeIncome }}</b><br>
+                    <br>
+                    <small style="text-decoration:underline">costs</small><br>
+                    <i>buildings</i> <b style="color:red">{{ myBuildingCosts }}</b><br>
+                    <br>
+                    <small style="text-decoration:underline">as of tomorrow</small> <b style="color:greenyellow">{{ myTotal }}</b><br>
+                    <br>
             </div>
             <div class="panel panel-default">
                 {% if myBuildings %}

@@ -101,12 +101,13 @@ class MapService
      * @return City|null
      */
     public function findNearestCity($x, $y) {
-        $query = "SELECT id FROM game.city WHERE x>=" .($x - 5). " AND x<=" .($x + 5). " AND y>= " .($y - 5). " AND y<=" .($y + 5). " LIMIT 1;";
+        $query = "SELECT id FROM game.city WHERE x>=" .($x - 8). " AND x<=" .($x + 8). " AND y>=" .($y - 8). " AND y<=" .($y + 8). ";";
         $this->db->setQuery($query);
         $this->db->query();
-        $loadObj = $this->db->loadObject();
-
-        if (isset($loadObj)) {
+        $ObjList = $this->db->loadObjectList();
+        if (!empty($ObjList)) {
+            shuffle($ObjList);
+            $loadObj = array_shift($ObjList);
             $city = new City($loadObj->id);
             $city->setDb($this->db);
             $city->load();
@@ -216,5 +217,14 @@ class MapService
                 return false;
             }
         }
+    }
+
+
+    public function getCitiesByID()
+    {
+        $query = 'SELECT id FROM game.city;';
+        $this->db->setQuery($query);
+        $this->db->query();
+        return $this->db->loadObjectList();
     }
 }
