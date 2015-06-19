@@ -677,6 +677,7 @@ class Newgame
                           ptype INT NULL,
                           x INT NULL,
                           y INT NULL,
+                          city INT NULL,
                           population INT NULL,
                           fighters INT NULL,
                           morale INT NULL,

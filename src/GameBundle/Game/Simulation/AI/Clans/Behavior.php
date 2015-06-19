@@ -26,7 +26,6 @@ use GameBundle\Game\Rules\Rules;
  */
 class Behavior
 {
-
     /** @var DBCommon $db **/
     protected $db;
     /** @var MapService */
@@ -176,7 +175,7 @@ class Behavior
                 $tgp->setDb($this->db);
                 $tgp->load();
 
-                if (rand(1, 5) < 5) {
+                if (rand(1, 15) < 15) {
                     $depot->Produce(strtolower($tgp->getNamed()));
                     $result = 'Clan' . $clan->getId() . ' produced ' . $tgp->getNamed() . ' in ' . $clan->getX() . ', ' . $clan->getY();
                 } else {
@@ -202,6 +201,7 @@ class Behavior
                 if (isset($city)) {
                     if (($city->getX() == $clan->getX()) && ($city->getY() == $clan->getY())) {
                         $result = '';
+                        $this->clans->setClanCurrentCity($clan, $city);
                         $result .= $this->clanSellBehavior($clan, $depot, $city);
                         if ($clan->getCoin() > 65) {
                             $result .= $this->clanBuyBehavior($clan, $city);
@@ -221,14 +221,14 @@ class Behavior
 
                 // If we can afford to, let's party
                 if ($clan->getFood() >= 150) {
-                    $clan->setFood($clan->getId(), ($clan->getFood() - 100));
+                    $clan->setFood($clan->getFood() - 100);
 
-                    if (($clan->getPopulation() >= 200) && (rand(0, $clan->getPopulation()) > 500)) {
-                        $clan->setPopulation($clan->getPopulation() - 150);
+                    if (($clan->getPopulation() >= 200) && (rand(0, $clan->getPopulation()) > 265)) {
+                        $clan->setPopulation($clan->getPopulation() - 100);
                         $this->tribes->createClan($clan->getTribeId());
                         $this->news->createSomeNews('A family of clan' . $clan->Id() . ' went to seek new pastures', $clan->getY(), $clan->getY());
                     } else {
-                        $clan->setPopulation($clan->getPopulation(), ($clan->getPopulation() + (25 + rand(1, 7))));
+                        $clan->setPopulation($clan->getPopulation() + (25 + rand(1, 7)));
                     }
                     $clan->update();
 

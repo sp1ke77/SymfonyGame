@@ -36,7 +36,7 @@ class EstateviewController extends Controller
         $myBuildingCosts = 0;
         $myTotalCosts = $myBuildingCosts;
 
-        $myTotal = $myCoin + $myTotalIncome - $myTotalCosts;
+        $myTotal = $myCoin + ceil($myTotalIncome) - $myTotalCosts;
 
         $myBuildings = [];
 
