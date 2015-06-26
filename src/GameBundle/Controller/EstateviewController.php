@@ -13,7 +13,6 @@ use GameBundle\Game\Model\City;
 
 class EstateviewController extends Controller
 {
-
     function indexAction()
     {
         $db = $this->get('db');

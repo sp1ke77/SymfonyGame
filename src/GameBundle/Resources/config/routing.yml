@@ -55,9 +55,13 @@ get_news:
     defaults: { _controller: GameBundle:Mapview:getNews }
 
 estate_view:
-    path:     /estate
+    path:   /estate
     defaults: { _controller: GameBundle:Estateview:index }
 
 character_view:
-    path:     /charview
+    path:   /charview
     defaults: { _controller: GameBundle:Characterview:index }
+
+politics_view:
+    path:   /politics
+    defaults: { _controller: GameBundle:Politicsview:index }

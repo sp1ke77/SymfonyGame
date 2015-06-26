@@ -149,7 +149,7 @@ class City extends GameEntity
 
     public function taxTrade($amt)
     {
-        $this->tradeincome += ($amt * 0.01);
+        $this->tradeincome += ($amt * 0.1);
         $this->update();
     }
 }
