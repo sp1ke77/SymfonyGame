@@ -119,6 +119,7 @@ class Rules
                     }
                     return $this->travel($issuer, $xy[0], $xy[1]);
                 }
+            
 
             case 'buy goods':
 

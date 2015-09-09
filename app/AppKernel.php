@@ -24,7 +24,6 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
         return $bundles;
@@ -37,11 +36,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return '/tmp/cache';
+        return $this->getRootDir() . '/app/cache';
     }
 
     public function getLogDir()
     {
-        return '/tmp/logs';
+        return $this->getRootDir() . '/app/logs';
     }
 }
